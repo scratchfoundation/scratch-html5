@@ -1,0 +1,42 @@
+To-do and notes:  HTML5 Player
+Last updated: June 2013, Tim Mickel 
+
+To do:
+    -Implement volume control for playSound (it's working for notes and drums,
+     but the way I'm preloading the sample data for playSound means changing the volume
+     mid-play is a little more tricky.  Perhaps use a GainNode per sprite?) 
+     Also need volume/tempo watchers.
+    
+    -Cloning
+        This is potentially easy; duplicate the object using deep copy on clone.
+        Then remove the object from runtime.sprites on self-destruct - be careful of mem. leak
+    
+    -Procedures
+    
+    -Trigger hats (e.g. When Scene Starts?)
+
+    -Ask block
+    
+    -SVGs/Clicks/Correct collisions and bounce
+     (see Chromium bug https://code.google.com/p/chromium/issues/detail?id=249037).
+    
+    -Cloud variables/Scratch 2.0 API calls
+  
+    -List watchers
+    
+    -Implement sliders via drawing instead of <input type="range" />
+    
+    -Graphic effects
+        Some are simple to implement in canvas (ghost, brightness, etc.)
+        Potentially use CSS filters (CSS3 hue-rotate looks promising)
+
+    -Sound input, camera input
+
+
+Performance considerations:
+    -Touching, touching color, color touching color can definitely be improved
+
+Known bugs:
+    -Touching color, color touching color is currently finicky
+    -"Keep on stage" / "Bounce on edge" do not match flash player; need to consider transparency
+    -Experimental touch support for iPad was put in - this needs to be played with especially for non-iOS.

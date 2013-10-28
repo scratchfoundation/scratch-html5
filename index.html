@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scratch HTML5</title>
+    <meta charset="utf-8">
+    <!-- iPad properties: set width, disable pinch zoom -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="user-scalable=no, width=540" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style type="text/css">
+        body {
+            background: #222;
+            color: #fff;
+            margin: 0;
+        }
+    </style>
+    <link href="player.css" type="text/css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="js/util/Timer.js"></script>
+    <script src="js/util/OffsetBuffer.js"></script>
+    <script src="js/util/Color.js"></script>
+    <script src="js/util/Rectangle.js"></script>
+    <script src="js/Sprite.js"></script>
+    <script src="js/Reporter.js"></script>
+    <script src="js/Stage.js"></script>
+    <script src="js/sound/WAVFile.js"></script>
+    <script src="js/sound/SoundDecoder.js"></script>
+    <script src="js/sound/SoundBank.js"></script>
+    <script src="js/sound/NotePlayer.js"></script>
+    <script src="soundbank/Instr.js"></script>
+    <script src="js/IO.js"></script>
+    <script src="js/primitives/VarListPrims.js"></script>
+    <script src="js/primitives/MotionAndPenPrims.js"></script>
+    <script src="js/primitives/LooksPrims.js"></script>
+    <script src="js/primitives/SensingPrims.js"></script>
+    <script src="js/primitives/SoundPrims.js"></script>
+    <script src="js/primitives/Primitives.js"></script>
+    <script src="js/Interpreter.js"></script>
+    <script src="js/Runtime.js"></script>
+    <script src="js/Scratch.js"></script>
+    <script type="text/javascript">
+        if (window.location.hash) {
+            var project_id = parseInt(window.location.hash.substr(1));
+        } else {
+            var project_id = 10000160; // Default project for display
+        }
+    </script>
+  </head>
+  <body>
+    <div id="up">&nbsp;</div>
+    <div id="left">&nbsp;</div>
+    <div id="overContainer">
+      <div id="greenSlide"><div id="greenSlideFg"><img src="img/greenflag.png"></div></div>
+      <div id="container"></div>
+    </div>
+    <div id="right">&nbsp;</div>
+    <div id="down">&nbsp;</div>
+    
+    <div id="info">Loading...</div>
+
+    <button id="trigger_green_flag">Green flag</button>
+    <button id="trigger_stop">Stop</button>
+
+    <input type="text" name="project_id" id="project_id" /><button id='go_project'>Go!</button>
+  </body>
+</html>
