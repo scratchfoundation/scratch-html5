@@ -222,10 +222,10 @@ SensingPrims.prototype.primTimeDate = function(b) {
     return 0;
 }
 
-SensingPrims.prototype.primTimestamp = function() {
-   var now = new Date();
-   return (now.getTime() - 946677600000) / 86400000;
-   // (now - ms since 1/1/2000) / ms in a day
+SensingPrims.prototype.primTimestamp = function(b) {
+   var now = new Date(), epoch = new Date(2000,0,1), dst = now.getTimezoneOffset() - epoch.getTimezoneOffset(), msSince = now.getTime() - epoch.getTime();
+   msSince += (now.getTimezoneOffset() - dst) * 60000;
+   return msSince / 86400000;
 }
 
 // Helpers
