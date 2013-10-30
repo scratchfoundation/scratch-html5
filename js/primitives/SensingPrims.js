@@ -31,6 +31,7 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
     primTable['getAttribute:of:'] = this.primGetAttribute;
 
     primTable['timeAndDate'] = this.primTimeDate;
+    primTable['timestamp'] = this.primTimestamp;
 }
   
 SensingPrims.prototype.primTouching = function(b) {
@@ -219,6 +220,12 @@ SensingPrims.prototype.primTimeDate = function(b) {
     if (dt == 'minute') return now.getMinutes();
     if (dt == 'second') return now.getSeconds();
     return 0;
+}
+
+SensingPrims.prototype.primTimestamp = function() {
+   var now = new Date();
+   return (now.getTime() - 946677600000) / 86400000;
+   // (now - ms since 1/1/2000) / ms in a day
 }
 
 // Helpers
