@@ -30,7 +30,7 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
 
     primTable['getAttribute:of:'] = this.primGetAttribute;
 
-    primTable['timeAndDate'] = this.primTimeDate;
+    primTable['timeAndDate']  = function(b){ return runtime.getTimeString(interp.arg(b, 0)); };
     primTable['timestamp'] = this.primTimestamp;
 }
   
@@ -127,9 +127,9 @@ var stageColorHitTest = function(target, color) {
   
 var stageColorByColorHitTest = function(target, myColor, otherColor) {
     var threshold_acceptable = function(a, b, c, x, y, z) {
-        diff_a = Math.abs(a-x);
-        diff_b = Math.abs(b-y);
-        diff_c = Math.abs(c-z);
+        var diff_a = Math.abs(a-x);
+        var diff_b = Math.abs(b-y);
+        var diff_c = Math.abs(c-z);
         if (diff_a + diff_b + diff_c < 100) {
             return true;
         }
@@ -157,7 +157,7 @@ var stageColorByColorHitTest = function(target, myColor, otherColor) {
     var hitCanvas = document.createElement('canvas');
     hitCanvas.width = 480;
     hitCanvas.height = 360;
-    hitCtx = hitCanvas.getContext('2d');
+    var hitCtx = hitCanvas.getContext('2d');
     $.each(runtime.sprites, function(i, sprite) {
         if (sprite != target)
             sprite.stamp(hitCtx, 100);

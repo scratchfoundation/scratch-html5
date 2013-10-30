@@ -177,6 +177,22 @@ Runtime.prototype.spriteNamed = function(n) {
     });
     return selected_sprite;
 }
+
+Runtime.prototype.getTimeString = function(which) {
+    // Return local time properties.
+    var now = new Date();
+    switch (which) {
+        case 'hour': return now.getHours();
+        case 'minute': return now.getMinutes();
+        case 'second': return now.getSeconds();
+        case 'year': return now.getFullYear(); // four digit year (e.g. 2012)
+        case 'month': return now.getMonth() + 1; // 1-12
+        case 'date': return now.getDate(); // 1-31
+        case 'day of week': return now.getDay() + 1; // 1-7, where 1 is Sunday
+    }
+    return ''; // shouldn't happen
+}
+
   
 // Reassigns z-indices for layer functions
 Runtime.prototype.reassignZ = function(target, move) {
