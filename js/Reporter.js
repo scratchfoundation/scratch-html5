@@ -118,3 +118,51 @@ Reporter.prototype.changeSlider = function() {
     var variable = $(this).attr('data-var');
     target.variables[variable] = newValue;
 }
+
+var List = function(data) {
+    this.contents = data.contents;
+    this.listName = data.listName;
+
+    this.height = data.height;
+    this.width = data.width;
+    this.x = data.x;
+    this.y = data.y;
+    this.z = io.getCount();
+    this.visible = data.visible;
+
+//    this.isPersistent = data.isPersistent;
+
+    this.el = null; // jQuery element for list
+    this.containerEl = null;
+};
+
+List.prototype.attach = function(scene) {
+    this.el = $('<div class="list">');
+    this.el.append('<div class="list-title">'+this.listName);
+    this.containerEl = $('<div style="width:99%">').appendTo(this.el);
+    this.el.append('<div class="list-add">+');
+    this.el.append('<div class="list-length">length: '+this.contents.length);
+    scene.append(this.el);
+    this.update();
+    this.el.css('left', this.x);
+    this.el.css('top', this.y);
+    this.el.width(this.width);
+    this.el.height(this.height);
+    this.el.css('z-index', this.z);
+    this.el.css('display', this.visible ? 'inline-block' : 'none');
+}
+
+List.prototype.update = function(){
+    this.el.css('display', this.visible ? 'inline-block' : 'none');
+    if (!this.visible) return;
+
+    var c = this.containerEl.html(''); // so that it can be used inside the forEach
+    this.contents.forEach(function(val,i){
+        $('<div style="clear:both">').appendTo(c).append('<div class="list-index">'+(i+1),'<div class="list-item">'+val);
+    });
+    this.el.find('.list-length').text('length: '+this.contents.length);
+};
+
+List.prototype.updateLayer = function() {
+    this.el.css('z-index', this.z);
+}

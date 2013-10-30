@@ -93,18 +93,22 @@ IO.prototype.makeObjects = function() {
     runtime.stage.attachPenLayer(runtime.scene);
     runtime.stage.loadSounds();
     
-    // Create the sprites
-    $.each(this.data.children, function(index, obj) {
+    // Create the sprites and watchers
+    $.each(this.data.children.concat(this.data.lists), function i(index, obj) {
         var newSprite;
-        if(!obj.cmd) {
+        if(!obj.cmd && !obj.listName) { // sprite
             newSprite = new Sprite(obj);
-        } else {
+            if (obj.lists) $.each(obj.lists, i);
+        } else if (!obj.listName) { // watcher
             newSprite = new Reporter(obj);
+            runtime.reporters.push(newSprite);
+        } else { // list
+            newSprite = new List(obj);
             runtime.reporters.push(newSprite);
         }
         runtime.sprites.push(newSprite);
         newSprite.attach(runtime.scene);
-        if (!obj.cmd)
+        if (!obj.cmd && !obj.listName)
             newSprite.loadSounds();
     });
 }

@@ -91,6 +91,74 @@
     position: absolute;
 }
 
+/* List watcher styles */
+.list {
+    float: left;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 2px;
+    background-color: #C1C4C7;
+    padding-left: 3px;
+    font: bold 10px Verdana, sans-serif;
+    position: absolute;
+}
+
+.list .list-title {
+    padding-top: 2px;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+}
+
+.list .list-index {
+    color: rgb(81, 81, 81);
+    float: left;
+    padding: 2px;
+    margin-top: 0px;
+    font: bold 10px Verdana,sans-serif;
+}
+
+.list .list-item {
+    float: left;
+    width: 70%;
+    min-height: 18px; 
+    margin-bottom: 0px;
+    margin-right: 2px;
+    padding-left: 5px;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    background-color: #D94D11;
+    font-size: 10px;
+    color: white;
+    word-wrap: break-word;
+    font: bold 10px Verdana, sans-serif;
+}
+
+.list .list-add {
+   clear: both;
+   background-color: #dedede;
+   width: 12px;
+   height: 12px;
+   border-radius: 12px;
+   margin-top: 12px;
+   color: #707070;
+   font: bold 10px Verdana, sans-serif;
+   text-align: center;
+}
+
+.list .list-length {
+    font-size: 10px;
+    font-weight: normal;
+    margin-top: -12px;
+    text-align: center;
+    color: black;
+}
+
 /* Say/think bubble styles */
 .bubble-container {
     position: absolute;
