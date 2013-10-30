@@ -31,6 +31,7 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
     primTable['getAttribute:of:'] = this.primGetAttribute;
 
     primTable['timeAndDate']  = function(b){ return runtime.getTimeString(interp.arg(b, 0)); };
+    primTable['timestamp'] = this.primTimestamp;
 }
   
 SensingPrims.prototype.primTouching = function(b) {
@@ -206,6 +207,25 @@ SensingPrims.prototype.primGetAttribute = function(b) {
     if (attr == 'size') return targetSprite.getSize();
     if (attr == 'volume') return targetSprite.volume;
     return 0;
+}
+
+SensingPrims.prototype.primTimeDate = function(b) {
+    var dt = interp.arg(b, 0);
+    var now = new Date();
+    if (dt == 'year') return now.getFullYear();
+    if (dt == 'month') return now.getMonth()+1;
+    if (dt == 'date') return now.getDate();
+    if (dt == 'day of week') return now.getDay()+1;
+    if (dt == 'hour') return now.getHours();
+    if (dt == 'minute') return now.getMinutes();
+    if (dt == 'second') return now.getSeconds();
+    return 0;
+}
+
+SensingPrims.prototype.primTimestamp = function(b) {
+   var now = new Date(), epoch = new Date(2000,0,1), dst = now.getTimezoneOffset() - epoch.getTimezoneOffset(), msSince = now.getTime() - epoch.getTime();
+   msSince += (now.getTimezoneOffset() - dst) * 60000;
+   return msSince / 86400000;
 }
 
 // Helpers

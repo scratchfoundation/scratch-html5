@@ -99,6 +99,9 @@ Reporter.prototype.update = function() {
         case 'costumeIndex':
             newValue = target.currentCostumeIndex + 1;
             break;
+        case 'timer':
+            newValue = interp.primitiveTable.timer().toFixed(3);
+            break;
     }
     this.valueEl.html(newValue);
     if (this.mode == 3)

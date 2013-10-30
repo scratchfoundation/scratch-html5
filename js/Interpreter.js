@@ -248,13 +248,13 @@ Interpreter.prototype.initPrims = function() {
 
     // added by John:
     this.primitiveTable['showBubble'] = function(b) { console.log(interp.arg(b, 1)) }
-    this.primitiveTable['timerReset'] = function(b) { interp.timerBase = new Date().getTime() }
-    this.primitiveTable['timer'] = function(b) { return (new Date().getTime() - interp.timerBase) / 1000 }
+    this.primitiveTable['timerReset'] = function(b) {interp.timerBase = (new Date()).getTime() }
+    this.primitiveTable['timer'] = function(b) {return ((new Date()).getTime() - interp.timerBase) / 1000 }
 
     new Primitives().addPrimsTo(this.primitiveTable);
 }
 
-var timerBase = 0;
+Interpreter.prototype.timerBase = (new Date()).getTime();
 Interpreter.prototype.lookupPrim = function(op) {
     var fcn = interp.primitiveTable[op];
     if (fcn == null) fcn = function(b) { console.log('not implemented: ' + b.op) }

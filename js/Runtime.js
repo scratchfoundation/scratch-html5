@@ -75,6 +75,7 @@ Runtime.prototype.greenFlag = function() {
     if (this.projectLoaded) {
         interp.activeThread = new Thread(null);
         interp.threads = [];
+        interp.primitiveTable.timerReset();
         this.startGreenFlags();
     }
 }
