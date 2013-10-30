@@ -140,23 +140,28 @@
 }
 
 .list .list-add {
-   clear: both;
-   background-color: #dedede;
-   width: 12px;
-   height: 12px;
-   border-radius: 12px;
-   margin-top: 12px;
-   color: #707070;
-   font: bold 10px Verdana, sans-serif;
-   text-align: center;
+    clear: both;
+    background-color: #dedede;
+    width: 12px;
+    height: 12px;
+    border-radius: 12px;
+    color: #707070;
+    font: bold 10px Verdana, sans-serif;
+    text-align: center;
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
 }
 
 .list .list-length {
     font-size: 10px;
     font-weight: normal;
-    margin-top: -12px;
     text-align: center;
     color: black;
+    position: absolute;
+    bottom: 2px;
+    left: 0px;
+    right: 0px;
 }
 
 /* Say/think bubble styles */

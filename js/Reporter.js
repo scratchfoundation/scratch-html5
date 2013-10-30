@@ -139,7 +139,7 @@ var List = function(data) {
 List.prototype.attach = function(scene) {
     this.el = $('<div class="list">');
     this.el.append('<div class="list-title">'+this.listName);
-    this.containerEl = $('<div style="width:99%">').appendTo(this.el);
+    this.containerEl = $('<div style="width:99%;overflow:auto">').appendTo(this.el);
     this.el.append('<div class="list-add">+');
     this.el.append('<div class="list-length">length: '+this.contents.length);
     scene.append(this.el);
@@ -160,6 +160,7 @@ List.prototype.update = function(){
     this.contents.forEach(function(val,i){
         $('<div style="clear:both">').appendTo(c).append('<div class="list-index">'+(i+1),'<div class="list-item">'+val);
     });
+    c.height(this.height-26);
     this.el.find('.list-length').text('length: '+this.contents.length);
 };
 
