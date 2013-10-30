@@ -26,6 +26,7 @@ VarListPrims.prototype.addPrimsTo = function(primTable) {
     primTable['showVariable:']       = this.primShowVar;
 
     // List primitives
+    primTable['contentsOfList:']      = this.primReadList;
     primTable['append:toList:']      = this.primListAppend;
     primTable['deleteLine:ofList:']  = this.primListDeleteLine;
     primTable['insert:at:ofList:']   = this.primListInsertAt;
@@ -101,6 +102,14 @@ var findList = function(targetSprite, listName) {
         return runtime.stage.lists[listName].contents;
     }
     return null;
+}
+
+VarListPrims.prototype.primReadList = function(b) {
+    var list = findList(interp.targetSprite(), interp.arg(b, 0));
+    if (list) {
+       var allOne = list.map(function(val){return val.length}).reduce(function(old,val){return old+val},0)===list.length;
+       return list.join(allOne?'':' ');
+    }
 }
 
 VarListPrims.prototype.primListAppend = function(b) {
