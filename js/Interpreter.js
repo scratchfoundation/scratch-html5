@@ -40,6 +40,7 @@ var Thread = function(block, target) {
     this.tmp = null; // used for thread operations like Timer
     this.tmpObj = []; // used for Sprite operations like glide
     this.firstTime = true;
+	this.paused = false; // pausing thread for: ask
 }
 
 var Interpreter = function() {
@@ -104,7 +105,7 @@ Interpreter.prototype.stepThreads = function() {
         var threadStopped = false;
         for (var a = this.threads.length-1; a >= 0; --a) {
             this.activeThread = this.threads[a];
-            this.stepActiveThread();
+	        this.stepActiveThread();
             if (!this.activeThread || this.activeThread.nextBlock == null) {
                 threadStopped = true;
             }
@@ -135,11 +136,13 @@ Interpreter.prototype.stepActiveThread = function() {
         this.opCount++;
         // Advance the "program counter" to the next block before running the primitive.
         // Control flow primitives (e.g. if) may change activeThread.nextBlock.
+        if(this.activeThread.paused) return;
+		
         this.activeThread.nextBlock = b.nextBlock;
         b.primFcn(b);
         if (this.yield) { this.activeThread.nextBlock = b; return; }
         b = this.activeThread.nextBlock; // refresh local variable b in case primitive did some control flow
-        while (b == null) {
+		while (b == null) {
             // end of a substack; pop the owning control flow block from stack
             // Note: This is a loop to handle nested control flow blocks. 
             b = this.activeThread.stack.pop();
