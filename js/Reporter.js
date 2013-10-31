@@ -134,13 +134,30 @@ var List = function(data) {
 
     this.el = null; // jQuery element for list
     this.containerEl = null;
+    this.scrollbar = null;
 };
 
 List.prototype.attach = function(scene) {
     this.el = $('<div class="list">');
     this.el.append('<div class="list-title">'+this.listName);
-    this.containerEl = $('<div style="width:99%;overflow:auto">').appendTo(this.el);
-    this.el.append('<div class="list-add">+');
+    var c = this.containerEl = $('<div style="overflow:hidden;float:left;position:relative">').appendTo(this.el).width(this.width-19);
+    var s = this.scrollbar = $('<div class="list-scrollbar-container"><div class="list-scrollbar">').appendTo(this.el);
+    var sb = s.children('.list-scrollbar');
+    sb.mousedown(function(e){
+        if (e.which===1) $(this).data({scrolling:true,startY:e.pageY}); // left button
+    });
+    $('body').mousemove(function(e){
+        if (sb.data('scrolling')) {
+            var offset = e.pageY-sb.data('startY');
+            if (offset > -1 && offset < c.height()-sb.height()) {
+                sb.css('top',offset);
+                c.scrollTop(offset);
+            }
+        }
+    }).mouseup(function(){
+        if ($.hasData(sb[0],'scrolling')) sb.removeData(['scrolling','startY']);
+    });
+//    this.el.append('<div class="list-add">+'); // disabled because it doesn't do anything even in the original
     this.el.append('<div class="list-length">length: '+this.contents.length);
     scene.append(this.el);
     this.update();
@@ -161,6 +178,8 @@ List.prototype.update = function(){
         $('<div style="clear:both">').appendTo(c).append('<div class="list-index">'+(i+1),'<div class="list-item">'+val);
     });
     c.height(this.height-26);
+    var s = this.scrollbar.height(this.height-26);
+    s.children('.list-scrollbar').height(s.height()/c[0].scrollHeight*s.height()).css('display', s.children('.list-scrollbar').height()===c.height() ? 'none' : 'inline-block');
     this.el.find('.list-length').text('length: '+this.contents.length);
 };
 

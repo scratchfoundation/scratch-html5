@@ -113,6 +113,20 @@
     font-weight: bold;
 }
 
+.list .list-scrollbar-container {
+    float: right;
+    width: 10px;
+    position: relative;
+}
+
+.list .list-scrollbar {
+    position: absolute;
+    top: 0px;
+    width: 10px;
+    background-color: #a8aaad;
+    border-radius: 10px;
+}
+
 .list .list-index {
     color: rgb(81, 81, 81);
     float: left;
