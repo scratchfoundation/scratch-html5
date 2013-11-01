@@ -32,6 +32,9 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
 
     primTable['timeAndDate']  = function(b){ return runtime.getTimeString(interp.arg(b, 0)); };
     primTable['timestamp'] = this.primTimestamp;
+	
+	primTable['doAsk'] = this.primDoAsk;
+	primTable['answer'] = this.primAnswer;
 }
   
 SensingPrims.prototype.primTouching = function(b) {
@@ -227,6 +230,30 @@ SensingPrims.prototype.primTimestamp = function(b) {
    msSince += (now.getTimezoneOffset() - dst) * 60000;
    return msSince / 86400000;
 }
+
+SensingPrims.prototype.primDoAsk = function(b){
+	console.log(b);
+	showBubble(b, 'say');
+	$("#container").append($('<div id="ask-box"><input type="text" id="answer"></input><input type="submit" id="answer-submit"></input>/div>'));
+	$("#ask-box").css('top', '340px');
+	$("#ask-box").css('position', 'absolute');
+	$("#answer").css("width", "400");
+	var activeThread = interp.threads.indexOf(interp.activeThread)
+;
+	interp.activeThread.paused = true;
+	
+	
+	$("#answer-submit").bind("click", function(){
+		console.log(activeThread);
+		interp.threads[activeThread].paused = false;
+		SensingPrims._answer = $("#answer")[0].value;
+		$("#ask-box").remove(); // remove ask box
+	});
+};
+
+SensingPrims.prototype.primAnswer = function(b){
+	return SensingPrims._answer;
+};
 
 // Helpers
 SensingPrims.prototype.mouseOrSpritePosition = function(arg) {
