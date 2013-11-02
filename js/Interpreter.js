@@ -149,7 +149,6 @@ Interpreter.prototype.stepActiveThread = function() {
                 return;
             } else {
                 b = this.activeThread.stack.pop();
-                debugger;
                 if (b.isLoop) {
                     this.activeThread.nextBlock = b; // preserve where it left off
                     return;
