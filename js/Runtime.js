@@ -67,6 +67,12 @@ Runtime.prototype.loadStart = function() {
         return;
     }
     $('#info').html("Loaded!");
+	
+	// procedure definitions	
+	runtime.allStacksDo(function(stack, target){
+		if(stack.op == 'procDef') target.procedures[stack.args[0]] = stack; // procedure is a reference to the definition
+	});
+	
     setInterval(this.step, 33);
     this.projectLoaded = true;
 }

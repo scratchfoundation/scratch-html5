@@ -100,7 +100,7 @@ Reporter.prototype.update = function() {
             newValue = target.currentCostumeIndex + 1;
             break;
         case 'timer':
-            newValue = interp.primitiveTable.timer().toFixed(3);
+            newValue = (Math.floor(interp.primitiveTable.timer()*10)/10).toString();
             break;
     }
     this.valueEl.html(newValue);

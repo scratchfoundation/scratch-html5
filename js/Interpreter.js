@@ -39,6 +39,7 @@ var Thread = function(block, target) {
     this.target = target; // target object running the thread
     this.tmp = null; // used for thread operations like Timer
     this.tmpObj = []; // used for Sprite operations like glide
+	this.procedureArgs = {}; // used for storing procedure arguments. behavior outside of a procedure is undefined.
     this.firstTime = true;
 }
 
