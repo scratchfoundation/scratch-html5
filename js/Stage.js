@@ -34,6 +34,9 @@ var Stage = function(data) {
     this.lineCanvas.height = 360;
     this.lineCache = this.lineCanvas.getContext('2d');
 
+	// Procedures
+	this.procedures = [];
+
     Sprite.call(this, data);
 }
 

@@ -50,6 +50,11 @@ Primitives.prototype.addPrimsTo = function(primTable) {
     primTable["letter:of:"]         = this.primLetterOf;
     primTable["stringLength:"]      = function(b) { return interp.arg(b, 0).length };
     
+	// procedures
+	primTable["procDef"] = this.primProcDef;
+	primTable["getParam"] = this.primGetParam;
+	primTable["call"] = this.primCall;
+	
     new VarListPrims().addPrimsTo(primTable);
     new MotionAndPenPrims().addPrimsTo(primTable);
     new LooksPrims().addPrimsTo(primTable);
@@ -103,4 +108,36 @@ Primitives.prototype.primMathFunction = function(b) {
     }
     return 0;
 }
+
+Primitives.prototype.primProcDef = function(b){
+	// no op
+};
+
+Primitives.prototype.primGetParam = function(b){
+	return interp.activeThread.procedureArgs[b.args[0]];
+};
+
+Primitives.prototype.primCall = function(b){
+	interp.activeThread.stack.push(interp.activeThread.nextBlock); // flow control
+	interp.activeThread.nextBlock = interp.targetSprite().procedures[b.args[0]]; // jump
+		
+	// push args
+	var hat = interp.activeThread.nextBlock;
+	var argBlocks = hat.args.slice(1);
+	var argKeys = [];
+	var i = 0;
+	while(i < argBlocks.length){
+		if(argBlocks[i].op)
+			argKeys.push(argBlocks[i].op);
+		++i;
+	}
+	var argValues = b.args.slice(1);
+	
+	interp.activeThread.procedureArgs = {}; // clear old data
+	i = 0;
+	while(i < argKeys.length){
+		interp.activeThread.procedureArgs[argKeys[i]] = argValues[i];
+		++i;
+	}
+};
 
