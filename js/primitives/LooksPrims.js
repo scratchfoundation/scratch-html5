@@ -168,8 +168,7 @@ LooksPrims.prototype.primSetEffect = function(b) {
 }
 
 LooksPrims.prototype.primClearEffects = function(b) {
-    var s = interp.targetSprite();
-    s.ghostFilterEffect = 0;
+    interp.targetSprite().resetFilters();
 }
 
 var showBubble = function(b, type) {
