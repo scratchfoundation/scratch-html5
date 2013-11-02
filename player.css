@@ -137,3 +137,9 @@
     
     background: url(img/think-bottom.png) transparent no-repeat;
 }
+
+#ask-box {
+	top: 340px;
+	position: absolute;
+	width: 400px;
+}
