@@ -63,11 +63,9 @@ VarListPrims.prototype.primChangeVar = function(b) {
     if (s == null) return;
     var targetVar = interp.arg(b, 0);
     if (targetVar in s.variables) {
-        s.variables[targetVar] = parseFloat(s.variables[targetVar]);
-        s.variables[targetVar] += interp.arg(b, 1);
+        s.variables[targetVar] = parseFloat(s.variables[targetVar]) + interp.numarg(b, 1);
     } else if (targetVar in runtime.stage.variables) {
-        runtime.stage.variables[targetVar] = parseFloat(runtime.stage.variables[targetVar]);
-        runtime.stage.variables[targetVar] += interp.arg(b, 1);
+        runtime.stage.variables[targetVar] = parseFloat(runtime.stage.variables[targetVar]) + interp.numarg(b, 1);
     }
 }
 
@@ -123,7 +121,7 @@ VarListPrims.prototype.primListDeleteLine = function(b) {
     var line = interp.arg(b, 0);
     if (line == 'all' || list.length == 0) list.length = 0;
     else if (line == 'last') list.splice(list.length - 1, 1);
-    else if (parseInt(line) - 1 in list) list.splice(parseInt(line) - 1, 1);
+    else if (parseInt(line, 10) - 1 in list) list.splice(parseInt(line, 10) - 1, 1);
 }
 
 VarListPrims.prototype.primListInsertAt = function(b) {
@@ -134,7 +132,7 @@ VarListPrims.prototype.primListInsertAt = function(b) {
     var position = interp.arg(b, 1);
     if (position == 'last') position = list.length;
     else if (position == 'random') position = Math.round(Math.random() * list.length);
-    else position = parseInt(position) - 1;
+    else position = parseInt(position, 10) - 1;
     if (position > list.length) return;
     
     list.splice(position, 0, newItem);
@@ -148,7 +146,7 @@ VarListPrims.prototype.primListSetLine = function(b) {
     
     if (position == 'last') position = list.length - 1;
     else if (position == 'random') position = Math.floor(Math.random() * list.length);
-    else position = parseInt(position) - 1;
+    else position = parseInt(position, 10) - 1;
     if (position > list.length - 1) return;
 
     list[position] = newItem;

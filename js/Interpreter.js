@@ -139,13 +139,23 @@ Interpreter.prototype.stepActiveThread = function() {
         b.primFcn(b);
         if (this.yield) { this.activeThread.nextBlock = b; return; }
         b = this.activeThread.nextBlock; // refresh local variable b in case primitive did some control flow
-        while (b == null) {
+        while (!b) {
             // end of a substack; pop the owning control flow block from stack
             // Note: This is a loop to handle nested control flow blocks. 
-            b = this.activeThread.stack.pop();
-            if ((b == null) || (b.isLoop)) {
-                this.activeThread.nextBlock = b;
-                return; // yield at the end of a loop or when stack is empty
+
+            // yield at the end of a loop or when stack is empty
+            if (this.activeThread.stack.length === 0) {
+                this.activeThread.nextBlock = null;
+                return;
+            } else {
+                b = this.activeThread.stack.pop();
+                debugger;
+                if (b.isLoop) {
+                    this.activeThread.nextBlock = b; // preserve where it left off
+                    return;
+                } else {
+                    b = b.nextBlock; // skip and continue for non looping blocks
+                }
             }
         }
     }
@@ -194,7 +204,26 @@ Interpreter.prototype.arg = function(block, index) {
     }
     return arg;
 }
-  
+
+Interpreter.prototype.numarg = function(block, index) {
+    var arg = parseFloat(this.arg(block, index));
+    if (arg !== arg) {
+        return 0;
+    }
+    return arg;
+}
+
+Interpreter.prototype.boolarg = function(block, index) {
+    var arg = this.arg(block, index);
+    if (typeof arg === 'boolean') {
+        return arg;
+    } else if (typeof arg === 'string') {
+        return arg === '' || arg === '0' || arg.toLowerCase() === 'false';
+    }
+    return arg;
+}
+
+
 Interpreter.prototype.targetSprite = function() {
     return this.activeThread.target;
 }
@@ -231,14 +260,14 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['whenGreenFlag']       = this.primNoop;
     this.primitiveTable['whenKeyPressed']      = this.primNoop;
     this.primitiveTable['whenClicked']         = this.primNoop;
-    this.primitiveTable['if']                  = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b) };
+    this.primitiveTable['if']                  = function(b) { if (interp.boolarg(b, 0)) interp.startSubstack(b) };
     this.primitiveTable['doForever']           = function(b) { interp.startSubstack(b, true) };
-    this.primitiveTable['doForeverIf']         = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b, true); else interp.yield = true; };
-    this.primitiveTable['doIf']                = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b); };
+    this.primitiveTable['doForeverIf']         = function(b) { if (interp.boolarg(b, 0)) interp.startSubstack(b, true); else interp.yield = true; };
+    this.primitiveTable['doIf']                = function(b) { if (interp.boolarg(b, 0)) interp.startSubstack(b); };
     this.primitiveTable['doRepeat']            = this.primRepeat;
-    this.primitiveTable['doIfElse']            = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b); else interp.startSubstack(b, false, true); };
-    this.primitiveTable['doWaitUntil']         = function(b) { if (!interp.arg(b, 0)) interp.yield = true };
-    this.primitiveTable['doUntil']             = function(b) { if (!interp.arg(b, 0)) interp.startSubstack(b, true) };
+    this.primitiveTable['doIfElse']            = function(b) { if (interp.boolarg(b, 0)) interp.startSubstack(b); else interp.startSubstack(b, false, true); };
+    this.primitiveTable['doWaitUntil']         = function(b) { if (!interp.boolarg(b, 0)) interp.yield = true };
+    this.primitiveTable['doUntil']             = function(b) { if (!interp.boolarg(b, 0)) interp.startSubstack(b, true) };
     this.primitiveTable['doReturn']            = function(b) { interp.activeThread = new Thread(null); };
     this.primitiveTable['stopAll']             = function(b) { interp.activeThread = new Thread(null); interp.threads = []; }
     this.primitiveTable['whenIReceive']        = this.primNoop;
@@ -264,13 +293,13 @@ Interpreter.prototype.lookupPrim = function(op) {
 Interpreter.prototype.primNoop = function(b) { console.log(b.op); }
 	
 Interpreter.prototype.primWait = function(b) {
-    if (interp.activeThread.firstTime) interp.startTimer(interp.arg(b, 0));
+    if (interp.activeThread.firstTime) interp.startTimer(interp.numarg(b, 0));
     else interp.checkTimer();
 }
   
 Interpreter.prototype.primRepeat = function(b) {
     if (b.tmp == -1) {
-        b.tmp = Math.max(interp.arg(b, 0), 0); // Initialize repeat count on this block
+        b.tmp = Math.max(interp.numarg(b, 0), 0); // Initialize repeat count on this block
     }
     if (b.tmp > 0) {
         b.tmp -= 1; // decrement count
@@ -323,10 +352,8 @@ Interpreter.prototype.isRunning = function(b) {
 
 Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
     // Start the substack of a control structure command such as if or forever.
-    if (isLoop) {
-        b.isLoop = true;
-        this.activeThread.stack.push(b); // remember the block that started the substack
-    }
+    b.isLoop = !!isLoop;
+    this.activeThread.stack.push(b); // remember the block that started the substack
     if(!secondSubstack) {
         this.activeThread.nextBlock = b.substack;
     } else {

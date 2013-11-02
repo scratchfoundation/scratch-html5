@@ -26,23 +26,23 @@ var Primitives = function() {}
 
 Primitives.prototype.addPrimsTo = function(primTable) {
     // Math primitives
-    primTable["+"]        = function(b) { return interp.arg(b, 0) + interp.arg(b, 1) };
-    primTable["-"]        = function(b) { return interp.arg(b, 0) - interp.arg(b, 1) };
-    primTable["*"]        = function(b) { return interp.arg(b, 0) * interp.arg(b, 1) };
-    primTable["/"]        = function(b) { return interp.arg(b, 0) / interp.arg(b, 1) };
-    primTable["%"]        = function(b) { return interp.arg(b, 0) % interp.arg(b, 1) };
+    primTable["+"]        = function(b) { return interp.numarg(b, 0) + interp.numarg(b, 1) };
+    primTable["-"]        = function(b) { return interp.numarg(b, 0) - interp.numarg(b, 1) };
+    primTable["*"]        = function(b) { return interp.numarg(b, 0) * interp.numarg(b, 1) };
+    primTable["/"]        = function(b) { return interp.numarg(b, 0) / interp.numarg(b, 1) };
+    primTable["%"]        = function(b) { return interp.numarg(b, 0) % interp.numarg(b, 1) };
     primTable["randomFrom:to:"] = this.primRandom;
-    primTable["<"]        = function(b) { return (interp.arg(b, 0) < interp.arg(b, 1)) };
+    primTable["<"]        = function(b) { return (interp.numarg(b, 0) < interp.numarg(b, 1)) };
     primTable["="]        = function(b) { return (interp.arg(b, 0) == interp.arg(b, 1)) };
-    primTable[">"]        = function(b) { return (interp.arg(b, 0) > interp.arg(b, 1)) };
-    primTable["&"]        = function(b) { return interp.arg(b, 0) && interp.arg(b, 1) };
-    primTable["|"]        = function(b) { return interp.arg(b, 0) || interp.arg(b, 1) };
-    primTable["not"]      = function(b) { return !interp.arg(b, 0) };
-    primTable["abs"]      = function(b) { return Math.abs(interp.arg(b, 0)) };
-    primTable["sqrt"]     = function(b) { return Math.sqrt(interp.arg(b, 0)) };
+    primTable[">"]        = function(b) { return (interp.numarg(b, 0) > interp.numarg(b, 1)) };
+    primTable["&"]        = function(b) { return interp.boolarg(b, 0) && interp.boolarg(b, 1) };
+    primTable["|"]        = function(b) { return interp.boolarg(b, 0) || interp.boolarg(b, 1) };
+    primTable["not"]      = function(b) { return !interp.boolarg(b, 0) };
+    primTable["abs"]      = function(b) { return Math.abs(interp.numarg(b, 0)) };
+    primTable["sqrt"]     = function(b) { return Math.sqrt(interp.numarg(b, 0)) };
 
     primTable["\\\\"]               = this.primModulo;
-    primTable["rounded"]            = function(b) { return Math.round(interp.arg(b, 0)) };
+    primTable["rounded"]            = function(b) { return Math.round(interp.numarg(b, 0)) };
     primTable["computeFunction:of:"] = this.primMathFunction;
     
     // String primitives
@@ -58,8 +58,8 @@ Primitives.prototype.addPrimsTo = function(primTable) {
 }
   
 Primitives.prototype.primRandom = function(b) {
-    var n1 = interp.arg(b, 0);
-    var n2 = interp.arg(b, 1);
+    var n1 = interp.numarg(b, 0);
+    var n2 = interp.numarg(b, 1);
     var low = (n1 <= n2) ? n1 : n2;
     var hi = (n1 <= n2) ? n2 : n1;
     if(low == hi) return low;
@@ -72,21 +72,21 @@ Primitives.prototype.primRandom = function(b) {
   
 Primitives.prototype.primLetterOf = function(b) {
     var s = interp.arg(b, 1);
-    var i = interp.arg(b, 0) - 1;
+    var i = interp.numarg(b, 0) - 1;
     if ((i < 0) || (i >= s.length)) return "";
     return s.charAt(i);
 }
   
 Primitives.prototype.primModulo = function(b) {
-    var modulus = interp.arg(b, 1);
-    var n = interp.arg(b, 0) % modulus;
+    var modulus = interp.numarg(b, 1);
+    var n = interp.numarg(b, 0) % modulus;
     if (n < 0) n += modulus;
     return n;
 }
 
 Primitives.prototype.primMathFunction = function(b) {
-    var op = interp.arg(b, 0);
-    var n = interp.arg(b, 1);
+    var op = interp.numarg(b, 0);
+    var n = interp.numarg(b, 1);
     switch(op) {
         case "abs": return Math.abs(n);
         case "sqrt": return Math.sqrt(n);
