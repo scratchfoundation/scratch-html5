@@ -54,6 +54,7 @@ Primitives.prototype.addPrimsTo = function(primTable) {
 	primTable["procDef"] = this.primProcDef;
 	primTable["getParam"] = this.primGetParam;
 	primTable["call"] = this.primCall;
+	primTable["procEnd"] = function(){ interp.activeThread.procedureArgs.pop(); };
 	
     new VarListPrims().addPrimsTo(primTable);
     new MotionAndPenPrims().addPrimsTo(primTable);
@@ -114,13 +115,15 @@ Primitives.prototype.primProcDef = function(b){
 };
 
 Primitives.prototype.primGetParam = function(b){
+	console.log(interp.activeThread.procedureArgs);
 	return interp.activeThread.procedureArgs[interp.activeThread.procedureArgs.length-1][b.args[0]];
 };
 
 Primitives.prototype.primCall = function(b){
+	interp.activeThread.stack.push(new Block(["procEnd"]));
 	interp.activeThread.stack.push(interp.activeThread.nextBlock); // flow control
 	interp.activeThread.nextBlock = interp.targetSprite().procedures[b.args[0]]; // jump
-		
+
 	// push args
 	var hat = interp.activeThread.nextBlock;
 	var argBlocks = hat.args.slice(1);

@@ -144,9 +144,6 @@ Interpreter.prototype.stepActiveThread = function() {
             // end of a substack; pop the owning control flow block from stack
             // Note: This is a loop to handle nested control flow blocks. 
             b = this.activeThread.stack.pop();
-			if(this.activeThread.procedureArgs.length){ // nested procedure issues
-				this.activeThread.procedureArgs.pop();
-			}
             if ((b == null) || (b.isLoop)) {
                 this.activeThread.nextBlock = b;
                 return; // yield at the end of a loop or when stack is empty
