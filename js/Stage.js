@@ -35,7 +35,7 @@ var Stage = function(data) {
     this.lineCache = this.lineCanvas.getContext('2d');
 
 	// Procedures
-	this.procedures = [];
+	this.procedures = {};
 
     Sprite.call(this, data);
 }
