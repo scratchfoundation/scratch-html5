@@ -1,3 +1,22 @@
+body {
+    background: #fff;
+    color: #333;
+    margin: 0;
+    padding: 30px;
+    font-family: sans-serif;
+}
+
+/* Wrapper wraps the entire player, and the text below and above. Ideally,
+   all CSS selectors would be descendants of #wrapper so that the player
+   is embeddable.
+*/
+#wrapper {
+    width: 540px;
+    height: 420px;
+    margin:auto;
+}
+
+/* Container is the Stage */
 #container {
     border: none;
     cursor: default;
@@ -18,6 +37,7 @@
     user-select: none;  
 }
 
+/* The pane over a project with the green flag on startup. */
 #greenSlide {
     position: absolute;
     float: left;
@@ -25,6 +45,7 @@
     margin-left: 30px;
 }
 
+/* The green flag icon. */
 #greenSlideFg {
     background-color: #000;
     opacity: 0.4;
@@ -35,10 +56,37 @@
 }
 
 /* iPad arrow key frame */
-#up { width: 540px; height: 30px; clear: both; background-color: #333; }
-#left { float: left; width: 30px; height: 360px; background-color: #333; }
-#right { float: left; width: 30px; height: 360px; background-color: #333; }
-#down { width: 540px; height: 30px; clear: both; background-color: #333; }
+/*  This is the frame around the stage with various buttons. */
+/*  up and down are 30 + 480 + 30 pixels wide */
+/*  left and right are 360 pixels high */
+#up {
+    width: 540px;
+    height: 30px;
+    clear: both;
+    background-color: #eee;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+#left {
+    float: left;
+    width: 30px;
+    height: 360px;
+    background-color: #eee;
+}
+#right {
+    float: left;
+    width: 30px;
+    height: 360px;
+    background-color: #eee;
+}
+#down {
+    width: 540px;
+    height: 30px;
+    clear: both;
+    background-color: #eee;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
     
 /* Reporter styles */
 .reporter-normal {
@@ -136,4 +184,59 @@
     height: 19px;
     
     background: url(img/think-bottom.png) transparent no-repeat;
+}
+
+/* Button styling */
+button {
+    background-color: #ddd;
+    border-radius: 3px;
+    border-style: none;
+    cursor: pointer;
+    font-family: sans-serif;
+    width:30px;
+    padding: 3px;
+    margin:3px;
+    height: 24px;
+}
+button:hover {
+    background-color: #ccc;
+}
+#trigger_green_flag, #trigger_stop {
+    font-size: 20px;
+    width:24px;
+    margin:3px;
+    float:right;
+}
+#trigger_green_flag {
+    color:#050;
+}
+#trigger_stop {
+    color:#F33;
+    margin-right: 30px;
+}
+#clearer {
+    clear:both;
+}
+input[type=text] {
+    border-style: none;
+    border-radius: 4px;
+    font-family: sans-serif;
+    background-color: #ddd;
+    font-size: 14px;
+    padding:3px;
+    height:18px;
+    margin:3px;
+    margin-left: 30px;
+}
+input[type=text]:focus {
+    outline:none;
+    background-color: #ccc;
+}
+#info {
+    float:left;
+    margin-left: 30px;
+    height:24px;
+    padding:3px;
+    color:#aaa;
+    font-size:12px;
 }
