@@ -152,11 +152,25 @@ LooksPrims.prototype.primGoBack = function(b) {
     if(s.visible) interp.redraw();
 }
   
-LooksPrims.prototype.primChangeEffect = function(b) {}
+LooksPrims.prototype.primChangeEffect = function(b) {
+    var s = interp.targetSprite();
+    var filter = interp.arg(b, 0);
+    var currentValue = eval("s." + filter + "FilterEffect");
+    eval("s." + filter + "FilterEffect = (currentValue + (interp.arg(b, 1)));");
+    s.updateTransform();
+}
 
-LooksPrims.prototype.primSetEffect = function(b) {}
+LooksPrims.prototype.primSetEffect = function(b) {
+    var s = interp.targetSprite();
+    var filter = interp.arg(b, 0);
+    eval("s." + filter + "FilterEffect = (interp.arg(b, 1));");
+    s.updateTransform();
+}
 
-LooksPrims.prototype.primClearEffects = function(b) {}
+LooksPrims.prototype.primClearEffects = function(b) {
+    var s = interp.targetSprite();
+    s.ghostFilterEffect = 0;
+}
 
 var showBubble = function(b, type) {
     var s = interp.targetSprite();

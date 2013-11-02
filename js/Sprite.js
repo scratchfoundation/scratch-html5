@@ -89,6 +89,9 @@ var Sprite = function(data) {
     this.soundsLoaded = 0;
     this.instrument = 1;
 
+    // Filter effects
+    this.ghostFilterEffect = 0;
+
     // Incremented when images are loaded by the browser.
     this.costumesLoaded = 0;
 
@@ -296,6 +299,8 @@ Sprite.prototype.updateTransform = function() {
     $(this.mesh).css('-ms-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
     $(this.mesh).css('-o-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
     $(this.mesh).css('transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
+    
+    $(this.mesh).css('opacity', ((100 - this.ghostFilterEffect) / 100));
 
     // Don't forget to update the talk bubble.
     if (this.talkBubble) {
