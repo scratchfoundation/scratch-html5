@@ -307,9 +307,16 @@ Sprite.prototype.updateTransform = function() {
     $(this.mesh).css('transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
     
     $(this.mesh).css('opacity', (1 - (this.ghostFilterEffect) / 100));
+	if (!!window.chrome) {
     $(this.mesh).css('-webkit-filter', 
                 'hue-rotate(' + ((this.colorFilterEffect % 200) * 1.8) + 'deg) \
                 brightness(' + ((this.brightnessFilterEffect / 100) + 1) + ')');
+    }
+    if (/Constructor/.test(window.HTMLElement)) {
+    $(this.mesh).css('-webkit-filter', 
+                'hue-rotate(' + ((this.colorFilterEffect % 200) * 1.8) + 'deg) \
+                brightness(' + (this.brightnessFilterEffect / 100) + ')');
+    }
 
     // Don't forget to update the talk bubble.
     if (this.talkBubble) {
