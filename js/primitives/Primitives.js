@@ -118,6 +118,7 @@ Primitives.prototype.primGetParam = function(b){
 };
 
 Primitives.prototype.primCall = function(b){
+	interp.activeThread.stack.push(interp.activeThread.nextBlock); // flow control
 	interp.activeThread.nextBlock = interp.targetSprite().procedures[b.args[0]]; // jump
 		
 	// push args
