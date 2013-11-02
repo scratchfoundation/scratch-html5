@@ -110,7 +110,7 @@ Primitives.prototype.primMathFunction = function(b) {
 }
 
 Primitives.prototype.primProcDef = function(b){
-	interp.activeThread.procedureLevels++;
+	// no op
 };
 
 Primitives.prototype.primGetParam = function(b){
