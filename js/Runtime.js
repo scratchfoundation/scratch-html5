@@ -35,8 +35,8 @@ var Runtime = function() {
     this.audioPlaying = [];
     this.notesPlaying = [];
     this.projectLoaded = false;
-}
-  
+};
+
 // Initializer for the drawing and audio contexts.
 Runtime.prototype.init = function() {
     this.scene = $('#container');
@@ -44,8 +44,8 @@ Runtime.prototype.init = function() {
     this.audioContext = new AudioContext();
     this.audioGain = this.audioContext.createGainNode();
     this.audioGain.connect(runtime.audioContext.destination);
-}
-  
+};
+
 // Load start waits for the stage and the sprites to be loaded, without
 // hanging the browser.  When the loading is finished, we begin the step
 // and animate methods.
@@ -69,7 +69,7 @@ Runtime.prototype.loadStart = function() {
     $('#info').html("Loaded!");
     setInterval(this.step, 33);
     this.projectLoaded = true;
-}
+};
 
 Runtime.prototype.greenFlag = function() {
     if (this.projectLoaded) {
@@ -78,7 +78,7 @@ Runtime.prototype.greenFlag = function() {
         interp.primitiveTable.timerReset();
         this.startGreenFlags();
     }
-}
+};
 
 Runtime.prototype.stopAll = function() {
     interp.activeThread = new Thread(null);
@@ -86,10 +86,11 @@ Runtime.prototype.stopAll = function() {
     stopAllSounds();
     // Hide reporters
     for (var s = 0; s < runtime.sprites.length; s++) {
-        if (typeof runtime.sprites[s].hideBubble == 'function')
+        if (typeof runtime.sprites[s].hideBubble == 'function') {
             runtime.sprites[s].hideBubble();
+        }
     }
-}
+};
 
 // Step method for execution - called every 33 milliseconds
 Runtime.prototype.step = function() {
@@ -97,8 +98,8 @@ Runtime.prototype.step = function() {
     for (var r = 0; r < runtime.reporters.length; r++) {
         runtime.reporters[r].update();
     }
-}
-  
+};
+
 // Stack functions -- push and remove stacks
 // to be run by the interpreter as threads.
 Runtime.prototype.allStacksDo = function(f) {
@@ -106,25 +107,25 @@ Runtime.prototype.allStacksDo = function(f) {
     var stack;
     for (var i = runtime.sprites.length-1; i >= 0; i--) {
         var o = runtime.sprites[i];
-        if(typeof(o) == 'object' && o.constructor == Sprite) {
+        if (typeof(o) == 'object' && o.constructor == Sprite) {
             $.each(o.stacks, function(index, stack) {
                 f(stack, o);
             });
         }
     }
     $.each(stage.stacks, function(index, stack) {
-       f(stack, stage); 
+       f(stack, stage);
     });
-}
-  
+};
+
 // Hat triggers
 Runtime.prototype.startGreenFlags = function() {
     function startIfGreenFlag(stack, target) {
         if (stack.op == 'whenGreenFlag') interp.toggleThread(stack, target);
     }
     this.allStacksDo(startIfGreenFlag);
-}
-  
+};
+
 Runtime.prototype.startKeyHats = function(ch) {
     var keyName = null;
     if (('A'.charCodeAt(0) <= ch) && (ch <= 'Z'.charCodeAt(0)) ||
@@ -140,43 +141,43 @@ Runtime.prototype.startKeyHats = function(ch) {
     if (ch == 32) keyName = "space";
 
     if (keyName == null) return;
-    var startMatchingKeyHats = function (stack, target) {
+    var startMatchingKeyHats = function(stack, target) {
         if ((stack.op == "whenKeyPressed") && (stack.args[0] == keyName)) {
             // Only start the stack if it is not already running
-            if (!interp.isRunning(stack)) 
+            if (!interp.isRunning(stack)) {
                 interp.toggleThread(stack, target);
+            }
         }
     }
     runtime.allStacksDo(startMatchingKeyHats);
-}
-  
+};
+
 Runtime.prototype.startClickedHats = function(sprite) {
     function startIfClicked(stack, target) {
-        if(target == sprite && stack.op == "whenClicked") {
-            if(!interp.isRunning(stack))
-                interp.toggleThread(stack, target);
+        if (target == sprite && stack.op == "whenClicked" && !interp.isRunning(stack)) {
+            interp.toggleThread(stack, target);
         }
     }
     runtime.allStacksDo(startIfClicked);
-}
-  
+};
+
 // Returns true if a key is pressed.
 Runtime.prototype.keyIsDown = function(ch) {
     return this.keysDown[ch] || false;
-}
-  
+};
+
 // Sprite named -- returns one of the sprites on the stage.
 Runtime.prototype.spriteNamed = function(n) {
     if (n == 'Stage') return this.stage;
     var selected_sprite = null;
     $.each(this.sprites, function(index, s) {
         if (s.objName == n) {
-            selected_sprite = s;   
+            selected_sprite = s;
             return false;
         }
     });
     return selected_sprite;
-}
+};
 
 Runtime.prototype.getTimeString = function(which) {
     // Return local time properties.
@@ -191,9 +192,8 @@ Runtime.prototype.getTimeString = function(which) {
         case 'day of week': return now.getDay() + 1; // 1-7, where 1 is Sunday
     }
     return ''; // shouldn't happen
-}
+};
 
-  
 // Reassigns z-indices for layer functions
 Runtime.prototype.reassignZ = function(target, move) {
     var sprites = this.sprites;
@@ -205,18 +205,18 @@ Runtime.prototype.reassignZ = function(target, move) {
             sprites.splice(index, 1);
         }
     });
-    
+
     if (move == null) {
         // Move to the front
         this.sprites.splice(this.sprites.length, 0, target);
-    } else if (oldIndex - move >= 0 && oldIndex - move < this.sprites.length+1) {
+    } else if (oldIndex - move >= 0 && oldIndex - move < this.sprites.length + 1) {
         // Move to the new position
         this.sprites.splice(oldIndex - move, 0, target);
     } else {
         // No change is required
         this.sprites.splice(oldIndex, 0, target);
-    }      
-    
+    }
+
     // Renumber the z-indices
     var newZ = 1;
     $.each(this.sprites, function(index, sprite) {
@@ -224,4 +224,4 @@ Runtime.prototype.reassignZ = function(target, move) {
         sprite.updateLayer();
         newZ++;
     });
-}
+};

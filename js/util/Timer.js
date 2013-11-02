@@ -21,40 +21,40 @@ var Timer = function() {
     var trials = [];
     var last_trial = 0;
     var start_time = 0;
-}
+};
 
 Timer.prototype.time = function() {
-    return (new Date()).getTime();
-}
+    return Date.now();
+};
 
 Timer.prototype.start = function() {
     start_time = this.time();
-}
+};
 
 Timer.prototype.stop = function() {
     end = this.time();
     last_trial = end - start_time;
     trials.push(last_trial);
-}
+};
 
 Timer.prototype.count = function() {
     return trials.length;
-}
+};
 
 Timer.prototype.average = function() {
     sum = 0;
-    for(i = 0; i < this.count(); i++) {
+    for (i = 0; i < this.count(); i++) {
         sum += trials[i];
     }
     return sum / this.count();
-}
+};
 
 Timer.prototype.print = function(element) {
-    text = "Trial: " + last_trial + "ms" + 
+    text = "Trial: " + last_trial + "ms" +
            "<br />\nTrials: " + this.count() + ", Avg: " + this.average() + "ms";
-    if(element) {
+    if (element) {
         $(element).html(text);
     } else {
         console.log(text);
     }
-}
+};

@@ -35,31 +35,28 @@ var Stage = function(data) {
     this.lineCache = this.lineCanvas.getContext('2d');
 
     Sprite.call(this, data);
-}
+};
 
 Stage.prototype = Object.create(Sprite.prototype);
 Stage.prototype.constructor = Stage;
-  
+
 Stage.prototype.attachPenLayer = function(scene) {
-    if (this.penLayerLoaded)
-        return;
+    if (this.penLayerLoaded) return;
     this.penLayerLoaded = true;
     $(this.lineCanvas).css('position', 'absolute');
     $(this.lineCanvas).css('z-index', '-1');
     scene.append(this.lineCanvas);
-}
-  
+};
+
 Stage.prototype.isLoaded = function() {
-    return (this.penLayerLoaded 
-            && this.costumesLoaded == this.costumes.length
-            && this.soundsLoaded == Object.keys(this.sounds).length);
-}
-  
+    return this.penLayerLoaded && this.costumesLoaded == this.costumes.length && this.soundsLoaded == Object.keys(this.sounds).length;
+};
+
 // Pen functions
 Stage.prototype.clearPenStrokes = function() {
     this.lineCache.clearRect(0, 0, 480, 360);
-}
-  
+};
+
 Stage.prototype.stroke = function(from, to, width, color) {
     this.lineCache.lineWidth = width;
     this.lineCache.lineCap = 'round';
@@ -69,4 +66,4 @@ Stage.prototype.stroke = function(from, to, width, color) {
     this.lineCache.lineTo(to[0] + 240.5, 180.5 - to[1]);
     this.lineCache.strokeStyle = 'rgb(' + (color >> 16) + ',' + (color >> 8 & 255) + ',' + (color & 255) + ')';
     this.lineCache.stroke();
-}
+};

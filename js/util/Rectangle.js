@@ -16,7 +16,7 @@
 var Point = function(x, y) {
     this.x = x;
     this.y = y;
-}
+};
 
 var Rectangle = function(x, y, width, height) {
     this.x = x;
@@ -27,10 +27,8 @@ var Rectangle = function(x, y, width, height) {
     this.right = x + width;
     this.top = y;
     this.bottom = y + height;
-}
+};
+
 Rectangle.prototype.intersects = function(other) {
-    return !(this.left > other.right ||
-                this.right < other.left || 
-                this.top > other.bottom || 
-                this.bottom < other.top);
-}
+    return !(this.left > other.right || this.right < other.left || this.top > other.bottom || this.bottom < other.top);
+};
