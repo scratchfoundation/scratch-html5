@@ -41,14 +41,14 @@ body {
 #greenSlide {
     position: absolute;
     float: left;
-    z-index: 500;
+    z-index: 500; /* Hmm, will this break after the 501st sprite? */
     margin-left: 30px;
 }
 
 /* The green flag icon. */
 #greenSlideFg {
     background-color: #000;
-    opacity: 0.4;
+    opacity: 0.2;
     width: 278px;
     height: 218px;
     padding-top: 142px;
@@ -57,35 +57,60 @@ body {
 
 /* iPad arrow key frame */
 /*  This is the frame around the stage with various buttons. */
-/*  up and down are 30 + 480 + 30 pixels wide */
-/*  left and right are 360 pixels high */
+#ui-top {
+    width: 540px;
+    height: 30px;
+    clear: both;
+    background-color: #eee;
+}
 #up {
+    padding-top:10px;
     width: 540px;
     height: 30px;
     clear: both;
     background-color: #eee;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    text-align: center;
+
+    color:#ccc;
 }
 #left {
     float: left;
     width: 30px;
     height: 360px;
     background-color: #eee;
+    line-height: 360px;
+    color:#ccc;
+    text-align: center;
 }
 #right {
     float: left;
     width: 30px;
     height: 360px;
     background-color: #eee;
+    line-height: 360px;
+    color:#ccc;
+    text-align: center;
 }
 #down {
+    padding-top:10px;
     width: 540px;
     height: 30px;
-    clear: both;
     background-color: #eee;
+    text-align: center;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+
+    color:#ccc;
+}
+#ui-bottom {
+    width:480px;
+    height: 30px;
+    background-color: #eee;
+    padding-left: 30px;
+    padding-right: 30px;
+    clear: both;
 }
     
 /* Reporter styles */
@@ -190,18 +215,21 @@ body {
 button {
     background-color: #ddd;
     border-radius: 3px;
-    border-style: none;
     cursor: pointer;
+    border:none;
     font-family: sans-serif;
-    width:30px;
+    width:24px;
     padding: 3px;
     margin:3px;
     height: 24px;
+    background: -webkit-linear-gradient(#ddd, #ccc);
 }
 button:hover {
     background-color: #ccc;
+    background: -webkit-linear-gradient(#ccc, #bbb);
 }
 #trigger_green_flag, #trigger_stop {
+    padding-top:0px;
     font-size: 20px;
     width:24px;
     margin:3px;
@@ -213,6 +241,7 @@ button:hover {
 #trigger_stop {
     color:#F33;
     margin-right: 30px;
+    margin-left:0px;
 }
 #clearer {
     clear:both;
@@ -227,6 +256,7 @@ input[type=text] {
     height:18px;
     margin:3px;
     margin-left: 30px;
+    width:100px;
 }
 input[type=text]:focus {
     outline:none;
