@@ -235,9 +235,6 @@ SensingPrims.prototype.primDoAsk = function(b){
 	console.log(b);
 	showBubble(b, 'say');
 	$("#container").append($('<div id="ask-box"><input type="text" id="answer"></input><input type="submit" id="answer-submit"></input>/div>'));
-	$("#ask-box").css('top', '340px');
-	$("#ask-box").css('position', 'absolute');
-	$("#answer").css("width", "400");
 	var activeThread = interp.threads.indexOf(interp.activeThread)
 ;
 	interp.activeThread.paused = true;
