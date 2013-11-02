@@ -79,8 +79,8 @@ LooksPrims.prototype.primShowCostume = function(b) {
         if (i >= 0) {
             s.showCostume(i);
         } else {
-            var n = Number(arg);
-            if (!isNaN(n)) {
+            var n = parseInt(arg, 10);
+            if (n === n) { // if n is not NaN
                 s.showCostume(n - 1);
             } else {
                 return;  // arg did not match a costume name nor is a valid number
@@ -104,8 +104,8 @@ LooksPrims.prototype.primStartScene = function(b) {
         if (i >= 0) {
             s.showCostume(i);
         } else {
-            var n = Number(arg);
-            if (!isNaN(n)) {
+            var n = parseInt(arg, 10);
+            if (n === n) { // fast !isNaN check
                 s.showCostume(n - 1);
             } else {
                 return;  // arg did not match a costume name nor is a valid number
@@ -123,14 +123,14 @@ LooksPrims.prototype.primCostumeNum = function(b) {
 LooksPrims.prototype.primChangeSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
-    s.setSize(s.getSize() + interp.arg(b, 0));
+    s.setSize(s.getSize() + interp.numarg(b, 0));
     if (s.visible) interp.redraw();
 }
   
 LooksPrims.prototype.primSetSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
-    s.setSize(interp.arg(b, 0));
+    s.setSize(interp.numarg(b, 0));
     if (s.visible) interp.redraw();
 }
   
@@ -148,7 +148,7 @@ LooksPrims.prototype.primGoFront = function(b) {
   
 LooksPrims.prototype.primGoBack = function(b) {
     var s = interp.targetSprite();
-    runtime.reassignZ(s, interp.arg(b, 0));
+    runtime.reassignZ(s, interp.numarg(b, 0));
     if(s.visible) interp.redraw();
 }
   
@@ -168,7 +168,7 @@ var showBubbleAndWait = function(b, type) {
     if (s == null) return;
     if (interp.activeThread.firstTime) {
         var text = interp.arg(b, 0);
-        var secs = interp.arg(b, 1);
+        var secs = interp.numarg(b, 1);
         s.showBubble(text, type);
         if (s.visible) interp.redraw();
         interp.startTimer(secs);

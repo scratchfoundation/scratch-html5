@@ -155,8 +155,8 @@ SoundPrims.prototype.primPlayNote = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     if (interp.activeThread.firstTime) {
-        var key = interp.arg(b, 0);
-        var secs = beatsToSeconds(interp.arg(b, 1));
+        var key = interp.numarg(b, 0);
+        var secs = beatsToSeconds(interp.numarg(b, 1));
         playNote(s.instrument, key, secs, s);
         interp.startTimer(secs);
     } else {
@@ -168,8 +168,8 @@ SoundPrims.prototype.primPlayDrum = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     if (interp.activeThread.firstTime) {
-        var drum = Math.round(interp.arg(b, 0));
-        var secs = beatsToSeconds(interp.arg(b, 1));
+        var drum = Math.round(interp.numarg(b, 0));
+        var secs = beatsToSeconds(interp.numarg(b, 1));
         playDrum(drum, secs, s);
         interp.startTimer(secs);
     } else {
@@ -181,7 +181,7 @@ SoundPrims.prototype.primPlayRest = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     if (interp.activeThread.firstTime) {
-        var secs = beatsToSeconds(interp.arg(b, 0));
+        var secs = beatsToSeconds(interp.numarg(b, 0));
         interp.startTimer(secs);
     } else {
         interp.checkTimer();
@@ -199,12 +199,12 @@ SoundPrims.prototype.primStopAllSounds = function(b) {
 
 SoundPrims.prototype.primChangeVolume = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.volume += interp.arg(b, 0);
+    if (s != null) s.volume += interp.numarg(b, 0);
 }
 
 SoundPrims.prototype.primSetVolume = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.volume = interp.arg(b, 0);
+    if (s != null) s.volume = interp.numarg(b, 0);
 }
 
 SoundPrims.prototype.primVolume = function(b) {
