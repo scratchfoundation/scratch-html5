@@ -110,11 +110,11 @@ Primitives.prototype.primMathFunction = function(b) {
 }
 
 Primitives.prototype.primProcDef = function(b){
-	// no op
+	interp.activeThread.procedureLevels++;
 };
 
 Primitives.prototype.primGetParam = function(b){
-	return interp.activeThread.procedureArgs[b.args[0]];
+	return interp.activeThread.procedureArgs[interp.activeThread.procedureArgs.length-1][b.args[0]];
 };
 
 Primitives.prototype.primCall = function(b){
@@ -133,11 +133,13 @@ Primitives.prototype.primCall = function(b){
 	}
 	var argValues = b.args.slice(1);
 	
-	interp.activeThread.procedureArgs = {}; // clear old data
+	var argObj = {};
 	i = 0;
 	while(i < argKeys.length){
-		interp.activeThread.procedureArgs[argKeys[i]] = argValues[i];
+		argObj[argKeys[i]] = argValues[i];
 		++i;
 	}
+		
+	interp.activeThread.procedureArgs.push(argObj);
 };
 

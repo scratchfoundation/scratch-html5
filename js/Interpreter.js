@@ -39,7 +39,8 @@ var Thread = function(block, target) {
     this.target = target; // target object running the thread
     this.tmp = null; // used for thread operations like Timer
     this.tmpObj = []; // used for Sprite operations like glide
-	this.procedureArgs = {}; // used for storing procedure arguments. behavior outside of a procedure is undefined.
+	this.procedureArgs = []; // used for storing procedure arguments. behavior outside of a procedure is undefined.
+  	this.procedureLevels = 0; // for dealing with nested procedures
     this.firstTime = true;
 }
 
@@ -144,6 +145,10 @@ Interpreter.prototype.stepActiveThread = function() {
             // end of a substack; pop the owning control flow block from stack
             // Note: This is a loop to handle nested control flow blocks. 
             b = this.activeThread.stack.pop();
+			if(this.activeThread.procedureLevels){ // nested procedure issues
+				this.activeThread.procedureArgs.pop();
+				this.activeThread.procedureLevels--;
+			}
             if ((b == null) || (b.isLoop)) {
                 this.activeThread.nextBlock = b;
                 return; // yield at the end of a loop or when stack is empty
