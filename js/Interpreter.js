@@ -133,10 +133,11 @@ Interpreter.prototype.stepActiveThread = function() {
     if (b == null) return;
     this.yield = false;
     while (true) {
-        this.opCount++;
+		if(this.activeThread.paused) return; // thread pausing allows asynchronous events to trigger program flow
+		
         // Advance the "program counter" to the next block before running the primitive.
         // Control flow primitives (e.g. if) may change activeThread.nextBlock.
-        if(this.activeThread.paused) return;
+        this.opCount++;
 		
         this.activeThread.nextBlock = b.nextBlock;
         b.primFcn(b);
