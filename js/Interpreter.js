@@ -22,7 +22,7 @@
 
 var Block = function(opAndArgs, optionalSubstack) {
     this.op = opAndArgs[0];
-    this.primFcn = interp.lookupPrim(this.op); 
+    this.primFcn = interp.lookupPrim(this.op);
     this.args = opAndArgs.slice(1); // arguments can be either or constants (numbers, boolean strings, etc.) or expressions (Blocks)
     this.isLoop = false; // set to true for loop blocks the first time they run
     this.substack = optionalSubstack;
@@ -30,7 +30,7 @@ var Block = function(opAndArgs, optionalSubstack) {
     this.nextBlock = null;
     this.tmp = -1;
     interp.fixArgs(this);
-}
+};
 
 var Thread = function(block, target) {
     this.nextBlock = block; // next block to run; null when thread is finished
@@ -40,7 +40,7 @@ var Thread = function(block, target) {
     this.tmp = null; // used for thread operations like Timer
     this.tmpObj = []; // used for Sprite operations like glide
     this.firstTime = true;
-}
+};
 
 var Interpreter = function() {
     // Interpreter state
@@ -54,10 +54,10 @@ var Interpreter = function() {
     this.yield = false;
     this.doRedraw = false;
     this.opCount = 0; // used to benchmark the interpreter
-}
+};
 
 // Utilities for building blocks and sequences of blocks
-Interpreter.prototype.fixArgs = function(b) { 
+Interpreter.prototype.fixArgs = function(b) {
     // Convert the arguments of the given block into blocks or substacks if necessary.
     // A block argument can be a constant (numbers, boolean strings, etc.), an expression (Blocks), or a substack (an array of blocks).
     var newArgs = [];
@@ -66,7 +66,7 @@ Interpreter.prototype.fixArgs = function(b) {
         if (arg && arg.constructor == Array) {
             if ((arg.length > 0) && (arg[0].constructor == Array)) {
                 // if first element arg is itself an array, then arg is a substack
-                if(!b.substack) {
+                if (!b.substack) {
                     b.substack = this.makeBlockList(arg);
                 } else {
                     b.substack2 = this.makeBlockList(arg);
@@ -80,7 +80,7 @@ Interpreter.prototype.fixArgs = function(b) {
         }
     }
     b.args = newArgs;
-}
+};
 
 Interpreter.prototype.makeBlockList = function(blockList) {
     var firstBlock = null, lastBlock = null;
@@ -91,7 +91,7 @@ Interpreter.prototype.makeBlockList = function(blockList) {
         lastBlock = b;
     }
     return firstBlock;
-}
+};
 
 // The Interpreter proper
 Interpreter.prototype.stepThreads = function() {
@@ -115,17 +115,17 @@ Interpreter.prototype.stepThreads = function() {
                 if (this.threads[a].nextBlock != null) {
                     newThreads.push(this.threads[a]);
                 }
-            } 
+            }
             this.threads = newThreads;
             if (this.threads.length == 0) return;
         }
         this.currentMSecs = this.timer.time();
     }
-}
+};
 
 Interpreter.prototype.stepActiveThread = function() {
     // Run the active thread until it yields.
-    if(typeof(this.activeThread) == 'undefined') {
+    if (typeof(this.activeThread) == 'undefined') {
         return;
     }
     var b = this.activeThread.nextBlock;
@@ -141,7 +141,7 @@ Interpreter.prototype.stepActiveThread = function() {
         b = this.activeThread.nextBlock; // refresh local variable b in case primitive did some control flow
         while (b == null) {
             // end of a substack; pop the owning control flow block from stack
-            // Note: This is a loop to handle nested control flow blocks. 
+            // Note: This is a loop to handle nested control flow blocks.
             b = this.activeThread.stack.pop();
             if ((b == null) || (b.isLoop)) {
                 this.activeThread.nextBlock = b;
@@ -149,8 +149,8 @@ Interpreter.prototype.stepActiveThread = function() {
             }
         }
     }
-}
-  
+};
+
 Interpreter.prototype.toggleThread = function(b, targetObj) {
     var newThreads = [], wasRunning = false;
     for (var i = 0; i < this.threads.length; i++) {
@@ -161,16 +161,16 @@ Interpreter.prototype.toggleThread = function(b, targetObj) {
         }
     }
     this.threads = newThreads;
-    if(!wasRunning) {
+    if (!wasRunning) {
         this.startThread(b, targetObj);
     }
-  }
-  
+}
+
 Interpreter.prototype.startThread = function(b, targetObj) {
     this.activeThread = new Thread(b, targetObj);
     this.threads.push(this.activeThread);
-}
-  
+};
+
 Interpreter.prototype.restartThread = function(b, targetObj) {
     // used by broadcast; stop any thread running on b, then start a new thread on b
     var newThread = new Thread(b, targetObj);
@@ -184,7 +184,7 @@ Interpreter.prototype.restartThread = function(b, targetObj) {
     if (!wasRunning) {
         this.threads.push(newThread);
     }
-}
+};
 
 Interpreter.prototype.arg = function(block, index) {
     var arg = block.args[index];
@@ -193,11 +193,11 @@ Interpreter.prototype.arg = function(block, index) {
         return arg.primFcn(arg); // expression
     }
     return arg;
-}
-  
+};
+
 Interpreter.prototype.targetSprite = function() {
     return this.activeThread.target;
-}
+};
 
 // Timer
 Interpreter.prototype.startTimer = function(secs) {
@@ -206,7 +206,7 @@ Interpreter.prototype.startTimer = function(secs) {
     this.activeThread.tmp = this.currentMSecs + waitMSecs; // end time in milliseconds
     this.activeThread.firstTime = false;
     this.yield = true;
-}
+};
 
 Interpreter.prototype.checkTimer = function() {
     // check for timer expiration and clean up if expired. return true when expired
@@ -219,11 +219,11 @@ Interpreter.prototype.checkTimer = function() {
         this.yield = true;
         return false;
     }
-}
-  
+};
+
 Interpreter.prototype.redraw = function() {
     this.doRedraw = true;
-}
+};
 
 // Primitive operations
 Interpreter.prototype.initPrims = function() {
@@ -231,14 +231,14 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['whenGreenFlag']       = this.primNoop;
     this.primitiveTable['whenKeyPressed']      = this.primNoop;
     this.primitiveTable['whenClicked']         = this.primNoop;
-    this.primitiveTable['if']                  = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b) };
-    this.primitiveTable['doForever']           = function(b) { interp.startSubstack(b, true) };
+    this.primitiveTable['if']                  = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b); };
+    this.primitiveTable['doForever']           = function(b) { interp.startSubstack(b, true); };
     this.primitiveTable['doForeverIf']         = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b, true); else interp.yield = true; };
     this.primitiveTable['doIf']                = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b); };
     this.primitiveTable['doRepeat']            = this.primRepeat;
     this.primitiveTable['doIfElse']            = function(b) { if (interp.arg(b, 0)) interp.startSubstack(b); else interp.startSubstack(b, false, true); };
-    this.primitiveTable['doWaitUntil']         = function(b) { if (!interp.arg(b, 0)) interp.yield = true };
-    this.primitiveTable['doUntil']             = function(b) { if (!interp.arg(b, 0)) interp.startSubstack(b, true) };
+    this.primitiveTable['doWaitUntil']         = function(b) { if (!interp.arg(b, 0)) interp.yield = true; };
+    this.primitiveTable['doUntil']             = function(b) { if (!interp.arg(b, 0)) interp.startSubstack(b, true); };
     this.primitiveTable['doReturn']            = function(b) { interp.activeThread = new Thread(null); };
     this.primitiveTable['stopAll']             = function(b) { interp.activeThread = new Thread(null); interp.threads = []; }
     this.primitiveTable['whenIReceive']        = this.primNoop;
@@ -247,27 +247,27 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['wait:elapsed:from:']  = this.primWait;
 
     // added by John:
-    this.primitiveTable['showBubble'] = function(b) { console.log(interp.arg(b, 1)) }
-    this.primitiveTable['timerReset'] = function(b) {interp.timerBase = (new Date()).getTime() }
-    this.primitiveTable['timer'] = function(b) {return ((new Date()).getTime() - interp.timerBase) / 1000 }
+    this.primitiveTable['showBubble'] = function(b) { console.log(interp.arg(b, 1)); };
+    this.primitiveTable['timerReset'] = function(b) { interp.timerBase = Date.now(); };
+    this.primitiveTable['timer'] = function(b) { return (Date.now() - interp.timerBase) / 1000; };
 
     new Primitives().addPrimsTo(this.primitiveTable);
-}
+};
 
-Interpreter.prototype.timerBase = (new Date()).getTime();
+Interpreter.prototype.timerBase = Date.now();
 Interpreter.prototype.lookupPrim = function(op) {
     var fcn = interp.primitiveTable[op];
-    if (fcn == null) fcn = function(b) { console.log('not implemented: ' + b.op) }
+    if (fcn == null) fcn = function(b) { console.log('not implemented: ' + b.op); };
     return fcn;
-}
+};
 
-Interpreter.prototype.primNoop = function(b) { console.log(b.op); }
-	
+Interpreter.prototype.primNoop = function(b) { console.log(b.op); };
+
 Interpreter.prototype.primWait = function(b) {
     if (interp.activeThread.firstTime) interp.startTimer(interp.arg(b, 0));
     else interp.checkTimer();
-}
-  
+};
+
 Interpreter.prototype.primRepeat = function(b) {
     if (b.tmp == -1) {
         b.tmp = Math.max(interp.arg(b, 0), 0); // Initialize repeat count on this block
@@ -280,14 +280,14 @@ Interpreter.prototype.primRepeat = function(b) {
         b.tmp = -1;
         b = null;
     }
-}
-  
+};
+
 Interpreter.prototype.broadcast = function(b, waitFlag) {
     var pair;
     if (interp.activeThread.firstTime) {
         var receivers = [];
         var msg = String(interp.arg(b, 0)).toLowerCase();
-        var findReceivers = function (stack, target) {
+        var findReceivers = function(stack, target) {
             if ((stack.op == "whenIReceive") && (stack.args[0].toLowerCase() == msg)) {
                 receivers.push([stack, target]);
             }
@@ -303,14 +303,14 @@ Interpreter.prototype.broadcast = function(b, waitFlag) {
         if (interp.isRunning(interp.activeThread.tmpObj[pair][0])) {
             done = false;
         }
-    }  
+    }
     if (done) {
         interp.activeThread.tmpObj = null;
         interp.activeThread.firstTime = true;
     } else {
         interp.yield = true;
     }
-}
+};
 
 Interpreter.prototype.isRunning = function(b) {
     for (t in interp.threads) {
@@ -319,7 +319,7 @@ Interpreter.prototype.isRunning = function(b) {
         }
     }
     return false;
-}
+};
 
 Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
     // Start the substack of a control structure command such as if or forever.
@@ -327,9 +327,9 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
         b.isLoop = true;
         this.activeThread.stack.push(b); // remember the block that started the substack
     }
-    if(!secondSubstack) {
+    if (!secondSubstack) {
         this.activeThread.nextBlock = b.substack;
     } else {
         this.activeThread.nextBlock = b.substack2;
     }
-}
+};

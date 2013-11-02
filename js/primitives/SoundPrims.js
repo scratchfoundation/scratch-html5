@@ -15,7 +15,7 @@
 
 'use strict';
 
-var SoundPrims = function() {}
+var SoundPrims = function() {};
 
 SoundPrims.prototype.addPrimsTo = function(primTable) {
     primTable['playSound:'] = this.primPlaySound;
@@ -34,7 +34,7 @@ SoundPrims.prototype.addPrimsTo = function(primTable) {
     primTable['changeTempoBy:'] = function(b) { runtime.stage.data.tempoBPM = runtime.stage.data.tempoBPM + interp.arg(b, 0); };
     primTable['setTempoTo:'] = function(b) { runtime.stage.data.tempoBPM = interp.arg(b, 0); };
     primTable['tempo'] = function(b) { return runtime.stage.data.tempoBPM; };
-}
+};
 
 var playSound = function(snd) {
     if (snd.source) {
@@ -42,11 +42,11 @@ var playSound = function(snd) {
         snd.source.noteOff(0);
         snd.source = null;
     }
-    
+
     snd.source = runtime.audioContext.createBufferSource();
     snd.source.buffer = snd.buffer;
     snd.source.connect(runtime.audioGain);
-    
+
     // Track the sound's completion state
     snd.source.done = false;
     snd.source.finished = function() {
@@ -64,7 +64,7 @@ var playSound = function(snd) {
     runtime.audioPlaying.push(snd);
     snd.source.noteOn(0);
     return snd.source;
-}
+};
 
 var playDrum = function(drum, secs, client) {
     var player = SoundBank.getDrumPlayer(drum, secs);
@@ -81,9 +81,9 @@ var playDrum = function(drum, secs, client) {
             runtime.notesPlaying.splice(i, 1);
         }
     }
-    window.setTimeout(source.finished, secs * 1000);    
+    window.setTimeout(source.finished, secs * 1000);
     return player;
-}
+};
 
 var playNote = function(instrument, midiKey, secs, client) {
     var player =  SoundBank.getNotePlayer(instrument, midiKey);
@@ -99,9 +99,9 @@ var playNote = function(instrument, midiKey, secs, client) {
             runtime.notesPlaying.splice(i, 1);
         }
     }
-    window.setTimeout(source.finished, secs * 1000);    
+    window.setTimeout(source.finished, secs * 1000);
     return player;
-}
+};
 
 var stopAllSounds = function() {
     var oldPlaying = runtime.audioPlaying;
@@ -121,14 +121,14 @@ var stopAllSounds = function() {
             oldPlaying[s].finished();
         }
     }
-}
+};
 
 SoundPrims.prototype.primPlaySound = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     var snd = s.soundNamed(interp.arg(b, 0));
     if (snd != null) playSound(snd);
-}
+};
 
 SoundPrims.prototype.primPlaySoundUntilDone = function(b) {
     var activeThread = interp.activeThread;
@@ -145,11 +145,11 @@ SoundPrims.prototype.primPlaySoundUntilDone = function(b) {
     } else {
         interp.yield = true;
     }
-}
+};
 
 var beatsToSeconds = function(beats) {
-    return (beats * 60) / runtime.stage.data.tempoBPM;
-}
+    return beats * 60 / runtime.stage.data.tempoBPM;
+};
 
 SoundPrims.prototype.primPlayNote = function(b) {
     var s = interp.targetSprite();
@@ -162,7 +162,7 @@ SoundPrims.prototype.primPlayNote = function(b) {
     } else {
         interp.checkTimer();
     }
-}
+};
 
 SoundPrims.prototype.primPlayDrum = function(b) {
     var s = interp.targetSprite();
@@ -175,7 +175,7 @@ SoundPrims.prototype.primPlayDrum = function(b) {
     } else {
         interp.checkTimer();
     }
-}
+};
 
 SoundPrims.prototype.primPlayRest = function(b) {
     var s = interp.targetSprite();
@@ -186,28 +186,28 @@ SoundPrims.prototype.primPlayRest = function(b) {
     } else {
         interp.checkTimer();
     }
-}
+};
 
 SoundPrims.prototype.primSetInstrument = function(b) {
     var s = interp.targetSprite();
     if (s != null) s.instrument = interp.arg(b, 0);
-}
+};
 
 SoundPrims.prototype.primStopAllSounds = function(b) {
     stopAllSounds();
-}
+};
 
 SoundPrims.prototype.primChangeVolume = function(b) {
     var s = interp.targetSprite();
     if (s != null) s.volume += interp.arg(b, 0);
-}
+};
 
 SoundPrims.prototype.primSetVolume = function(b) {
     var s = interp.targetSprite();
     if (s != null) s.volume = interp.arg(b, 0);
-}
+};
 
 SoundPrims.prototype.primVolume = function(b) {
     var s = interp.targetSprite();
-    return (s != null) ? s.volume : 0;
-}
+    return s != null ? s.volume : 0;
+};

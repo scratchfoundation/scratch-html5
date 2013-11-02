@@ -19,11 +19,10 @@
 
 var WAVFile = function() {};
 
-
 WAVFile.decode = function(waveData) {
     // Decode the given WAV file data and return an Object with the format and sample data.
     var result = {};
-    
+
     var data = new OffsetBuffer(waveData);
 
     // read WAVE File Header
@@ -31,11 +30,11 @@ WAVFile.decode = function(waveData) {
     var totalSize = data.readInt();
     if (data.getLength() != (totalSize + 8)) console.log("WAVFile: bad RIFF size; ignoring");
     if (data.readString(4) != 'WAVE') { console.log("WAVFile: not a WAVE file"); return; }
-    
+
     // read format chunk
     var formatChunk = WAVFile.extractChunk('fmt ', data);
     if (formatChunk.getLength() < 16) { console.log("WAVFile: format chunk is too small"); return; }
-    
+
     var encoding = formatChunk.readShort();
     result.encoding = encoding;
     result.channels = formatChunk.readShort();
@@ -48,7 +47,7 @@ WAVFile.decode = function(waveData) {
     var sampleDataStartAndSize = WAVFile.dataChunkStartAndSize(data);
     result.sampleDataStart = sampleDataStartAndSize[0];
     result.sampleDataSize = sampleDataStartAndSize[1];
-    
+
     // handle various encodings
     if (encoding == 1) {
         if (!((result.bitsPerSample == 8) || (result.bitsPerSample == 16))) {
@@ -75,8 +74,7 @@ WAVFile.decode = function(waveData) {
         return;
     }
     return result;
-}
-
+};
 
 WAVFile.extractChunk = function(desiredType, data) {
     // Return the contents of the first chunk of the given type or an empty OffsetBuffer if it is not found.
@@ -93,8 +91,7 @@ WAVFile.extractChunk = function(desiredType, data) {
         }
     }
     return new OffsetBuffer(new ArrayBuffer());
-}
-
+};
 
 WAVFile.dataChunkStartAndSize = function(data) {
     // Return an array with the starting offset and size of the first chunk of the given type.
@@ -110,4 +107,4 @@ WAVFile.dataChunkStartAndSize = function(data) {
         }
     }
     return [0, 0]; // chunk not found; bad wave file
-}
+};

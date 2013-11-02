@@ -178,24 +178,24 @@ SoundBank.getNotePlayer = function(instNum, midiKey) {
     // Return a NotePlayer for the given Scratch 2.0 instrument number (1..21)
     // and MIDI key (0..127). If the instrument is out of range, use 1.
     var r = SoundBank.getNoteRecord(instNum - 1, midiKey);
-    var env = (r.length > 5) ? r[5] : null;
+    var env = r.length > 5 ? r[5] : null;
     return new NotePlayer(Instr.samples[r[1]], SoundBank.pitchForKey(r[2]), r[3], r[4], env);
-}
+};
 
 SoundBank.getNoteRecord = function(instNum, midiKey) {
     // Get a note record for the given instrument number.
-    if ((instNum < 0) || (instNum >= SoundBank.instruments.length)) instNum = 0;
+    if (instNum < 0 || instNum >= SoundBank.instruments.length) instNum = 0;
     var keyRanges = SoundBank.instruments[instNum];
     for (var r = 0; r < keyRanges.length; r++) {
         var topOfKeyRange = keyRanges[r][0];
         if (midiKey <= topOfKeyRange) return keyRanges[r];
     }
     return keyRanges[keyRanges.length - 1]; // return the note record for the top key range.
-}
+};
 
 SoundBank.pitchForKey = function(midiKey) {
     return 440 * Math.pow(2, (midiKey - 69) / 12); // midi key 69 is A=440 Hz
-}
+};
 
 SoundBank.getDrumPlayer = function(drumNum, secs) {
     // Return a NotePlayer for the given drum number.
@@ -210,6 +210,4 @@ SoundBank.getDrumPlayer = function(drumNum, secs) {
     var player = new NotePlayer(Instr.samples[entry[0]], SoundBank.pitchForKey(60), loopStart, loopEnd, env);
     player.setNoteAndDuration(60 + entry[1], 0);
     return player;
-}
-
-
+};

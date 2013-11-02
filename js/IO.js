@@ -27,26 +27,24 @@ var IO = function() {
     // In production, simply use the local path (no proxy)
     // since we won't be hampered by the same-origin policy.
     this.base = 'proxy.php?resource=internalapi/';
-    this.project_base = this.base + 'project/'; 
+    this.project_base = this.base + 'project/';
     this.project_suffix = '/get/';
     this.asset_base = this.base + 'asset/';
     this.asset_suffix = '/get/';
     this.soundbank_base = 'soundbank/';
     this.spriteLayerCount = 0;
-}
-  
+};
+
 IO.prototype.loadProject = function(project_id) {
     var runningIO = this;
-    $.getJSON(this.project_base + project_id + this.project_suffix,
-        function(data) {
-            runningIO.data = data;
-            runningIO.makeObjects();
-            runningIO.loadThreads();
-            runningIO.loadNotesDrums();
-            runtime.loadStart(); // Try to run the project.
-        }
-    );
-}
+    $.getJSON(this.project_base + project_id + this.project_suffix, function(data) {
+        runningIO.data = data;
+        runningIO.makeObjects();
+        runningIO.loadThreads();
+        runningIO.loadNotesDrums();
+        runtime.loadStart(); // Try to run the project.
+    });
+};
 
 IO.prototype.soundRequest = function(sound, sprite) {
     var request = new XMLHttpRequest();
@@ -63,9 +61,9 @@ IO.prototype.soundRequest = function(sound, sprite) {
             data[i] = samples[i];
         }
         sprite.soundsLoaded++;
-    }
+    };
     request.send();
-}
+};
 
 IO.prototype.loadNotesDrums = function() {
     var self = this;
@@ -81,22 +79,22 @@ IO.prototype.loadNotesDrums = function() {
             var soundBuffer = waveData.readBytes(2 * info.sampleCount);
             Instr.samples[name] = soundBuffer;
             Instr.wavsLoaded++;
-        }
+        };
         request.send();
     });
-}
-  
+};
+
 IO.prototype.makeObjects = function() {
     // Create the stage
     runtime.stage = new Stage(this.data);
     runtime.stage.attach(runtime.scene);
     runtime.stage.attachPenLayer(runtime.scene);
     runtime.stage.loadSounds();
-    
+
     // Create the sprites
     $.each(this.data.children, function(index, obj) {
         var newSprite;
-        if(!obj.cmd) {
+        if (!obj.cmd) {
             newSprite = new Sprite(obj);
         } else {
             newSprite = new Reporter(obj);
@@ -107,8 +105,8 @@ IO.prototype.makeObjects = function() {
         if (!obj.cmd)
             newSprite.loadSounds();
     });
-}
-  
+};
+
 IO.prototype.loadThreads = function() {
     var target = runtime.stage;
     var scripts = target.data.scripts;
@@ -123,9 +121,9 @@ IO.prototype.loadThreads = function() {
             $.each(target.data.scripts, function(j, s) {
                 target.stacks.push(interp.makeBlockList(s[2]));
             });
-        } 
+        }
     });
-}
+};
 
 // Returns the number sprite we are rendering
 // used for initial layering assignment
@@ -133,4 +131,4 @@ IO.prototype.getCount = function() {
     var rv = this.spriteLayerCount;
     this.spriteLayerCount++;
     return rv;
-}
+};
