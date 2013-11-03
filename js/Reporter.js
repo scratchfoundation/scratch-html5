@@ -148,11 +148,15 @@ List.prototype.attach = function(scene) {
     });
     $('body').mousemove(function(e){
         if (sb.data('scrolling')) {
-            var offset = e.pageY-sb.data('startY');
-            if (offset > -1 && offset < c.height()-sb.height()) {
-                sb.css('top',offset);
-                c.scrollTop(offset);
+            var offset = parseInt(sb.css('top'))+e.pageY-sb.data('startY');
+            if (offset < 0) {
+                offset = 0;
             }
+            if (offset > c.height()-sb.height()) {
+                offset = c.height()-sb.height();
+            }
+            sb.css('top',offset);
+            c.scrollTop(c.height()/sb.height()*offset);
         }
     }).mouseup(function(){
         if ($.hasData(sb[0],'scrolling')) sb.removeData(['scrolling','startY']);
@@ -178,6 +182,8 @@ List.prototype.update = function(){
         $('<div style="clear:both">').appendTo(c).append('<div class="list-index">'+(i+1),'<div class="list-item">'+val);
     });
     c.height(this.height-26);
+    c.find('.list-index').width(c.find('.list-index').last().width());
+    c.find('.list-item').width(c.width()-c.find('.list-index').width()-15)
     var s = this.scrollbar.height(this.height-26);
     s.children('.list-scrollbar').height(s.height()/c[0].scrollHeight*s.height()).css('display', s.children('.list-scrollbar').height()===c.height() ? 'none' : 'inline-block');
     this.el.find('.list-length').text('length: '+this.contents.length);
