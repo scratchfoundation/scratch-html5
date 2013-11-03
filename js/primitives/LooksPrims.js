@@ -155,15 +155,15 @@ LooksPrims.prototype.primGoBack = function(b) {
 LooksPrims.prototype.primChangeEffect = function(b) {
     var s = interp.targetSprite();
     var filter = interp.arg(b, 0);
-    var currentValue = eval("s." + filter + "FilterEffect");
-    eval("s." + filter + "FilterEffect = (currentValue + (interp.arg(b, 1)));");
+    var currentValue = s.filters[filter];
+    s.filters[filter] = currentValue + interp.arg(b, 1);
     s.updateTransform();
 }
 
 LooksPrims.prototype.primSetEffect = function(b) {
     var s = interp.targetSprite();
     var filter = interp.arg(b, 0);
-    eval("s." + filter + "FilterEffect = (interp.arg(b, 1));");
+    s.filters[filter] = interp.arg(b, 1);
     s.updateTransform();
 }
 

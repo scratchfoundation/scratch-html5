@@ -89,6 +89,11 @@ Runtime.prototype.stopAll = function() {
         if (typeof runtime.sprites[s].hideBubble == 'function')
             runtime.sprites[s].hideBubble();
     }
+    // Reset graphic effects
+    for (var s = 0; s < runtime.sprites.length; s++) {
+        if (typeof runtime.sprites[s].hideBubble == 'function')
+            runtime.sprites[s].resetFilters();
+    }
 }
 
 // Step method for execution - called every 33 milliseconds

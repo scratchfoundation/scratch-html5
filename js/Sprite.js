@@ -89,14 +89,8 @@ var Sprite = function(data) {
     this.soundsLoaded = 0;
     this.instrument = 1;
 
-    // Filter effects
-    this.colorFilterEffect = 0;
-    this.fisheyeFilterEffect = 0;
-    this.whirlFilterEffect = 0;
-    this.pixelateFilterEffect = 0;
-    this.mosaicFilterEffect = 0;
-    this.brightnessFilterEffect = 0;
-    this.ghostFilterEffect = 0;
+    // Image effects
+    this.filters = { color: 0, fisheye: 0, whirl: 0, pixelate: 0, mosaic: 0, brightness: 0, ghost: 0 };
 
     // Incremented when images are loaded by the browser.
     this.costumesLoaded = 0;
@@ -306,16 +300,18 @@ Sprite.prototype.updateTransform = function() {
     $(this.mesh).css('-o-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
     $(this.mesh).css('transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
     
-    $(this.mesh).css('opacity', (1 - (this.ghostFilterEffect) / 100));
+    $(this.mesh).css('opacity', (1 - (this.filters['ghost']) / 100));
+    //Chrome
 	if (!!window.chrome) {
     $(this.mesh).css('-webkit-filter', 
-                'hue-rotate(' + ((this.colorFilterEffect % 200) * 1.8) + 'deg) \
-                brightness(' + ((this.brightnessFilterEffect / 100) + 1) + ')');
+                'hue-rotate(' + ((this.filters['color'] % 200) * 1.8) + 'deg) \
+                brightness(' + ((this.filters['brightness'] / 100) + 1) + ')');
     }
+    //Safari
     if (/Constructor/.test(window.HTMLElement)) {
     $(this.mesh).css('-webkit-filter', 
-                'hue-rotate(' + ((this.colorFilterEffect % 200) * 1.8) + 'deg) \
-                brightness(' + (this.brightnessFilterEffect / 100) + ')');
+                'hue-rotate(' + ((this.filters['color'] % 200) * 1.8) + 'deg) \
+                brightness(' + (this.filters['brightness'] / 100) + ')');
     }
 
     // Don't forget to update the talk bubble.
@@ -479,12 +475,6 @@ Sprite.prototype.soundNamed = function(name) {
 }
 
 Sprite.prototype.resetFilters = function() {
-    this.colorFilterEffect = 0;
-    this.fisheyeFilterEffect = 0;
-    this.whirlFilterEffect = 0;
-    this.pixelateFilterEffect = 0;
-    this.mosaicFilterEffect = 0;
-    this.brightnessFilterEffect = 0;
-    this.ghostFilterEffect = 0;
+    this.filters = { color: 0, fisheye: 0, whirl: 0, pixelate: 0, mosaic: 0, brightness: 0, ghost: 0 };
     this.updateTransform();
 }
