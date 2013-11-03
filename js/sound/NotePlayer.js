@@ -65,11 +65,11 @@ var NotePlayer = function(wavFileData, originalPitch, loopStart, loopEnd, env) {
     if (env) {
         this.attackEnd = env[0] * 44.100;
         if (this.attackEnd > 0) this.attackRate = Math.pow(33000, 1 / this.attackEnd);
-        this.holdEnd = this.attackEnd + (env[1] * 44.100);
+        this.holdEnd = this.attackEnd + env[1] * 44.100;
         var decayCount = env[2] * 44100;
-        this.decayRate = (decayCount == 0) ? 1 : Math.pow(33000, -1 / decayCount);
+        this.decayRate = decayCount == 0 ? 1 : Math.pow(33000, -1 / decayCount);
     }
-}
+};
 
 NotePlayer.prototype = Object.create(SoundDecoder.prototype);
 NotePlayer.prototype.constructor = NotePlayer;
@@ -79,14 +79,14 @@ NotePlayer.prototype.setNoteAndDuration = function(midiKey, secs) {
     var pitch = 440 * Math.pow(2, (midiKey - 69) / 12); // midi key 69 is A (440 Hz)
     this.stepSize = pitch / (2 * this.originalPitch); // adjust for original sampling rate of 22050
     this.setDuration(secs);
-}
+};
 
 NotePlayer.prototype.setDuration = function(secs) {
     this.samplesSinceStart = 0;
     this.samplesRemaining = 44100 * secs;
     if (!this.isLooped) this.samplesRemaining = Math.min(this.samplesRemaining, this.endOffset / this.stepSize);
-    this.envelopeValue = (this.attackEnd > 0) ? 1 / 33000 : 1;
-}
+    this.envelopeValue = this.attackEnd > 0 ? 1 / 33000 : 1;
+};
 
 NotePlayer.prototype.interpolatedSample = function() {
     if (this.samplesRemaining-- <= 0) { this.noteFinished(); return 0; }
@@ -99,11 +99,11 @@ NotePlayer.prototype.interpolatedSample = function() {
     var frac = this.index - i;
     var curr = this.rawSample(i);
     var next = this.rawSample(i + 1);
-    var sample = (curr + (frac * (next - curr))) / 100000; // xxx 32000; attenuate...
+    var sample = (curr + frac * (next - curr)) / 100000; // xxx 32000; attenuate...
     if (this.samplesRemaining < 1000) sample *= (this.samplesRemaining / 1000.0); // relaase phease
     this.updateEnvelope();
     return this.envelopeValue * sample;
-}
+};
 
 NotePlayer.prototype.rawSample = function(sampleIndex) {
     if (sampleIndex >= this.endOffset) {
@@ -112,8 +112,8 @@ NotePlayer.prototype.rawSample = function(sampleIndex) {
     }
     var byteIndex = 2 * sampleIndex;
     var result = (this.soundData[byteIndex + 1] << 8) + this.soundData[byteIndex];
-    return (result <= 32767) ? result : result - 65536;
-}
+    return result <= 32767 ? result : result - 65536;
+};
 
 NotePlayer.prototype.updateEnvelope = function() {
     // Compute envelopeValue for the current sample.
@@ -125,4 +125,4 @@ NotePlayer.prototype.updateEnvelope = function() {
     } else if (this.samplesSinceStart > this.holdEnd) {
         if (this.decayRate < 1) this.envelopeValue *= this.decayRate;
     }
-}
+};

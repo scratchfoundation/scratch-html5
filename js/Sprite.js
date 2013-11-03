@@ -22,12 +22,12 @@
 'use strict';
 
 var Sprite = function(data) {
-    if(!this.data) {
+    if (!this.data) {
         this.data = data;
     }
 
     // Public variables used for Scratch-accessible data.
-    this.visible = (typeof(this.data.visible) == "undefined") ? true : data.visible;
+    this.visible = typeof(this.data.visible) == "undefined" ? true : data.visible;
 
     this.scratchX = data.scratchX || 0;
     this.scratchY = data.scratchY || 0;
@@ -94,8 +94,8 @@ var Sprite = function(data) {
 
     // Stacks to be pushed to the interpreter and run
     this.stacks = [];
-}
-  
+};
+
 // Attaches a Sprite (<img>) to a Scratch scene
 Sprite.prototype.attach = function(scene) {
     // Create textures and materials for each of the costumes.
@@ -109,7 +109,7 @@ Sprite.prototype.attach = function(scene) {
             sprite.costumesLoaded += 1;
             sprite.updateCostume();
 
-            $(sprite.textures[c]).css('display', (sprite.currentCostumeIndex == c) ? 'inline' : 'none');
+            $(sprite.textures[c]).css('display', sprite.currentCostumeIndex == c ? 'inline' : 'none');
             $(sprite.textures[c]).css('position', 'absolute').css('left', '0px').css('top', '0px');
             $(sprite.textures[c]).bind('dragstart', function(evt) { evt.preventDefault(); })
               .bind('selectstart', function(evt) { evt.preventDefault(); })
@@ -137,24 +137,23 @@ Sprite.prototype.attach = function(scene) {
     this.talkBubbleStyler = $('<div class="bubble-say"></div>');
     this.talkBubble.append(this.talkBubbleBox);
     this.talkBubble.append(this.talkBubbleStyler);
-    
+
     runtime.scene.append(this.talkBubble);
-}
+};
 
 // Load sounds from the server and buffer them
 Sprite.prototype.loadSounds = function() {
     var spr = this;
-    $.each(this.sounds, function (index, sound) {
+    $.each(this.sounds, function(index, sound) {
         io.soundRequest(sound, spr);
     });
-}
+};
 
 // True when all the costumes have been loaded
 Sprite.prototype.isLoaded = function() {
-    return (this.costumesLoaded == this.costumes.length 
-            && this.soundsLoaded == Object.keys(this.sounds).length);
-}
-  
+    return this.costumesLoaded == this.costumes.length && this.soundsLoaded == Object.keys(this.sounds).length;
+};
+
 // Step methods
 Sprite.prototype.showCostume = function(costume) {
     if (costume < 0) {
@@ -167,34 +166,34 @@ Sprite.prototype.showCostume = function(costume) {
         this.currentCostumeIndex = costume;
     }
     this.updateCostume();
-}
-  
+};
+
 Sprite.prototype.indexOfCostumeNamed = function(name) {
-    for(var i in this.costumes) {
+    for (var i in this.costumes) {
         var c = this.costumes[i];
-        if(c['costumeName'] == name) {
+        if (c['costumeName'] == name) {
             return i;
         }
     }
     return null;
-}
-  
+};
+
 Sprite.prototype.showCostumeNamed = function(name) {
     var index = this.indexOfCostumeNamed(name);
-    if(!index) return;
+    if (!index) return;
     this.showCostume(index);
-}
-  
+};
+
 Sprite.prototype.updateCostume = function() {
-    if(!this.textures[this.currentCostumeIndex]) {
+    if (!this.textures[this.currentCostumeIndex]) {
         this.currentCostumeIndex = 0;
     }
     $(this.mesh).css('display', 'none');
     this.mesh = this.textures[this.currentCostumeIndex];
     this.updateVisible();
     this.updateTransform();
-}
-  
+};
+
 Sprite.prototype.onClick = function(evt) {
     // TODO - needs work!!
     var boxOffset = $('#container').offset();
@@ -238,34 +237,35 @@ Sprite.prototype.onClick = function(evt) {
         $(underElement).click();
         $(this.mesh).show();
     }
-}
-  
+};
+
 Sprite.prototype.setVisible = function(v) {
     this.visible = v;
     this.updateVisible();
-}
+};
 
 Sprite.prototype.updateLayer = function() {
     $(this.mesh).css('z-index', this.z);
     if (this.talkBubble) this.talkBubble.css('z-index', this.z);
-}
+};
 
 Sprite.prototype.updateVisible = function() {
-    $(this.mesh).css('display', (this.visible) ? 'inline' : 'none');
-    if (this.talkBubbleOn)
-        this.talkBubble.css('display', (this.visible) ? 'inline-block' : 'none');
-}
+    $(this.mesh).css('display', this.visible ? 'inline' : 'none');
+    if (this.talkBubbleOn) {
+        this.talkBubble.css('display', this.visible ? 'inline-block' : 'none');
+    }
+};
 
 Sprite.prototype.updateTransform = function() {
     var texture = this.textures[this.currentCostumeIndex];
     var resolution = this.costumes[this.currentCostumeIndex].bitmapResolution || 1;
-    
+
     var drawWidth = texture.width * this.scale / resolution;
     var drawHeight = texture.height * this.scale / resolution;
-    
+
     var rotationCenterX = this.costumes[this.currentCostumeIndex].rotationCenterX;
     var rotationCenterY = this.costumes[this.currentCostumeIndex].rotationCenterY;
-    
+
     var drawX = this.scratchX + (480 / 2) - rotationCenterX;
     var drawY = -this.scratchY + (360 / 2) - rotationCenterY;
 
@@ -275,26 +275,26 @@ Sprite.prototype.updateTransform = function() {
         // sign to the X scale.
     }
 
-    $(this.mesh).css('transform', 
+    $(this.mesh).css('transform',
                 'translatex(' + drawX + 'px) \
                  translatey(' + drawY + 'px) \
                  rotate(' + this.rotation + 'deg) \
                  scaleX(' + scaleXprepend + (this.scale / resolution) + ') scaleY(' +  (this.scale / resolution) + ')');
-    $(this.mesh).css('-moz-transform', 
+    $(this.mesh).css('-moz-transform',
                 'translatex(' + drawX + 'px) \
                  translatey(' + drawY + 'px) \
                  rotate(' + this.rotation + 'deg) \
                  scaleX(' + scaleXprepend + this.scale + ') scaleY(' +  this.scale / resolution + ')');
-    $(this.mesh).css('-webkit-transform', 
+    $(this.mesh).css('-webkit-transform',
                 'translatex(' + drawX + 'px) \
                  translatey(' + drawY + 'px) \
                  rotate(' + this.rotation + 'deg) \
                  scaleX(' + scaleXprepend + (this.scale / resolution) + ') scaleY(' +  (this.scale / resolution) + ')');
-    
-    $(this.mesh).css('-webkit-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
-    $(this.mesh).css('-moz-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
-    $(this.mesh).css('-ms-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
-    $(this.mesh).css('-o-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px'); 
+
+    $(this.mesh).css('-webkit-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
+    $(this.mesh).css('-moz-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
+    $(this.mesh).css('-ms-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
+    $(this.mesh).css('-o-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
     $(this.mesh).css('transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
 
     // Don't forget to update the talk bubble.
@@ -303,9 +303,9 @@ Sprite.prototype.updateTransform = function() {
         this.talkBubble.css('left', xy[0] + 'px');
         this.talkBubble.css('top', xy[1] + 'px');
     }
-    
-    this.updateLayer(); 
-}
+
+    this.updateLayer();
+};
 
 Sprite.prototype.getTalkBubbleXY = function() {
     var texture = this.textures[this.currentCostumeIndex];
@@ -316,7 +316,7 @@ Sprite.prototype.getTalkBubbleXY = function() {
     var drawX = this.scratchX + (480 / 2) - rotationCenterX;
     var drawY = -this.scratchY + (360 / 2) - rotationCenterY;
     return [drawX + drawWidth, drawY - drawHeight / 2];
-}
+};
 
 Sprite.prototype.showBubble = function(text, type) {
     var xy = this.getTalkBubbleXY();
@@ -329,30 +329,34 @@ Sprite.prototype.showBubble = function(text, type) {
 
     this.talkBubbleStyler.removeClass('bubble-say');
     this.talkBubbleStyler.removeClass('bubble-think');
-    if (type == 'say') this.talkBubbleStyler.addClass('bubble-say');
-    else if (type == 'think') this.talkBubbleStyler.addClass('bubble-think');
-    
-    if (this.visible)
+    if (type == 'say') {
+        this.talkBubbleStyler.addClass('bubble-say');
+    } else if (type == 'think') {
+        this.talkBubbleStyler.addClass('bubble-think');
+    }
+
+    if (this.visible) {
         this.talkBubble.css('display', 'inline-block');
+    }
     this.talkBubbleBox.html(text);
-}
+};
 
 Sprite.prototype.hideBubble = function() {
     this.talkBubbleOn = false;
     this.talkBubble.css('display', 'none');
-}
-  
+};
+
 Sprite.prototype.setXY = function(x, y) {
     this.scratchX = x;
     this.scratchY = y;
     this.updateTransform();
-}
-  
+};
+
 Sprite.prototype.setDirection = function(d) {
     var rotation;
     d = d % 360
     if (d < 0) d += 360;
-    this.direction = (d > 180) ? d - 360 : d;
+    this.direction = d > 180 ? d - 360 : d;
     if (this.rotationStyle == 'normal') {
         rotation = (this.direction - 90) % 360;
     } else if (this.rotationStyle == 'leftRight') {
@@ -367,23 +371,23 @@ Sprite.prototype.setDirection = function(d) {
     }
     this.rotation = rotation;
     this.updateTransform();
-}
+};
 
 Sprite.prototype.setRotationStyle = function(r) {
     this.rotationStyle = r;
-}
-  
+};
+
 Sprite.prototype.getSize = function() {
     return this.scale * 100;
-}
+};
 
 Sprite.prototype.setSize = function(percent) {
     var newScale = percent / 100.0;
     newScale = Math.max(0.05, Math.min(newScale, 100));
     this.scale = newScale;
     this.updateTransform();
-}
-  
+};
+
 // Move functions
 Sprite.prototype.keepOnStage = function() {
     var x = this.scratchX + 240;
@@ -398,7 +402,7 @@ Sprite.prototype.keepOnStage = function() {
     if (myBox.top > edgeBox.bottom) y -= myBox.top - edgeBox.bottom;
     this.scratchX = x - 240;
     this.scratchY = 180 - y;
-}
+};
 
 Sprite.prototype.getRect = function() {
     var cImg = this.textures[this.currentCostumeIndex];
@@ -406,35 +410,38 @@ Sprite.prototype.getRect = function() {
     var y = 180 - this.scratchY - (cImg.height/2.0);
     var myBox = new Rectangle(x, y, cImg.width, cImg.height);
     return myBox;
-}
-  
-// Pen functions 
+};
+
+// Pen functions
 Sprite.prototype.setPenColor = function(c) {
     var hsv = Color.rgb2hsv(c);
     this.penHue = (200 * hsv[0]) / 360 ;
     this.penShade = 50 * hsv[2];  // not quite right; doesn't account for saturation
     this.penColorCache = c;
-}
-Sprite.prototype.setPenHue = function(n) { 
+};
+
+Sprite.prototype.setPenHue = function(n) {
     this.penHue = n % 200;
     if (this.penHue < 0) this.penHue += 200;
     this.updateCachedPenColor();
-}
-Sprite.prototype.setPenShade = function(n) { 
+};
+
+Sprite.prototype.setPenShade = function(n) {
     this.penShade = n % 200;
     if (this.penShade < 0) this.penShade += 200;
     this.updateCachedPenColor();
-}
+};
+
 Sprite.prototype.updateCachedPenColor = function() {
     var c = Color.fromHSV((this.penHue * 180.0) / 100.0, 1, 1);
-    var shade = (this.penShade > 100) ? 200 - this.penShade : this.penShade; // range 0..100
+    var shade = this.penShade > 100 ? 200 - this.penShade : this.penShade; // range 0..100
     if (shade < 50) {
         this.penColorCache = Color.mixRGB(0, c, (10 + shade) / 60.0);
     } else {
         this.penColorCache = Color.mixRGB(c, 0xFFFFFF, (shade - 50) / 60);
     }
-}
-  
+};
+
 Sprite.prototype.stamp = function(canvas, opacity) {
     var drawWidth = this.textures[this.currentCostumeIndex].width * this.scale;
     var drawHeight = this.textures[this.currentCostumeIndex].height * this.scale;
@@ -447,12 +454,13 @@ Sprite.prototype.stamp = function(canvas, opacity) {
     canvas.drawImage(this.mesh, -drawWidth/2, -drawHeight/2, drawWidth, drawHeight);
     canvas.restore();
     canvas.globalAlpha = 1;
-}
+};
 
 Sprite.prototype.soundNamed = function(name) {
-    if (name in this.sounds && this.sounds[name].buffer)
+    if (name in this.sounds && this.sounds[name].buffer) {
         return this.sounds[name];
-    else if (name in runtime.stage.sounds && runtime.stage.sounds[name].buffer)
+    } else if (name in runtime.stage.sounds && runtime.stage.sounds[name].buffer) {
         return runtime.stage.sounds[name];
+    }
     return null;
-}
+};

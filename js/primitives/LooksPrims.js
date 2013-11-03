@@ -15,7 +15,7 @@
 
 'use strict';
 
-var LooksPrims = function() {}
+var LooksPrims = function() {};
 
 LooksPrims.prototype.addPrimsTo = function(primTable) {
     primTable["show"]               = this.primShow;
@@ -42,28 +42,28 @@ LooksPrims.prototype.addPrimsTo = function(primTable) {
     primTable["changeGraphicEffect:by:"] = this.primChangeEffect;
     primTable["setGraphicEffect:to:"]    = this.primSetEffect;
     primTable["filterReset"]             = this.primClearEffects;
-    
+
     primTable["say:"] = function(b) { showBubble(b, 'say'); };
     primTable["say:duration:elapsed:from:"] = function(b) { showBubbleAndWait(b, 'say'); };
     primTable["think:"] = function(b) { showBubble(b, 'think'); };
     primTable["think:duration:elapsed:from:"] = function(b) { showBubbleAndWait(b, 'think'); };
-}
+};
 
 LooksPrims.prototype.primShow = function(b) {
     interp.targetSprite().setVisible(true);
     interp.redraw();
-}
+};
 
 LooksPrims.prototype.primHide = function(b) {
-    interp.targetSprite().setVisible(false);  
+    interp.targetSprite().setVisible(false);
     interp.redraw();
-}
+};
 
 LooksPrims.prototype.primNextCostume = function(b) {
     interp.targetSprite().showCostume(interp.targetSprite().currentCostumeIndex + 1);
     interp.redraw();
-}
-  
+};
+
 LooksPrims.prototype.primShowCostume = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
@@ -88,8 +88,8 @@ LooksPrims.prototype.primShowCostume = function(b) {
         }
     }
     if (s.visible) interp.redraw();
-}
-  
+};
+
 LooksPrims.prototype.primStartScene = function(b) {
     var s = runtime.stage;
     var arg = interp.arg(b, 0);
@@ -113,55 +113,55 @@ LooksPrims.prototype.primStartScene = function(b) {
         }
     }
     if (s.visible) interp.redraw();
-}
-  
+};
+
 LooksPrims.prototype.primCostumeNum = function(b) {
     var s = interp.targetSprite();
-    return (s == null) ? 1 : s.currentCostumeIndex + 1;
-}
-  
+    return s == null ? 1 : s.currentCostumeIndex + 1;
+};
+
 LooksPrims.prototype.primChangeSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     s.setSize(s.getSize() + interp.arg(b, 0));
     if (s.visible) interp.redraw();
-}
-  
+};
+
 LooksPrims.prototype.primSetSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     s.setSize(interp.arg(b, 0));
     if (s.visible) interp.redraw();
-}
-  
+};
+
 LooksPrims.prototype.primSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return 100;
     return s.getSize();
-}
-  
+};
+
 LooksPrims.prototype.primGoFront = function(b) {
     var s = interp.targetSprite();
     runtime.reassignZ(s, null);
-    if(s.visible) interp.redraw();
-}
-  
+    if (s.visible) interp.redraw();
+};
+
 LooksPrims.prototype.primGoBack = function(b) {
     var s = interp.targetSprite();
     runtime.reassignZ(s, interp.arg(b, 0));
-    if(s.visible) interp.redraw();
-}
-  
-LooksPrims.prototype.primChangeEffect = function(b) {}
+    if (s.visible) interp.redraw();
+};
 
-LooksPrims.prototype.primSetEffect = function(b) {}
+LooksPrims.prototype.primChangeEffect = function(b) {};
 
-LooksPrims.prototype.primClearEffects = function(b) {}
+LooksPrims.prototype.primSetEffect = function(b) {};
+
+LooksPrims.prototype.primClearEffects = function(b) {};
 
 var showBubble = function(b, type) {
     var s = interp.targetSprite();
     if (s != null) s.showBubble(interp.arg(b, 0), type);
-}
+};
 
 var showBubbleAndWait = function(b, type) {
     var s = interp.targetSprite();
@@ -175,4 +175,4 @@ var showBubbleAndWait = function(b, type) {
     } else {
         if (interp.checkTimer()) s.hideBubble();
     }
-}
+};

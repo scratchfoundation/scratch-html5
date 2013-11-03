@@ -33,7 +33,7 @@ var Reporter = function(data) {
     this.el = null; // jQuery Element for the outer box
     this.valueEl = null; // jQ element containing the reporter value
     this.slider = null; // slider jQ element
-}
+};
 
 Reporter.prototype.attach = function(scene) {
     switch (this.mode) {
@@ -47,7 +47,7 @@ Reporter.prototype.attach = function(scene) {
                 // Temporarily, set the value to sliderMin until an update
                 this.slider = $('<input type="range" min="' + this.sliderMin +
                                 '" max="' + this.sliderMax + '" step="1" value="' +
-                                this.sliderMin + '" data-target="' + this.target + 
+                                this.sliderMin + '" data-target="' + this.target +
                                 '" data-var="' + this.param + '">');
                 this.slider.change(this.changeSlider);
                 this.el.append('<br>');
@@ -68,13 +68,13 @@ Reporter.prototype.attach = function(scene) {
     this.valueEl.css('background-color', 'rgb(' + cR + ',' + cG + ',' + cB + ')');
     this.el.css('display', this.visible ? 'inline-block' : 'none');
     scene.append(this.el);
-}
+};
 
 Reporter.prototype.update = function() {
     this.el.css('display', this.visible ? 'inline-block' : 'none');
     if (!this.visible) return;
-     
-    var newValue ='';
+
+    var newValue = '';
     var target = runtime.spriteNamed(this.target);
     switch (this.cmd) {
         case 'getVar:':
@@ -104,20 +104,21 @@ Reporter.prototype.update = function() {
             break;
     }
     this.valueEl.html(newValue);
-    if (this.mode == 3)
+    if (this.mode == 3) {
         this.slider.val(parseInt(newValue));
-}
+    }
+};
 
 Reporter.prototype.updateLayer = function() {
     this.el.css('z-index', this.z);
-}
+};
 
 Reporter.prototype.changeSlider = function() {
     var newValue = parseInt($(this).val());
     var target = runtime.spriteNamed($(this).attr('data-target'));
     var variable = $(this).attr('data-var');
     target.variables[variable] = newValue;
-}
+};
 
 var List = function(data) {
     this.contents = data.contents;
@@ -171,7 +172,7 @@ List.prototype.attach = function(scene) {
     this.el.height(this.height);
     this.el.css('z-index', this.z);
     this.el.css('display', this.visible ? 'inline-block' : 'none');
-}
+};
 
 List.prototype.update = function(){
     this.el.css('display', this.visible ? 'inline-block' : 'none');
@@ -191,4 +192,4 @@ List.prototype.update = function(){
 
 List.prototype.updateLayer = function() {
     this.el.css('z-index', this.z);
-}
+};

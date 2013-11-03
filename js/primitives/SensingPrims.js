@@ -15,13 +15,13 @@
 
 'use strict';
 
-var SensingPrims = function() {}
+var SensingPrims = function() {};
 
 SensingPrims.prototype.addPrimsTo = function(primTable) {
     primTable['touching:']      = this.primTouching;
     primTable['touchingColor:'] = this.primTouchingColor;
     primTable['color:sees:']    = this.primColorTouchingColor;
-  
+
     primTable['keyPressed:']  = this.primKeyPressed;
     primTable['mousePressed'] = function(b) { return runtime.mouseDown; };
     primTable['mouseX']       = function(b) { return runtime.mousePos[0]; };
@@ -30,29 +30,29 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
 
     primTable['getAttribute:of:'] = this.primGetAttribute;
 
-    primTable['timeAndDate'] = this.primTimeDate;
+    primTable['timeAndDate']  = function(b){ return runtime.getTimeString(interp.arg(b, 0)); };
     primTable['timestamp'] = this.primTimestamp;
-}
-  
+};
+
 SensingPrims.prototype.primTouching = function(b) {
     var s = interp.targetSprite();
     if (s == null || !s.visible) return false;
-    
+
     var arg = interp.arg(b, 0);
     if (arg == '_edge_') {
         return false; // TODO
     }
-    
+
     if (arg == '_mouse_') {
         return false; // TODO
     }
-    
+
     var s2 = runtime.spriteNamed(arg);
     if (s2 == null || !s2.visible) return false;
-    
+
     return spriteHitTest(s, s2);
-}
-  
+};
+
 SensingPrims.prototype.primTouchingColor = function(b) {
     var s = interp.targetSprite();
     if (s == null || !s.visible) return false;
@@ -60,8 +60,8 @@ SensingPrims.prototype.primTouchingColor = function(b) {
     var color = interp.arg(b, 0);
 
     return stageColorHitTest(s, color);
-}
-  
+};
+
 SensingPrims.prototype.primColorTouchingColor = function(b) {
     var s = interp.targetSprite();
     if (s == null || !s.visible) return false;
@@ -70,8 +70,8 @@ SensingPrims.prototype.primColorTouchingColor = function(b) {
     var stageColor = interp.arg(b, 1);
 
     return stageColorByColorHitTest(s, myColor, stageColor);
-}
-  
+};
+
 var spriteHitTest = function(a, b) {
     var hitCanvas = document.createElement('canvas');
     hitCanvas.width = 480;
@@ -91,8 +91,8 @@ var spriteHitTest = function(a, b) {
         }
     }
     return false;
-}
-  
+};
+
 var stageColorHitTest = function(target, color) {
     var r, g, b;
     r = (color >> 16);
@@ -123,18 +123,18 @@ var stageColorHitTest = function(target, color) {
             return true;
     }
     return false;
-}
-  
+};
+
 var stageColorByColorHitTest = function(target, myColor, otherColor) {
     var threshold_acceptable = function(a, b, c, x, y, z) {
-        diff_a = Math.abs(a-x);
-        diff_b = Math.abs(b-y);
-        diff_c = Math.abs(c-z);
+        var diff_a = Math.abs(a-x);
+        var diff_b = Math.abs(b-y);
+        var diff_c = Math.abs(c-z);
         if (diff_a + diff_b + diff_c < 100) {
             return true;
         }
         return false;
-    }
+    };
     var targetCanvas = document.createElement('canvas');
     targetCanvas.width = 480;
     targetCanvas.height = 360;
@@ -157,23 +157,23 @@ var stageColorByColorHitTest = function(target, myColor, otherColor) {
     var hitCanvas = document.createElement('canvas');
     hitCanvas.width = 480;
     hitCanvas.height = 360;
-    hitCtx = hitCanvas.getContext('2d');
+    var hitCtx = hitCanvas.getContext('2d');
     $.each(runtime.sprites, function(i, sprite) {
-        if (sprite != target)
+        if (sprite != target) {
             sprite.stamp(hitCtx, 100);
+        }
     });
 
     var hitData = hitCtx.getImageData(0, 0, hitCanvas.width, hitCanvas.height).data;
     var pxCount = targetData.length;
     for (var i = 0; i < pxCount; i += 4) {
-      if (threshold_acceptable(targetData[i], targetData[i+1], targetData[i+2], mr, mg, mb)
-          && threshold_acceptable(hitData[i], hitData[i+1], hitData[i+2], or, og, ob)) {
+        if (threshold_acceptable(targetData[i], targetData[i+1], targetData[i+2], mr, mg, mb) && threshold_acceptable(hitData[i], hitData[i+1], hitData[i+2], or, og, ob)) {
             return true;
-      }
+        }
     }
     return false;
-}
-    
+};
+
 SensingPrims.prototype.primKeyPressed = function(b) {
     var key = interp.arg(b, 0);
     var ch = key.charCodeAt(0);
@@ -184,8 +184,8 @@ SensingPrims.prototype.primKeyPressed = function(b) {
     if (key == "down arrow") ch = 40;
     if (key == "space") ch = 32;
     return (typeof(runtime.keysDown[ch]) != 'undefined');
-}
-  
+};
+
 SensingPrims.prototype.primDistanceTo = function(b) {
     var s = interp.targetSprite();
     var p = mouseOrSpritePosition(interp.arg(b, 0));
@@ -193,8 +193,8 @@ SensingPrims.prototype.primDistanceTo = function(b) {
     var dx = p.x - s.scratchX;
     var dy = p.y - s.scratchY;
     return Math.sqrt((dx * dx) + (dy * dy));
-}
-  
+};
+
 SensingPrims.prototype.primGetAttribute = function(b) {
     var attr = interp.arg(b, 0);
     var targetSprite = runtime.spriteNamed(interp.arg(b, 1));
@@ -207,7 +207,7 @@ SensingPrims.prototype.primGetAttribute = function(b) {
     if (attr == 'size') return targetSprite.getSize();
     if (attr == 'volume') return targetSprite.volume;
     return 0;
-}
+};
 
 SensingPrims.prototype.primTimeDate = function(b) {
     var dt = interp.arg(b, 0);
@@ -220,13 +220,16 @@ SensingPrims.prototype.primTimeDate = function(b) {
     if (dt == 'minute') return now.getMinutes();
     if (dt == 'second') return now.getSeconds();
     return 0;
-}
+};
 
 SensingPrims.prototype.primTimestamp = function(b) {
-   var now = new Date(), epoch = new Date(2000,0,1), dst = now.getTimezoneOffset() - epoch.getTimezoneOffset(), msSince = now.getTime() - epoch.getTime();
-   msSince += (now.getTimezoneOffset() - dst) * 60000;
-   return msSince / 86400000;
-}
+    var now = new Date();
+    var epoch = new Date(2000, 0, 1);
+    var dst = now.getTimezoneOffset() - epoch.getTimezoneOffset();
+    var msSince = now.getTime() - epoch.getTime();
+    msSince += (now.getTimezoneOffset() - dst) * 60000;
+    return msSince / 86400000;
+};
 
 // Helpers
 SensingPrims.prototype.mouseOrSpritePosition = function(arg) {
@@ -239,4 +242,4 @@ SensingPrims.prototype.mouseOrSpritePosition = function(arg) {
         return new Point(s.scratchX, s.scratchY);
     }
     return null;
-}
+};
