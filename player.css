@@ -111,6 +111,7 @@ body {
     padding-left: 30px;
     padding-right: 30px;
     clear: both;
+    text-align: right;
 }
     
 /* Reporter styles */
@@ -211,16 +212,26 @@ body {
     background: url(img/think-bottom.png) transparent no-repeat;
 }
 
+#info {
+    float:left;
+    margin-left: 30px;
+    height:24px;
+    padding:3px;
+    color:#aaa;
+    font-size:12px;
+}
+
 /* Button styling */
 button {
     background-color: #ddd;
     border-radius: 3px;
     cursor: pointer;
-    border:none;
+    border-style: none;
     font-family: sans-serif;
     width:24px;
     padding: 3px;
     margin:3px;
+    margin-top:0px;
     height: 24px;
     background: -webkit-linear-gradient(#ddd, #ccc);
 }
@@ -247,6 +258,7 @@ button:hover {
     clear:both;
 }
 input[type=text] {
+    display: inline-block;
     border-style: none;
     border-radius: 4px;
     font-family: sans-serif;
@@ -255,18 +267,28 @@ input[type=text] {
     padding:3px;
     height:18px;
     margin:3px;
-    margin-left: 30px;
     width:100px;
+    box-shadow: 0px 0px 5px inset black;
+    -webkit-box-shadow: 0px 0px 5px inset black;
 }
 input[type=text]:focus {
     outline:none;
     background-color: #ccc;
 }
-#info {
-    float:left;
-    margin-left: 30px;
-    height:24px;
-    padding:3px;
-    color:#aaa;
+
+#project_id {
+    text-align: center;
+}
+
+#address-hint {
     font-size:12px;
+}
+#go_project {
+    display: table-cell;
+    height:24px;
+    padding:0px;
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-top: 3px;
+    margin-bottom: 0px;
 }
