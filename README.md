@@ -8,6 +8,11 @@ Unimplementable Features on iOS: Image effects for whirl, fisheye, mosaic, and p
 
 More documentation will be added as time permits. Thanks for contributing, and Scratch On!
 
+## Contributions
+
+Thank you for your interest in helping out with the Scratch HTML5 Player.  [@sclements](https://github.com/sclements/) is the maintainer of the project and reviews all code before pull requests are approved.  Though we appreciate all attempts to contribute, there are some contraints that must be met before pull requests can be approved.  Here are our top concerns for contributions: matching the behavior and interface of the Flash player, code cleanliness and organization, and robust well tested logic.  CSS goes into player.css (not in the html or javascript).  Please use [compare.html](https://github.com/LLK/scratch-html5/blob/master/compare.html) to compare your work with the production Flash player.
+
+
 ## Installation
 
 Running the HTML5 player on your own website, or locally, you will need to have
