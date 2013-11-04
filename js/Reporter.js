@@ -120,7 +120,7 @@ Reporter.prototype.changeSlider = function() {
     target.variables[variable] = newValue;
 };
 
-var List = function(data) {
+var List = function(data, sprite) {
     this.contents = data.contents;
     this.listName = data.listName;
 
@@ -131,6 +131,8 @@ var List = function(data) {
     this.z = io.getCount();
     this.visible = data.visible;
 
+    this.target = sprite;
+
 //    this.isPersistent = data.isPersistent;
 
     this.el = null; // jQuery element for list
@@ -140,7 +142,7 @@ var List = function(data) {
 
 List.prototype.attach = function(scene) {
     this.el = $('<div class="list">');
-    this.el.append('<div class="list-title">'+this.listName);
+    this.el.append('<div class="list-title">'+(this.target==='Stage'?'':this.target+' ')+this.listName);
     var c = this.containerEl = $('<div style="overflow:hidden;float:left;position:relative">').appendTo(this.el).width(this.width-19);
     var s = this.scrollbar = $('<div class="list-scrollbar-container"><div class="list-scrollbar">').appendTo(this.el);
     var sb = s.children('.list-scrollbar');
@@ -175,6 +177,8 @@ List.prototype.attach = function(scene) {
 };
 
 List.prototype.update = function(){
+    this.contents = findList(runtime.spriteNamed(this.target),this.listName);
+
     this.el.css('display', this.visible ? 'inline-block' : 'none');
     if (!this.visible) return;
 

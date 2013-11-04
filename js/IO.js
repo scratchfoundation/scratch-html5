@@ -91,22 +91,44 @@ IO.prototype.makeObjects = function() {
     runtime.stage.attachPenLayer(runtime.scene);
     runtime.stage.loadSounds();
     // Create the sprites and watchers
-    $.each(this.data.children.concat(this.data.lists), function i(index, obj) {
+    function createObj(obj, sprite) {
         var newSprite;
-        if(!obj.cmd && !obj.listName) { // sprite
-            newSprite = new Sprite(obj);
-            if (obj.lists) $.each(obj.lists, i);
-        } else if (!obj.listName) { // watcher
-            newSprite = new Reporter(obj);
-            runtime.reporters.push(newSprite);
-        } else { // list
-            newSprite = new List(obj);
-            runtime.reporters.push(newSprite);
-        }
-        runtime.sprites.push(newSprite);
-        newSprite.attach(runtime.scene);
-        if (!obj.cmd && !obj.listName)
+        function createSprite(obj) {
+            var newSprite = new Sprite(obj);
             newSprite.loadSounds();
+            return newSprite;
+        }
+        function createReporter(obj, sprite) {
+            var newSprite;
+            if (obj.listName) { // list
+                if (!(sprite===runtime.stage && !runtime.stage.lists[obj.listName])) { // for local lists, only if in sprite
+                    newSprite = new List(obj, sprite.objName);
+                    runtime.reporters.push(newSprite);
+                }
+            } else {
+                newSprite = new Reporter(obj);
+                runtime.reporters.push(newSprite);
+            }
+            return newSprite;
+        }
+        if (obj.objName) { // sprite
+            newSprite = createSprite(obj);
+            sprite = newSprite;
+        } else {
+            newSprite = createReporter(obj, sprite);
+        }
+        if (newSprite) {
+            runtime.sprites.push(newSprite);
+            newSprite.attach(runtime.scene);
+        }
+    }
+    $.each(this.data.children, function(index, obj) {
+        createObj(obj, runtime.stage); // create children of stage - sprites, watchers, and stage's lists
+    });
+    $.each(runtime.sprites.filter(function(sprite){return sprite instanceof Sprite}), function(index, sprite) { // list of sprites
+        $.each(sprite.lists, function(index, list){
+            createObj(list, sprite); // create local lists
+        });
     });
 };
 
