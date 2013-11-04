@@ -102,7 +102,7 @@
     border-width: 2px;
     background-color: #C1C4C7;
     padding-left: 3px;
-    font: bold 10px Verdana, sans-serif;
+    font: bold 11px sans-serif;
     position: absolute;
 }
 
@@ -111,6 +111,7 @@
     text-align: center;
     color: black;
     font-weight: bold;
+    margin-bottom: 4px;
 }
 
 .list .list-scrollbar-container {
@@ -132,26 +133,26 @@
     float: left;
     padding: 2px;
     margin-top: 0px;
-    font: bold 10px monospace;
+    text-align: right;
+    font: bold 11px;
 }
 
 .list .list-item {
-    float: left;
-    width: 70%;
+    float: right;
     height: 16px;
     overflow: hidden;
     margin-bottom: 0px;
     margin-right: 2px;
+    padding-top: 2px;
     padding-left: 5px;
     border-color: white;
     border-style: solid;
     border-width: 1px;
     border-radius: 4px;
-    background-color: #D94D11;
-    font-size: 10px;
+    background-color: #cc5b22;
     color: white;
     word-wrap: break-word;
-    font: bold 10px Verdana, sans-serif;
+    font: bolder 11px sans-serif;
 }
 
 .list .list-add {
@@ -161,7 +162,7 @@
     height: 12px;
     border-radius: 12px;
     color: #707070;
-    font: bold 10px Verdana, sans-serif;
+    font: bold 10px sans-serif;
     text-align: center;
     position: absolute;
     bottom: 2px;
@@ -225,3 +226,4 @@
     
     background: url(img/think-bottom.png) transparent no-repeat;
 }
+

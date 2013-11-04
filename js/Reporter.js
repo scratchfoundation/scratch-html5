@@ -143,7 +143,7 @@ var List = function(data, sprite) {
 List.prototype.attach = function(scene) {
     this.el = $('<div class="list">');
     this.el.append('<div class="list-title">'+(this.target==='Stage'?'':this.target+' ')+this.listName);
-    var c = this.containerEl = $('<div style="overflow:hidden;float:left;position:relative">').appendTo(this.el).width(this.width-19);
+    var c = this.containerEl = $('<div style="overflow:hidden;float:left;position:relative">').appendTo(this.el).width(this.width-13).height(this.height-34);
     var s = this.scrollbar = $('<div class="list-scrollbar-container"><div class="list-scrollbar">').appendTo(this.el);
     var sb = s.children('.list-scrollbar');
     sb.mousedown(function(e){
@@ -186,10 +186,9 @@ List.prototype.update = function(){
     this.contents.forEach(function(val,i){
         $('<div style="clear:both">').appendTo(c).append('<div class="list-index">'+(i+1),'<div class="list-item">'+val);
     });
-    c.height(this.height-26);
     c.find('.list-index').width(c.find('.list-index').last().width());
-    c.find('.list-item').width(c.width()-c.find('.list-index').width()-15)
-    var s = this.scrollbar.height(this.height-26);
+    c.find('.list-item').width(c.width()-c.find('.list-index').width()-15);
+    var s = this.scrollbar.height(c.height());
     s.children('.list-scrollbar').height(s.height()/c[0].scrollHeight*s.height()).css('display', s.children('.list-scrollbar').height()===c.height() ? 'none' : 'inline-block');
     this.el.find('.list-length').text('length: '+this.contents.length);
 };
@@ -197,3 +196,4 @@ List.prototype.update = function(){
 List.prototype.updateLayer = function() {
     this.el.css('z-index', this.z);
 };
+
