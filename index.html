@@ -41,6 +41,8 @@
     <script type="text/javascript">
         $(function() {
             $("#project_id").keyup(function(){
+                // Eventually, this will xhr to /projects/{{this.value}}/ and
+                // change color based on whether the response is 404 or 200.
                 if (isNaN(this.value)) {
                     this.style.backgroundColor = "#FDD";
                 } else {
