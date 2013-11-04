@@ -26,12 +26,8 @@
 }
 
 #greenSlideFg {
-    background-color: #000;
-    opacity: 0.4;
-    width: 278px;
-    height: 218px;
-    padding-top: 142px;
-    padding-left: 202px;;
+    background-color: rgba(0,0,0,0.4);
+    padding: 140px 202px;
 }
 
 /* iPad arrow key frame */
@@ -39,7 +35,12 @@
 #left { float: left; width: 30px; height: 360px; background-color: #333; }
 #right { float: left; width: 30px; height: 360px; background-color: #333; }
 #down { width: 540px; height: 30px; clear: both; background-color: #333; }
-    
+
+.playerContainer {
+    display: inline-block;
+    text-align: center;
+}
+
 /* Reporter styles */
 .reporter-normal {
     display: inline-block;

@@ -15,6 +15,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
             }
         </style>
         <link href="player.css" type="text/css" rel="stylesheet" />
+        <link href="compare.css" type="text/css" rel="stylesheet" />
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script src="js/util/Timer.js"></script>
@@ -47,17 +48,15 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
             }
         </script>
         <script>
+            var flashLog = null;
             $(function() {
                 // The flashvars tell flash about the project data (and autostart=true)
                 var flashvars = {
                     server: encodeURIComponent('scratch.mit.edu'),
+                    debugOps: true,
+                    debugOpCmd: 'debugFlash',
                     project_id: project_id
                 };
-
-                // Pass in the cloud token for the project
-                if (window.getCloudToken) {
-                    flashvars.cloud_token = encodeURIComponent(getCloudToken());
-                }
 
                 var params = {
                     allowscriptaccess: 'always',
@@ -69,7 +68,7 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
                 var flashPlayer = null;
                     //var swf_url = "http://cdn.scratch.mit.edu/scratchr2/static/Scratch.swf";
                 var swf_url = "http://jiggler.media.mit.edu/shanemc/scratchr2/static/Scratch.swf";
-                swfobject.embedSWF(swf_url, "flashScratch", "480", "400", "10.2.0",
+                swfobject.embedSWF(swf_url, "flashScratch", "482", "402", "10.2.0",
                     "http://cdn.scratch.mit.edu/scratchr2/static/expressInstall.swf",
                     flashvars, params, null, function(e) {
                         $('#flashScratch').css('visibility', 'visible');
@@ -84,11 +83,39 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
                 $('#trigger_stop').click(function() {
                     flashPlayer.ASstopRunning();
                 });
+
+                flashLog = $('#flashDebug');
+                var jsLog = $('#jsDebug');
+                interp.debugOps = true;
+                interp.debugFunc = function(opCount, opName, args) {
+                    var text = opCount + ': '+opName+'('+args.join(', ')+')';
+                    jsLog.val(jsLog.val() + text + "\n");
+                }
+
+                // Setup synchronized scrolling
+                flashLog.scroll(function() {
+                    jsLog.scrollTop(flashLog.scrollTop());
+                });
+
+                jsLog.scroll(function() {
+                    flashLog.scrollTop(jsLog.scrollTop());
+                });
             });
+
+            function debugFlash(opCount, opName, args) {
+                var text = opCount + ': '+opName+'('+args.join(', ')+')';
+                flashLog.val(flashLog.val() + text + "\n");
+            }
         </script>
     </head>
     <body>
-    <div style="display: inline-block;">
+    <div>
+        <div id="info">Loading...</div>
+        <button id="trigger_green_flag">Green flag</button>
+        <button id="trigger_stop">Stop</button>
+        <input type="text" name="project_id" id="project_id" /><button id='go_project'>Go!</button>
+    </div>
+    <div class="playerContainer">
         <div id="up">&nbsp;</div>
         <div id="left">&nbsp;</div>
         <div id="overContainer">
@@ -97,20 +124,16 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
         </div>
         <div id="right">&nbsp;</div>
         <div id="down">&nbsp;</div>
+        <textarea id="jsDebug"></textarea>
     </div>
-    <div style="display: inline-block;">
+    <div class="playerContainer">
         <div id="flashScratch" style="text-align:center;visibility:hidden;">
             <p style="color:#aaa;font-size:22px;margin-top:14px;line-height:28px;">Oh Noes! Scratch project cannot display.<br/>Flash player is disabled, missing, or less than version 10.2.</p>
             <a href="http://www.adobe.com/go/getflashplayer">
                 <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" target="_blank" />
             </a>
         </div>
+        <textarea id="flashDebug"></textarea>
     </div>
-        <div id="info">Loading...</div>
-
-        <button id="trigger_green_flag">Green flag</button>
-        <button id="trigger_stop">Stop</button>
-
-        <input type="text" name="project_id" id="project_id" /><button id='go_project'>Go!</button>
     </body>
 </html>
