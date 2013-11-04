@@ -217,7 +217,7 @@ Interpreter.prototype.boolarg = function(block, index) {
     if (typeof arg === 'boolean') {
         return arg;
     } else if (typeof arg === 'string') {
-        return arg === '' || arg === '0' || arg.toLowerCase() === 'false';
+        return !(arg === '' || arg === '0' || arg.toLowerCase() === 'false');
     }
     return arg;
 }
