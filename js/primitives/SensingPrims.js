@@ -32,6 +32,8 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
 
     primTable['timeAndDate']  = function(b){ return runtime.getTimeString(interp.arg(b, 0)); };
     primTable['timestamp'] = this.primTimestamp;
+
+    primTable['getUserName'] = this.primUsername;
 };
 
 SensingPrims.prototype.primTouching = function(b) {
@@ -229,6 +231,10 @@ SensingPrims.prototype.primTimestamp = function(b) {
     var msSince = now.getTime() - epoch.getTime();
     msSince += (now.getTimezoneOffset() - dst) * 60000;
     return msSince / 86400000;
+};
+
+SensingPrims.prototype.primUsername = function(b) {
+    return Scratch && Scratch.INIT_DATA && Scratch.INIT_DATA.LOGGED_IN_USER && Scratch.INIT_DATA.LOGGED_IN_USER.model?Scratch.INIT_DATA.LOGGED_IN_USER.model.username:''; // Scratch.INIT_DATA.LOGGED_IN_USER.model.username is what is used on the Scratch website
 };
 
 // Helpers
