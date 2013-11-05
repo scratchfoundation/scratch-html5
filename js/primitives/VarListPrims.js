@@ -195,10 +195,7 @@ VarListPrims.prototype.primListGetLine = function(b) {
     else if (list.length < line) return 0;
 
     var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 1));
-    console.log(w)
-    console.log(line)
     w.lastUpdated = line;
-    console.log(w)
     return list[line - 1];
 };
 
