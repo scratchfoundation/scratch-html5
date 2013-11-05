@@ -196,9 +196,10 @@ Sprite.prototype.updateCostume = function() {
 
 Sprite.prototype.onClick = function(evt) {
     // TODO - needs work!!
-    var boxOffset = $('#container').offset();
-    var mouseX = runtime.mousePos[0] + 240 + boxOffset.left;
-    var mouseY = 180 - runtime.mousePos[1] + boxOffset.top;
+
+    // We don't need boxOffset anymore.
+    var mouseX = runtime.mousePos[0] + 240;
+    var mouseY = 180 - runtime.mousePos[1];
 
     if (this.mesh.src.indexOf('.svg') == -1) {
         // HACK - if the image SRC doesn't indicate it's an SVG,

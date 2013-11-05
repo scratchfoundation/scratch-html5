@@ -7,16 +7,9 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
     <head>
         <title>Scratch HTML5 vs. Flash</title>
         <meta charset="utf-8">
-        <style type="text/css">
-            body {
-                background: #222;
-                color: #fff;
-                margin: 0;
-            }
-        </style>
         <link href="player.css" type="text/css" rel="stylesheet" />
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
         <script src="js/util/Timer.js"></script>
         <script src="js/util/OffsetBuffer.js"></script>
         <script src="js/util/Color.js"></script>
@@ -89,14 +82,23 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
     </head>
     <body>
     <div style="display: inline-block;">
-        <div id="up">&nbsp;</div>
-        <div id="left">&nbsp;</div>
-        <div id="overContainer">
-            <div id="greenSlide"><div id="greenSlideFg"><img src="img/greenflag.png"></div></div>
-            <div id="container"></div>
+        <div id="up">&#x25B2;</div>
+        <div id="ui-top">
+            <div id="info">Loading&hellip;</div>
+            <button id="trigger_stop">&#9632;</button>
+            <button id="trigger_green_flag">&#9873;</button>
+            <div class="clearer"></div>
         </div>
-        <div id="right">&nbsp;</div>
-        <div id="down">&nbsp;</div>
+        <div id="left">&#x25c0;</div>
+        <div id="overContainer">
+          <div id="greenSlide"><div id="greenSlideFg"><img src="img/greenflag.png"></div></div>
+          <div id="container"></div>
+        </div>
+        <div id="right">&#x25b6;</div>
+        <div id="ui-bottom">
+            <span id="address-hint">http://scratch.mit.edu/projects/</span><input type="text" name="project_id" id="project_id" placeholder="10000160" /><button id='go_project'>&rarr;</button></div>
+        <div id="down">&#x25BC;</div>
+
     </div>
     <div style="display: inline-block;">
         <div id="flashScratch" style="text-align:center;visibility:hidden;">
@@ -106,11 +108,5 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
             </a>
         </div>
     </div>
-        <div id="info">Loading...</div>
-
-        <button id="trigger_green_flag">Green flag</button>
-        <button id="trigger_stop">Stop</button>
-
-        <input type="text" name="project_id" id="project_id" /><button id='go_project'>Go!</button>
     </body>
 </html>
