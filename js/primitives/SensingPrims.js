@@ -234,7 +234,7 @@ SensingPrims.prototype.primTimestamp = function(b) {
 };
 
 SensingPrims.prototype.primUsername = function(b) {
-    return Scratch && Scratch.INIT_DATA && Scratch.INIT_DATA.LOGGED_IN_USER && Scratch.INIT_DATA.LOGGED_IN_USER.model?Scratch.INIT_DATA.LOGGED_IN_USER.model.username:''; // Scratch.INIT_DATA.LOGGED_IN_USER.model.username is what is used on the Scratch website
+    return typeof Scratch !== 'undefined' && typeof Scratch.INIT_DATA !== 'undefined' && typeof Scratch.INIT_DATA.LOGGED_IN_USER !== 'undefined' && typeof Scratch.INIT_DATA.LOGGED_IN_USER.model !== 'undefined'?Scratch.INIT_DATA.LOGGED_IN_USER.model.username:''; // Scratch.INIT_DATA.LOGGED_IN_USER.model.username is what is used on the Scratch website
 };
 
 // Helpers

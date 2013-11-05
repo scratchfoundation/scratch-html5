@@ -108,7 +108,7 @@ Reporter.prototype.update = function() {
     }
     this.valueEl.html(newValue);
     if (this.mode == 3) {
-        this.slider.val(parseInt(newValue));
+        this.slider.val(parseInt(newValue)).hide().width(this.el.width()-5).show();
     }
 };
 

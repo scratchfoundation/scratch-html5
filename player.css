@@ -147,6 +147,35 @@ body {
     position: absolute;
 }
 
+.reporter-normal input[type="range"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-radius: 5px;
+    background: -webkit-linear-gradient(to bottom right, #818181 1px, #d5d5d5);
+    background: -moz-linear-gradient(to bottom right, #818181 1px, #d5d5d5);
+    background: -ms-linear-gradient(to bottom right, #818181 1px, #d5d5d5);
+    background: -o-linear-gradient(to bottom right, #818181 1px, #d5d5d5);
+    background: linear-gradient(to bottom, #818181 1px, #d5d5d5);
+    display: block;
+    height: 5px;
+    margin: 2px;
+    outline: none;
+}
+.reporter-normal input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: -webkit-linear-gradient(to bottom right, white 50%, black);
+    background: -moz-linear-gradient(to bottom right, white 50%, black);
+    background: -ms-linear-gradient(to bottom right, white 50%, black);
+    background: -o-linear-gradient(to bottom right, white 50%, black);
+    background: linear-gradient(to bottom right, white 50%, black);
+    height: 10px;
+    width: 10px;
+}
+
 /* List watcher styles */
 .list {
     float: left;
@@ -351,3 +380,4 @@ input[type=text]:focus {
     margin-top: 3px;
     margin-bottom: 0px;
 }
+
