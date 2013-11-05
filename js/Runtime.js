@@ -42,7 +42,11 @@ Runtime.prototype.init = function() {
     this.scene = $('#container');
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext();
-    this.audioGain = this.audioContext.createGainNode();
+		try{
+	    this.audioGain = this.audioContext.createGain();
+		}catch(err){
+			this.audioGain = this.audioContext.createGainNode();
+		}
     this.audioGain.connect(runtime.audioContext.destination);
 };
 
