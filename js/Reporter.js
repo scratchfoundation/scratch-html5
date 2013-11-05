@@ -123,6 +123,7 @@ Reporter.prototype.changeSlider = function() {
 var List = function(data, sprite) {
     this.contents = data.contents;
     this.listName = data.listName;
+    this.lastUpdated = null;
 
     this.height = data.height;
     this.width = data.width;
@@ -191,6 +192,12 @@ List.prototype.update = function(){
     var s = this.scrollbar.height(c.height());
     s.children('.list-scrollbar').height(s.height()/c[0].scrollHeight*s.height()).css('display', s.children('.list-scrollbar').height()===c.height() ? 'none' : 'inline-block');
     this.el.find('.list-length').text('length: '+this.contents.length);
+    if (this.lastUpdated !== null) {
+        c.scrollTop(0); // so that the position().top is correct
+        c.scrollTop(c.find('.list-index').eq(this.lastUpdated).css('color','yellow').position().top);
+        s.children('.list-scrollbar').css('top',c.scrollTop()/(c.height()/s.children('.list-scrollbar').height()));
+        this.lastUpdated = null;
+    }
 };
 
 List.prototype.updateLayer = function() {

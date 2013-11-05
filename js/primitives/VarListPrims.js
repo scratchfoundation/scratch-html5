@@ -108,6 +108,17 @@ function findList(targetSprite, listName) {
     return null;
 }
 
+// Take a list name and target sprite and return the List object associated with it
+function findListWatcher(targetSprite, listName) {
+    var w = null;
+    for (var r = 0; r < runtime.reporters.length; r++) {
+        if (runtime.reporters[r] instanceof List && runtime.reporters[r].listName == listName && (runtime.reporters[r].target == targetSprite || runtime.reporters[r].target == 'Stage')) {
+            w = runtime.reporters[r];
+        }
+    }
+    return w;
+}
+
 VarListPrims.prototype.primReadList = function(b) {
     var list = findList(interp.targetSprite(), interp.arg(b, 0));
     if (list) {
@@ -119,6 +130,9 @@ VarListPrims.prototype.primReadList = function(b) {
 VarListPrims.prototype.primListAppend = function(b) {
     var list = findList(interp.targetSprite(), interp.arg(b, 1));
     if (list) list.push(interp.arg(b, 0));
+
+    var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 1));
+    w.lastUpdated = list.length-1;
 };
 
 VarListPrims.prototype.primListDeleteLine = function(b) {
@@ -142,6 +156,9 @@ VarListPrims.prototype.primListInsertAt = function(b) {
     if (position > list.length) return;
 
     list.splice(position, 0, newItem);
+
+    var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 2));
+    w.lastUpdated = position;
 };
 
 VarListPrims.prototype.primListSetLine = function(b) {
@@ -157,6 +174,9 @@ VarListPrims.prototype.primListSetLine = function(b) {
     if (position > list.length - 1) return;
 
     list[position] = newItem;
+
+    var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 1));
+    w.lastUpdated = position;
 };
 
 VarListPrims.prototype.primListLength = function(b) {
@@ -173,6 +193,12 @@ VarListPrims.prototype.primListGetLine = function(b) {
     if (line == 'random') line = Math.round(Math.random() * list.length);
     else if (line == 'last') line = list.length;
     else if (list.length < line) return 0;
+
+    var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 1));
+    console.log(w)
+    console.log(line)
+    w.lastUpdated = line;
+    console.log(w)
     return list[line - 1];
 };
 
@@ -185,21 +211,11 @@ VarListPrims.prototype.primListContains = function(b) {
 };
 
 VarListPrims.prototype.primHideList = function(b) {
-    var targetList = interp.arg(b, 0), targetSprite = interp.targetSprite().objName;
-    for (var r = 0; r < runtime.reporters.length; r++) {
-        if (runtime.reporters[r] instanceof List && runtime.reporters[r].listName == targetList && (runtime.reporters[r].target == targetSprite || runtime.reporters[r].target == 'Stage')) {
-            runtime.reporters[r].visible = false;
-            return;
-        }
-    }
+    var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 0));
+    w.visible = false;
 };
 
 VarListPrims.prototype.primShowList = function(b) {
-    var targetList = interp.arg(b, 0), targetSprite = interp.targetSprite().objName;
-    for (var r = 0; r < runtime.reporters.length; r++) {
-        if (runtime.reporters[r] instanceof List && runtime.reporters[r].listName == targetList && (runtime.reporters[r].target == targetSprite || runtime.reporters[r].target == 'Stage')) {
-            runtime.reporters[r].visible = true;
-            return;
-        }
-    }
+    var w = findListWatcher(interp.targetSprite().objName, interp.arg(b, 0));
+    w.visible = true;
 };
