@@ -54,6 +54,9 @@ var Interpreter = function() {
     this.yield = false;
     this.doRedraw = false;
     this.opCount = 0; // used to benchmark the interpreter
+    this.debugOps = false;
+    this.debugFunc = null;
+    this.opCount2 = 0;
 };
 
 // Utilities for building blocks and sequences of blocks
@@ -136,6 +139,14 @@ Interpreter.prototype.stepActiveThread = function() {
         // Advance the "program counter" to the next block before running the primitive.
         // Control flow primitives (e.g. if) may change activeThread.nextBlock.
         this.activeThread.nextBlock = b.nextBlock;
+        if(this.debugOps && this.debugFunc) {
+            var finalArgs = new Array(b.args.length);
+            for(var i=0; i<b.args.length; ++i)
+                finalArgs[i] = this.arg(b, i);
+
+            this.debugFunc(this.opCount2, b.op, finalArgs);
+            ++this.opCount2;
+        }
         b.primFcn(b);
         if (this.yield) { this.activeThread.nextBlock = b; return; }
         b = this.activeThread.nextBlock; // refresh local variable b in case primitive did some control flow
