@@ -25,7 +25,7 @@ LooksPrims.prototype.addPrimsTo = function(primTable) {
     primTable["lookLike:"]          = this.primShowCostume;
     primTable["costumeIndex"]       = this.primCostumeNum;
 
-    primTable["nextScene"]     = this.primNextCostume;
+    primTable["nextScene"]          = this.primNextCostume;
     primTable["showBackground:"]    = this.primShowCostume;
     primTable["backgroundIndex"]    = this.primCostumeNum;
 
