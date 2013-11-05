@@ -42,14 +42,9 @@ body {
     /* Hmm, will this break after the 501st sprite? */
     margin-left: 30px;
 }
-/* The green flag icon. */
- #greenSlideFg {
-    background-color: #000;
-    opacity: 0.2;
-    width: 278px;
-    height: 218px;
-    padding-top: 142px;
-    padding-left: 202px;
+#greenSlideFg {
+    background-color: rgba(0,0,0,0.4);
+    padding: 140px 202px;
 }
 /* iPad arrow key frame */
 
@@ -108,6 +103,10 @@ body {
     clear: both;
     text-align: right;
 }
+.playerContainer {
+    display: inline-block;
+    text-align: center;
+}
 /* Reporter styles */
  .reporter-normal {
     display: inline-block;
@@ -147,6 +146,96 @@ body {
     color: #fff;
     position: absolute;
 }
+
+/* List watcher styles */
+.list {
+    float: left;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 2px;
+    background-color: #C1C4C7;
+    padding-left: 3px;
+    font: bold 11px sans-serif;
+    position: absolute;
+}
+
+.list .list-title {
+    padding-top: 2px;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.list .list-scrollbar-container {
+    float: right;
+    width: 10px;
+    position: relative;
+}
+
+.list .list-scrollbar {
+    position: absolute;
+    top: 0px;
+    width: 10px;
+    background-color: #a8aaad;
+    border-radius: 10px;
+}
+
+.list .list-index {
+    color: rgb(81, 81, 81);
+    float: left;
+    padding: 2px;
+    margin-top: 0px;
+    text-align: right;
+    font: bold 11px;
+}
+
+.list .list-item {
+    float: right;
+    height: 16px;
+    overflow: hidden;
+    margin-bottom: 0px;
+    margin-right: 2px;
+    padding-top: 2px;
+    padding-left: 5px;
+    border-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    background-color: #cc5b22;
+    color: white;
+    word-wrap: break-word;
+    font: bolder 11px sans-serif;
+}
+
+.list .list-add {
+    clear: both;
+    background-color: #dedede;
+    width: 12px;
+    height: 12px;
+    border-radius: 12px;
+    color: #707070;
+    font: bold 10px sans-serif;
+    text-align: center;
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+}
+
+.list .list-length {
+    font-size: 10px;
+    font-weight: normal;
+    text-align: center;
+    color: black;
+    position: absolute;
+    bottom: 2px;
+    left: 0px;
+    right: 0px;
+}
+
 /* Say/think bubble styles */
  .bubble-container {
     position: absolute;
@@ -182,6 +271,7 @@ body {
     height: 19px;
     background: url(img/think-bottom.png) transparent no-repeat;
 }
+
 #info {
     float: left;
     margin-left: 30px;
