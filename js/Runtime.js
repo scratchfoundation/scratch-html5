@@ -91,8 +91,7 @@ Runtime.prototype.stopAll = function() {
     }
     // Reset graphic effects
     for (var s = 0; s < runtime.sprites.length; s++) {
-        if (typeof runtime.sprites[s].hideBubble == 'function')
-            runtime.sprites[s].resetFilters();
+        runtime.sprites[s].resetFilters();
     }
 }
 
