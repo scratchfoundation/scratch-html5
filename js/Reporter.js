@@ -102,10 +102,13 @@ Reporter.prototype.update = function() {
         case 'timer':
             newValue = interp.primitiveTable.timer().toFixed(3);
             break;
+        case 'timeAndDate':
+            newValue = runtime.getTimeString(this.param);
+            break;
     }
     this.valueEl.html(newValue);
     if (this.mode == 3) {
-        this.slider.val(parseInt(newValue));
+        this.slider.val(parseInt(newValue)).hide().width(this.el.width()-5).show();
     }
 };
 

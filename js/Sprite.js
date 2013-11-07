@@ -336,7 +336,7 @@ Sprite.prototype.showBubble = function(text, type) {
         this.talkBubbleStyler.addClass('bubble-think');
     }
 
-    if (this.visible) {
+    if (this.visible && text) {
         this.talkBubble.css('display', 'inline-block');
     }
     this.talkBubbleBox.html(text);
