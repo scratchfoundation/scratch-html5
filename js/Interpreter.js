@@ -281,7 +281,7 @@ Interpreter.prototype.primWait = function(b) {
 
 Interpreter.prototype.primRepeat = function(b) {
     if (b.tmp == -1) {
-        b.tmp = Math.max(interp.arg(b, 0), 0); // Initialize repeat count on this block
+        b.tmp = Math.round(interp.arg(b, 0)); // Initialize repeat count on this block
     }
     if (b.tmp > 0) {
         b.tmp -= 1; // decrement count
