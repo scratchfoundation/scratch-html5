@@ -79,13 +79,12 @@ Reporter.prototype.update = function() {
     switch (this.cmd) {
         case 'getVar:':
             newValue = target.variables[this.param];
-            if (typeof(newValue) == 'number' && this.mode != 3) newValue = newValue.toFixed(3);
             break;
         case 'xpos':
-            newValue = target.scratchX.toFixed(3);
+            newValue = target.scratchX;
             break;
         case 'ypos':
-            newValue = target.scratchY.toFixed(3);
+            newValue = target.scratchY;
             break;
         case 'heading':
             newValue = target.direction;
@@ -103,9 +102,13 @@ Reporter.prototype.update = function() {
             newValue = interp.primitiveTable.timer().toFixed(3);
             break;
     }
+    if (typeof newValue === 'number' && Math.abs(newValue) > 0.001) {
+        newValue = Math.round(newValue * 1000) / 1000;
+    }
+    newValue = '' + newValue;
     this.valueEl.html(newValue);
     if (this.mode == 3) {
-        this.slider.val(parseInt(newValue));
+        this.slider.val(Number(newValue));
     }
 };
 
@@ -114,7 +117,7 @@ Reporter.prototype.updateLayer = function() {
 };
 
 Reporter.prototype.changeSlider = function() {
-    var newValue = parseInt($(this).val());
+    var newValue = Number($(this).val());
     var target = runtime.spriteNamed($(this).attr('data-target'));
     var variable = $(this).attr('data-var');
     target.variables[variable] = newValue;
