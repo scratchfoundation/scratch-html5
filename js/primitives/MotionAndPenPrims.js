@@ -22,42 +22,42 @@ MotionAndPenPrims.prototype.addPrimsTo = function(primTable) {
     primTable['turnLeft:']          = this.primTurnLeft;
     primTable['turnRight:']         = this.primTurnRight;
     primTable['heading:']           = this.primSetDirection;
-    primTable["pointTowards:"]      = this.primPointTowards;
-    primTable["gotoX:y:"]           = this.primGoTo;
-    primTable["gotoSpriteOrMouse:"]  = this.primGoToSpriteOrMouse;
-    primTable["glideSecs:toX:y:elapsed:from:"] = this.primGlide;
+    primTable['pointTowards:']      = this.primPointTowards;
+    primTable['gotoX:y:']           = this.primGoTo;
+    primTable['gotoSpriteOrMouse:']  = this.primGoToSpriteOrMouse;
+    primTable['glideSecs:toX:y:elapsed:from:'] = this.primGlide;
 
-    primTable["changeXposBy:"]      = this.primChangeX;
-    primTable["xpos:"]              = this.primSetX;
-    primTable["changeYposBy:"]      = this.primChangeY;
-    primTable["ypos:"]              = this.primSetY;
+    primTable['changeXposBy:']      = this.primChangeX;
+    primTable['xpos:']              = this.primSetX;
+    primTable['changeYposBy:']      = this.primChangeY;
+    primTable['ypos:']              = this.primSetY;
 
-    primTable["bounceOffEdge"]      = this.primBounceOffEdge;
-    primTable["setRotationStyle"]   = this.primSetRotationStyle;
+    primTable['bounceOffEdge']      = this.primBounceOffEdge;
+    primTable['setRotationStyle']   = this.primSetRotationStyle;
 
-    primTable["xpos"]               = this.primXPosition;
-    primTable["ypos"]               = this.primYPosition;
-    primTable["heading"]            = this.primDirection;
+    primTable['xpos']               = this.primXPosition;
+    primTable['ypos']               = this.primYPosition;
+    primTable['heading']            = this.primDirection;
 
-    primTable["clearPenTrails"]     = this.primClear;
-    primTable["putPenDown"]         = this.primPenDown;
-    primTable["putPenUp"]           = this.primPenUp;
-    primTable["penColor:"]          = this.primSetPenColor;
-    primTable["setPenHueTo:"]       = this.primSetPenHue;
-    primTable["changePenHueBy:"]    = this.primChangePenHue;
-    primTable["setPenShadeTo:"]     = this.primSetPenShade;
-    primTable["changePenShadeBy:"]  = this.primChangePenShade;
-    primTable["penSize:"]           = this.primSetPenSize;
-    primTable["changePenSizeBy:"]   = this.primChangePenSize;
+    primTable['clearPenTrails']     = this.primClear;
+    primTable['putPenDown']         = this.primPenDown;
+    primTable['putPenUp']           = this.primPenUp;
+    primTable['penColor:']          = this.primSetPenColor;
+    primTable['setPenHueTo:']       = this.primSetPenHue;
+    primTable['changePenHueBy:']    = this.primChangePenHue;
+    primTable['setPenShadeTo:']     = this.primSetPenShade;
+    primTable['changePenShadeBy:']  = this.primChangePenShade;
+    primTable['penSize:']           = this.primSetPenSize;
+    primTable['changePenSizeBy:']   = this.primChangePenSize;
 
-    primTable["stampCostume"]       = this.primStamp;
-    primTable["stampTransparent"]   = this.primStampTransparent;
+    primTable['stampCostume']       = this.primStamp;
+    primTable['stampTransparent']   = this.primStampTransparent;
 };
 
 MotionAndPenPrims.prototype.primMove = function(b) {
     var s = interp.targetSprite();
     var radians = (90 - s.direction) * Math.PI / 180;
-    var d = interp.arg(b, 0);
+    var d = interp.numarg(b, 0);
 
     moveSpriteTo(s, s.scratchX + d * Math.cos(radians), s.scratchY + d * Math.sin(radians));
     if (s.visible) interp.redraw();
@@ -65,21 +65,21 @@ MotionAndPenPrims.prototype.primMove = function(b) {
 
 MotionAndPenPrims.prototype.primTurnLeft = function(b) {
     var s = interp.targetSprite();
-    var d = s.direction - interp.arg(b, 0);
+    var d = s.direction - interp.numarg(b, 0);
     s.setDirection(d);
     if (s.visible) interp.redraw();
 };
 
 MotionAndPenPrims.prototype.primTurnRight = function(b) {
     var s = interp.targetSprite();
-    var d = s.direction + interp.arg(b, 0);
+    var d = s.direction + interp.numarg(b, 0);
     s.setDirection(d);
     if (s.visible) interp.redraw();
 };
 
 MotionAndPenPrims.prototype.primSetDirection = function(b) {
     var s = interp.targetSprite();
-    s.setDirection(interp.arg(b, 0));
+    s.setDirection(interp.numarg(b, 0));
     if (s.visible) interp.redraw();
 };
 
@@ -96,7 +96,7 @@ MotionAndPenPrims.prototype.primPointTowards = function(b) {
 
 MotionAndPenPrims.prototype.primGoTo = function(b) {
     var s = interp.targetSprite();
-    if (s != null) moveSpriteTo(s, interp.arg(b, 0), interp.arg(b, 1));
+    if (s != null) moveSpriteTo(s, interp.numarg(b, 0), interp.numarg(b, 1));
 };
 
 MotionAndPenPrims.prototype.primGoToSpriteOrMouse = function(b) {
@@ -110,9 +110,9 @@ MotionAndPenPrims.prototype.primGlide = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
     if (interp.activeThread.firstTime) {
-        var secs = interp.arg(b, 0);
-        var destX = interp.arg(b, 1);
-        var destY = interp.arg(b, 2);
+        var secs = interp.numarg(b, 0);
+        var destX = interp.numarg(b, 1);
+        var destY = interp.numarg(b, 2);
         if (secs <= 0) {
             moveSpriteTo(s, destX, destY);
             return;
@@ -138,22 +138,22 @@ MotionAndPenPrims.prototype.primGlide = function(b) {
 
 MotionAndPenPrims.prototype.primChangeX = function(b) {
     var s = interp.targetSprite();
-    if (s != null) moveSpriteTo(s, s.scratchX + interp.arg(b, 0), s.scratchY);
+    if (s != null) moveSpriteTo(s, s.scratchX + interp.numarg(b, 0), s.scratchY);
 };
 
 MotionAndPenPrims.prototype.primSetX = function(b) {
     var s = interp.targetSprite();
-    if (s != null) moveSpriteTo(s, interp.arg(b, 0), s.scratchY);
+    if (s != null) moveSpriteTo(s, interp.numarg(b, 0), s.scratchY);
 };
 
 MotionAndPenPrims.prototype.primChangeY = function(b) {
     var s = interp.targetSprite();
-    if (s != null) moveSpriteTo(s, s.scratchX, s.scratchY + interp.arg(b, 0));
+    if (s != null) moveSpriteTo(s, s.scratchX, s.scratchY + interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primSetY = function(b) {
     var s = interp.targetSprite();
-    if (s != null) moveSpriteTo(s, s.scratchX, interp.arg(b, 0));
+    if (s != null) moveSpriteTo(s, s.scratchX, interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primBounceOffEdge = function(b) {
@@ -209,38 +209,38 @@ MotionAndPenPrims.prototype.primPenUp = function(b) {
 
 MotionAndPenPrims.prototype.primSetPenColor = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.setPenColor(interp.arg(b, 0));
+    if (s != null) s.setPenColor(interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primSetPenHue = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.setPenHue(interp.arg(b, 0));
+    if (s != null) s.setPenHue(interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primChangePenHue = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.setPenHue(s.penHue + interp.arg(b, 0));
+    if (s != null) s.setPenHue(s.penHue + interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primSetPenShade = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.setPenShade(interp.arg(b, 0));
+    if (s != null) s.setPenShade(interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primChangePenShade = function(b) {
     var s = interp.targetSprite();
-    if (s != null) s.setPenShade(s.penShade + interp.arg(b, 0));
+    if (s != null) s.setPenShade(s.penShade + interp.numarg(b, 0));
 };
 
 MotionAndPenPrims.prototype.primSetPenSize = function(b) {
     var s = interp.targetSprite();
-    var w = Math.max(0, Math.min(interp.arg(b, 0), 100));
+    var w = Math.max(0, Math.min(interp.numarg(b, 0), 100));
     if (s != null) s.penWidth = w;
 };
 
 MotionAndPenPrims.prototype.primChangePenSize = function(b) {
     var s = interp.targetSprite();
-    var w = Math.max(0, Math.min(s.penWidth + interp.arg(b, 0), 100));
+    var w = Math.max(0, Math.min(s.penWidth + interp.numarg(b, 0), 100));
     if (s != null) s.penWidth = w;
 };
 
@@ -251,7 +251,7 @@ MotionAndPenPrims.prototype.primStamp = function(b) {
 
 MotionAndPenPrims.prototype.primStampTransparent = function(b) {
     var s = interp.targetSprite();
-    var transparency = Math.max(0, Math.min(interp.arg(b, 0), 100));
+    var transparency = Math.max(0, Math.min(interp.numarg(b, 0), 100));
     var alpha = 100 - transparency;
     s.stamp(runtime.stage.lineCache, alpha);
 };
@@ -263,7 +263,7 @@ var stroke = function(s, oldX, oldY, newX, newY) {
 };
 
 var mouseOrSpritePosition = function(arg) {
-    if (arg == "_mouse_") {
+    if (arg == '_mouse_') {
         var w = runtime.stage;
         return new Point(runtime.mousePos[0], runtime.mousePos[1]);
     } else {

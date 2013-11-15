@@ -18,35 +18,35 @@
 var LooksPrims = function() {};
 
 LooksPrims.prototype.addPrimsTo = function(primTable) {
-    primTable["show"]               = this.primShow;
-    primTable["hide"]               = this.primHide;
+    primTable['show']               = this.primShow;
+    primTable['hide']               = this.primHide;
 
-    primTable["nextCostume"]        = this.primNextCostume;
-    primTable["lookLike:"]          = this.primShowCostume;
-    primTable["costumeIndex"]       = this.primCostumeNum;
+    primTable['nextCostume']        = this.primNextCostume;
+    primTable['lookLike:']          = this.primShowCostume;
+    primTable['costumeIndex']       = this.primCostumeNum;
 
-    primTable["nextScene"]     = this.primNextCostume;
-    primTable["showBackground:"]    = this.primShowCostume;
-    primTable["backgroundIndex"]    = this.primCostumeNum;
+    primTable['nextScene']     = this.primNextCostume;
+    primTable['showBackground:']    = this.primShowCostume;
+    primTable['backgroundIndex']    = this.primCostumeNum;
 
-    primTable["startScene"]         = this.primStartScene;
-    primTable["backgroundIndex"]    = this.primCostumeNum;
+    primTable['startScene']         = this.primStartScene;
+    primTable['backgroundIndex']    = this.primCostumeNum;
 
-    primTable["changeSizeBy:"]      = this.primChangeSize;
-    primTable["setSizeTo:"]         = this.primSetSize;
-    primTable["scale"]              = this.primSize;
+    primTable['changeSizeBy:']      = this.primChangeSize;
+    primTable['setSizeTo:']         = this.primSetSize;
+    primTable['scale']              = this.primSize;
 
-    primTable["comeToFront"]        = this.primGoFront;
-    primTable["goBackByLayers:"]    = this.primGoBack;
+    primTable['comeToFront']        = this.primGoFront;
+    primTable['goBackByLayers:']    = this.primGoBack;
 
-    primTable["changeGraphicEffect:by:"] = this.primChangeEffect;
-    primTable["setGraphicEffect:to:"]    = this.primSetEffect;
-    primTable["filterReset"]             = this.primClearEffects;
+    primTable['changeGraphicEffect:by:'] = this.primChangeEffect;
+    primTable['setGraphicEffect:to:']    = this.primSetEffect;
+    primTable['filterReset']             = this.primClearEffects;
 
-    primTable["say:"] = function(b) { showBubble(b, 'say'); };
-    primTable["say:duration:elapsed:from:"] = function(b) { showBubbleAndWait(b, 'say'); };
-    primTable["think:"] = function(b) { showBubble(b, 'think'); };
-    primTable["think:duration:elapsed:from:"] = function(b) { showBubbleAndWait(b, 'think'); };
+    primTable['say:'] = function(b) { showBubble(b, 'say'); };
+    primTable['say:duration:elapsed:from:'] = function(b) { showBubbleAndWait(b, 'say'); };
+    primTable['think:'] = function(b) { showBubble(b, 'think'); };
+    primTable['think:duration:elapsed:from:'] = function(b) { showBubbleAndWait(b, 'think'); };
 };
 
 LooksPrims.prototype.primShow = function(b) {
@@ -71,7 +71,7 @@ LooksPrims.prototype.primShowCostume = function(b) {
     if (typeof(arg) == 'number') {
         s.showCostume(arg - 1);
     } else {
-        if ((arg == 'CAMERA') || (arg == "CAMERA - MIRROR")) {
+        if ((arg == 'CAMERA') || (arg == 'CAMERA - MIRROR')) {
             s.showCostumeNamed(arg);
             return;
         }
@@ -79,8 +79,8 @@ LooksPrims.prototype.primShowCostume = function(b) {
         if (i >= 0) {
             s.showCostume(i);
         } else {
-            var n = Number(arg);
-            if (!isNaN(n)) {
+            var n = parseInt(arg, 10);
+            if (n === n) { // if n is not NaN
                 s.showCostume(n - 1);
             } else {
                 return;  // arg did not match a costume name nor is a valid number
@@ -96,7 +96,7 @@ LooksPrims.prototype.primStartScene = function(b) {
     if (typeof(arg) == 'number') {
         s.showCostume(arg - 1);
     } else {
-        if ((arg == 'CAMERA') || (arg == "CAMERA - MIRROR")) {
+        if ((arg == 'CAMERA') || (arg == 'CAMERA - MIRROR')) {
             s.showCostumeNamed(arg);
             return;
         }
@@ -104,8 +104,8 @@ LooksPrims.prototype.primStartScene = function(b) {
         if (i >= 0) {
             s.showCostume(i);
         } else {
-            var n = Number(arg);
-            if (!isNaN(n)) {
+            var n = parseInt(arg, 10);
+            if (n === n) { // fast !isNaN check
                 s.showCostume(n - 1);
             } else {
                 return;  // arg did not match a costume name nor is a valid number
@@ -123,14 +123,14 @@ LooksPrims.prototype.primCostumeNum = function(b) {
 LooksPrims.prototype.primChangeSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
-    s.setSize(s.getSize() + interp.arg(b, 0));
+    s.setSize(s.getSize() + interp.numarg(b, 0));
     if (s.visible) interp.redraw();
 };
 
 LooksPrims.prototype.primSetSize = function(b) {
     var s = interp.targetSprite();
     if (s == null) return;
-    s.setSize(interp.arg(b, 0));
+    s.setSize(interp.numarg(b, 0));
     if (s.visible) interp.redraw();
 };
 
@@ -148,8 +148,8 @@ LooksPrims.prototype.primGoFront = function(b) {
 
 LooksPrims.prototype.primGoBack = function(b) {
     var s = interp.targetSprite();
-    runtime.reassignZ(s, interp.arg(b, 0));
-    if (s.visible) interp.redraw();
+    runtime.reassignZ(s, interp.numarg(b, 0));
+    if(s.visible) interp.redraw();
 };
 
 LooksPrims.prototype.primChangeEffect = function(b) {};
@@ -168,7 +168,7 @@ var showBubbleAndWait = function(b, type) {
     if (s == null) return;
     if (interp.activeThread.firstTime) {
         var text = interp.arg(b, 0);
-        var secs = interp.arg(b, 1);
+        var secs = interp.numarg(b, 1);
         s.showBubble(text, type);
         if (s.visible) interp.redraw();
         interp.startTimer(secs);
