@@ -99,7 +99,7 @@ Reporter.prototype.update = function() {
             newValue = target.currentCostumeIndex + 1;
             break;
         case 'timer':
-            newValue = interp.primitiveTable.timer().toFixed(3);
+            newValue = interp.primitiveTable.timer();
             break;
     }
     if (typeof newValue === 'number' && Math.abs(newValue) > 0.001) {
