@@ -70,7 +70,7 @@ Runtime.prototype.loadStart = function() {
         setTimeout(function(runtime) { runtime.loadStart(); }, 50, this);
         return;
     }
-    $('#info').html("Loaded!");
+    $('#preloader').css('display', 'none');
     setInterval(this.step, 33);
     this.projectLoaded = true;
 };

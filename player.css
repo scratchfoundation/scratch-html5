@@ -1,28 +1,13 @@
-body {
-    background: #fff;
-    color: #333;
-    margin: 0;
-    padding: 0px;
-    font-family: sans-serif;
-}
 /* Wrapper wraps the entire player, and the text below and above. Ideally,
    all CSS selectors would be descendants of #wrapper so that the player
    is embeddable.
 */
- #wrapper {
-    width: 540px;
-    height: 420px;
-    margin: auto;
-}
-/* Container is the Stage */
- #container {
-    border: none;
-    cursor: default;
-    width: 480px;
-    height: 360px;
-    overflow: hidden;
+#player-container {
     position: relative;
-    float: left;
+    width: 482px;
+    padding: 48px;
+    margin: 0 auto;
+    font-family: sans-serif;
     /* Before, we accomplished this with e.preventDefault
      * on the context div.  But, we'd like to use those click events
      * for some things like reporter sliders.
@@ -34,102 +19,273 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
-/* The pane over a project with the green flag on startup. */
- #greenSlide {
-    position: absolute;
-    float: left;
-    z-index: 500;
-    /* Hmm, will this break after the 501st sprite? */
-    margin-left: 30px;
-}
-#greenSlideFg {
-    background-color: rgba(0,0,0,0.4);
-    padding: 140px 202px;
-}
-/* iPad arrow key frame */
 
-/*  This is the frame around the stage with various buttons. */
- #ui-top {
-    width: 540px;
-    height: 30px;
-    clear: both;
-    background-color: #eee;
+/*  Control bar above the stage */
+#player-header {
+    width: 480px;
+    height: 38px;
+    position: relative;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e6e6e6));
+    background: -webkit-linear-gradient(#fff, #e6e6e6);
+    background: -moz-linear-gradient(#fff, #e6e6e6);
+    background: -ms-linear-gradient(#fff, #e6e6e6);
+    background: -o-linear-gradient(#fff, #e6e6e6);
+    background: linear-gradient(#fff, #e6e6e6);
+    border: 1px solid #d1d1d1;
+    border-bottom: 0;
+    border-radius: 7px 7px 0 0;
 }
-#up {
-    padding-top: 10px;
-    width: 540px;
-    height: 30px;
-    clear: both;
-    background-color: #eee;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+
+/* Button styling */
+#player-header button {
+    border: 0;
+    background: center center no-repeat;
+    width: 33px;
+    height: 38px;
+    float: right;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#player-header-preload {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    background: url(img/fullScreenOn.png), url(img/greenFlagOn.png), url(img/stopOn.png);
+}
+button#toggle-fullscreen {
+    background-image: url(img/fullScreenOff.png);
+    background-position: 10px 8px;
+    width: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+button#trigger-green-flag {
+    background-image: url(img/greenFlagOff.png);
+}
+button#trigger-green-flag:hover {
+    background-image: url(img/greenFlagOn.png);
+}
+button#trigger-stop {
+    background-image: url(img/stopOff.png);
+}
+button#trigger-stop:hover {
+    background-image: url(img/stopOn.png);
+}
+
+/* Version number */
+#player-header-version {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    width: 45px;
     text-align: center;
-    color: #ccc;
+    color: rgba(0, 0, 0, .4);
+    font: 9px sans-serif;
 }
-#left {
-    float: left;
-    width: 30px;
+
+/* Wrapper for the Stage */
+#player-content {
+    position: relative;
+    border: 1px solid #d1d1d1;
+    border-top: 0;
+    width: 480px;
     height: 360px;
-    background-color: #eee;
-    line-height: 360px;
-    color: #ccc;
+}
+
+/* The Stage */
+#container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 360px;
+    cursor: default;
+    overflow: hidden;
+}
+
+/* Pane over the Stage with the green flag on startup */
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 360px;
+    z-index: 10000;
+    background: url(img/playerStartFlag.png) rgba(0, 0, 0, .26) center center no-repeat;
+}
+
+/* Preloader */
+#preloader {
+    position: absolute;
+    z-index: 10001;
+    top: 50%;
+    left: 50%;
+    margin-left: -156px;
+    margin-top: -61px;
+    width: 309px;
+    height: 119px;
+    border: 1px solid rgb(208, 209, 210);
+    background: #fff;
+    border-radius: 12px;
+    -webkit-box-shadow: 4px 4px 6px rgba(0, 0, 0, .5);
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, .5);
+    cursor: default;
+}
+#preloader-progress {
+    margin: 24px 30px 14px 29px;
+    background: rgb(185, 187, 189);
+    border-radius: 5px;
+    height: 22px;
+}
+#preloader-progress-bar {
+    height: 22px;
+    background: rgb(0, 161, 216);
+    border-radius: 5px;
+    width: 0;
+}
+#preloader-caption,
+#preloader-details {
+    margin: 14px 0 0 8px;
     text-align: center;
+    font-size: 18px;
+    color: rgba(0, 0, 0, .65);
+}
+#preloader-details {
+    margin: 6px 0 0 4px;
+    font-size: 12px;
+}
+
+/* iPad arrow key frame */
+.arrow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 578px;
+    height: 400px;
+    text-align: center;
+    font: 24px/48px sans-serif;
+    color: rgba(0, 0, 0, .2);
+    cursor: default;
+}
+.arrow.vertical {
+    height: 48px;
+}
+.arrow.horizontal {
+    width: 48px;
+    top: 48px;
+    line-height: 400px;
 }
 #right {
-    float: left;
-    width: 30px;
-    height: 360px;
-    background-color: #eee;
-    line-height: 360px;
-    color: #ccc;
-    text-align: center;
+    left: 530px;
 }
 #down {
-    padding-top: 10px;
-    width: 540px;
-    height: 30px;
-    background-color: #eee;
+    top: 448px;
+}
+#up::before {
+    content: '\25b2';
+}
+#down::before {
+    content: '\25bc';
+}
+#left::before {
+    content: '\25c0';
+}
+#right::before {
+    content: '\25b6';
+}
+
+/* Panel for project ID input */
+#project-picker {
+    margin: 16px 0;
     text-align: center;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    color: #ccc;
+    font-size: 16px;
+    line-height: 18px;
 }
-#ui-bottom {
-    width: 480px;
-    height: 30px;
-    background-color: #eee;
-    padding-left: 30px;
-    padding-right: 30px;
-    clear: both;
-    text-align: right;
+#project-id,
+#address-hint {
+    border: 1px solid #aaa;
+    padding: 6px;
 }
-.playerContainer {
-    display: inline-block;
-    text-align: center;
+#project-id {
+    -webkit-box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, .3);
+    box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, .3);
+    background: 0;
+    padding-left: 0;
+    border-left: 0;
+    margin: 0;
+    font: inherit;
+    width: 6em;
 }
+#project-id.error {
+    background: #fee;
+    -webkit-box-shadow: inset 0 3px 3px -3px rgba(100, 0, 0, .3);
+    box-shadow: inset 0 3px 3px -3px rgba(100, 0, 0, .3);
+}
+#address-hint {
+    -webkit-box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
+    box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
+    padding-right: 0;
+    border-right: 0;
+}
+#address-hint.error {
+    background: #fee;
+    -webkit-box-shadow: inset 3px 3px 3px -3px rgba(100, 0, 0, .3);
+    box-shadow: inset 3px 3px 3px -3px rgba(100, 0, 0, .3);
+}
+#go-project {
+    padding: 6px;
+    margin: 0;
+    border: 1px solid #aaa;
+    border-left: 0;
+    font: inherit;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
+    background: -webkit-linear-gradient(#fff, #ddd);
+    background: -moz-linear-gradient(#fff, #ddd);
+    background: -ms-linear-gradient(#fff, #ddd);
+    background: -o-linear-gradient(#fff, #ddd);
+    background: linear-gradient(#fff, #ddd);
+    -webkit-box-shadow: inset 0 -1px rgba(255, 255, 255, .2);
+    box-shadow: inset 0 -1px rgba(255, 255, 255, .2);
+    cursor: pointer;
+}
+#go-project:active {
+    background: -webkit-gradient(linear, left top, left bottom, from(#ddd), to(#eee));
+    background: -webkit-linear-gradient(#ddd, #eee);
+    background: -moz-linear-gradient(#ddd, #eee);
+    background: -ms-linear-gradient(#ddd, #eee);
+    background: -o-linear-gradient(#ddd, #eee);
+    background: linear-gradient(#ddd, #eee);
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, .3), inset 0 2px 5px rgba(0, 0, 0, .1);
+    box-shadow: inset 0 1px rgba(255, 255, 255, .3), inset 0 2px 5px rgba(0, 0, 0, .1);
+}
+
+
 /* Reporter styles */
- .reporter-normal {
+.reporter-normal {
     display: inline-block;
-    padding: 2px 5px 2px 5px;
+    padding: 2px 7px 3px 5px;
     background-color: rgb(193, 196, 199);
-    border: 1px solid rgb(130, 126, 126);
-    border-radius: 4px;
-    font-family: sans-serif;
-    font-size: 11px;
-    font-weight: bold;
+    border: 1px solid rgb(148, 145, 145);
+    border-radius: 6px;
+    font: bold 11px/15px sans-serif;
     color: #000;
     position: absolute;
 }
 .reporter-inset {
     display: inline-block;
-    min-width: 40px;
-    margin-left: 5px;
+    vertical-align: top;
+    min-width: 38px;
+    margin-left: 6px;
     padding: 1px;
     border: 1px solid #fff;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 0 3px #fff;
-    box-shadow: inset 0 0 3px #fff;
+    border-radius: 6px;
+    -webkit-box-shadow: inset -1px -1px 3px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow: inset -1px -1px 3px rgba(255, 255, 255, 0.7), inset 1px 1px 2px rgba(0, 0, 0, 0.35);
     text-align: center;
+    font: bold 9px/11px sans-serif;
     color: #fff;
 }
 .reporter-large {
@@ -139,9 +295,7 @@ body {
     border-radius: 4px;
     -webkit-box-shadow: 0 -3px 3px -3px #fff inset, -3px 0 3px -3px #fff inset, 0 3px 3px -3px #000 inset, 3px 0 3px -3px #000 inset;
     box-shadow: 0 -3px 3px -3px #fff inset, -3px 0 3px -3px #fff inset, 0 3px 3px -3px #000 inset, 3px 0 3px -3px #000 inset;
-    font-family: sans-serif;
-    font-size: 15px;
-    font-weight: bold;
+    font-family: bold 15px sans-serif;
     text-align: center;
     color: #fff;
     position: absolute;
@@ -270,84 +424,4 @@ body {
     width: 44px;
     height: 19px;
     background: url(img/think-bottom.png) transparent no-repeat;
-}
-
-#info {
-    float: left;
-    margin-left: 30px;
-    height: 24px;
-    padding: 3px;
-    color: #aaa;
-    font-size: 12px;
-}
-/* Button styling */
- button {
-    background-color: #ddd;
-    border-radius: 3px;
-    cursor: pointer;
-    border-style: none;
-    font-family: sans-serif;
-    width: 24px;
-    padding: 3px;
-    margin: 3px;
-    margin-top: 0px;
-    height: 24px;
-    background: -webkit-gradient(linear, top left, bottom left, from(#ddd), to(#ccc));
-    background: -webkit-linear-gradient(#ddd, #ccc);
-    background: linear-gradient(#ddd, #ccc);
-}
-button:hover {
-    background-color: #ccc;
-    background: -webkit-gradient(linear, top left, bottom left, from(#ccc), to(#bbb));
-    background: -webkit-linear-gradient(#ccc, #bbb);
-    background: linear-gradient(#ccc, #bbb);
-}
-#trigger_green_flag, #trigger_stop {
-    padding-top: 0px;
-    font-size: 20px;
-    width: 24px;
-    margin: 3px;
-    float: right;
-}
-#trigger_green_flag {
-    color: #050;
-}
-#trigger_stop {
-    color: #F33;
-    margin-right: 30px;
-    margin-left: 0px;
-}
-#clearer {
-    clear: both;
-}
-input[type=text] {
-    display: inline-block;
-    border-style: none;
-    border-radius: 4px;
-    font-family: sans-serif;
-    background-color: #ddd;
-    font-size: 14px;
-    padding: 3px;
-    height: 18px;
-    margin: 3px;
-    width: 100px;
-}
-input[type=text]:focus {
-    outline: none;
-    background-color: #ccc;
-}
-#project_id {
-    text-align: center;
-}
-#address-hint {
-    font-size: 12px;
-}
-#go_project {
-    display: table-cell;
-    height: 24px;
-    padding: 0px;
-    margin-right: 0px;
-    margin-left: 0px;
-    margin-top: 3px;
-    margin-bottom: 0px;
 }

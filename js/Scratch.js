@@ -37,22 +37,43 @@ $(function() {
     });
 
     // Update the project ID field
-    $('#project_id').val(project_id);
+    $('#project-id').val(project_id);
+
+    // Validate project ID field
+    $('#project-id').keyup(function() {
+        var n = this.value;
+
+        // Allow URL pasting
+        var e = /projects\/(\d+)/.exec(n);
+        if (e) {
+            n = this.value = e[1];
+        }
+
+        // Eventually, this will xhr to /projects/{{this.value}}/ and
+        // change color based on whether the response is 404 or 200.
+        $('#project-id, #address-hint').toggleClass('error', isNaN(n));
+    });
+
+    // Focus the actual input when the user clicks on the URL hint
+    $('#address-hint').click(function() {
+        $('#project-id').select();
+    });
 
     // Go project button behavior
-    $('#go_project').click(function() {
-        window.location = "#" + parseInt($('#project_id').val());
+    $('#go-project').click(function() {
+        window.location = '#' + parseInt($('#project-id').val());
         window.location.reload(true);
     });
 
     // Green flag behavior
-    $('#trigger_green_flag, #greenSlide').click(function() {
-        $('#greenSlide').css('display', 'none');
+    $('#trigger-green-flag, #overlay').click(function() {
+        if (!runtime.projectLoaded) return;
+        $('#overlay').css('display', 'none');
         runtime.greenFlag()
     });
 
     // Stop button behavior
-    $('#trigger_stop').click(function() {
+    $('#trigger-stop').click(function() {
         runtime.stopAll();
     });
 
