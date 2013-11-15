@@ -1,9 +1,38 @@
+body {
+    background: #fff;
+    font-family: sans-serif;
+    color: #000;
+    width: 1108px;
+    margin: 0 auto;
+}
+
+.container {
+    display: inline-block;
+    vertical-align: top;
+}
+
 textarea {
-    width: 450px;
+    width: 482px;
+    padding: 6px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     height: 200px;
-}
-
-object {
     display: block;
+    margin: 16px auto;
+    border: 1px solid #aaa;
+    box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
 }
 
+#flash-scratch {
+    text-align: center;
+    visibility: hidden;
+    display: block;
+    margin: 48px 0 62px;
+}
+
+#flash-scratch p {
+    color: #aaa;
+    font-size: 22px;
+    margin-top: 14px;
+    line-height: 28px;
+}

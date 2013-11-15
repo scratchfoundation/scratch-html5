@@ -1,134 +1,134 @@
-<?
-header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-?>
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Scratch HTML5 vs. Flash</title>
-        <meta charset="utf-8">
-        <link href="player.css" type="text/css" rel="stylesheet" />
-        <link href="compare.css" type="text/css" rel="stylesheet" />
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-        <script src="js/util/Timer.js"></script>
-        <script src="js/util/OffsetBuffer.js"></script>
-        <script src="js/util/Color.js"></script>
-        <script src="js/util/Rectangle.js"></script>
-        <script src="js/Sprite.js"></script>
-        <script src="js/Reporter.js"></script>
-        <script src="js/Stage.js"></script>
-        <script src="js/sound/WAVFile.js"></script>
-        <script src="js/sound/SoundDecoder.js"></script>
-        <script src="js/sound/SoundBank.js"></script>
-        <script src="js/sound/NotePlayer.js"></script>
-        <script src="soundbank/Instr.js"></script>
-        <script src="js/IO.js"></script>
-        <script src="js/primitives/VarListPrims.js"></script>
-        <script src="js/primitives/MotionAndPenPrims.js"></script>
-        <script src="js/primitives/LooksPrims.js"></script>
-        <script src="js/primitives/SensingPrims.js"></script>
-        <script src="js/primitives/SoundPrims.js"></script>
-        <script src="js/primitives/Primitives.js"></script>
-        <script src="js/Interpreter.js"></script>
-        <script src="js/Runtime.js"></script>
-        <script src="js/Scratch.js"></script>
-        <script type="text/javascript">
-            if (window.location.hash) {
-                var project_id = parseInt(window.location.hash.substr(1));
-            } else {
-                var project_id = 10000160; // Default project for display
-            }
-        </script>
-        <script>
-            var flashLog = null;
-            $(function() {
-                // The flashvars tell flash about the project data (and autostart=true)
-                var flashvars = {
-                    server: encodeURIComponent('scratch.mit.edu'),
-                    debugOps: true,
-                    debugOpCmd: 'debugFlash',
-                    project_id: project_id
-                };
+<meta charset=utf-8>
+<title>Scratch HTML5 vs. Flash</title>
 
-                var params = {
-                    allowscriptaccess: 'always',
-                    allowfullscreen: 'false',
-                    wmode: 'direct',
-                    menu: 'false'
-                };
+<link rel=stylesheet href=player.css>
+<link rel=stylesheet href=compare.css>
 
-                var flashPlayer = null;
-                    //var swf_url = "http://cdn.scratch.mit.edu/scratchr2/static/Scratch.swf";
-                var swf_url = "http://jiggler.media.mit.edu/shanemc/scratchr2/static/Scratch.swf";
-                swfobject.embedSWF(swf_url, "flashScratch", "482", "402", "10.2.0",
-                    "http://cdn.scratch.mit.edu/scratchr2/static/expressInstall.swf",
-                    flashvars, params, null, function(e) {
-                        $('#flashScratch').css('visibility', 'visible');
-                        if (e.success) flashPlayer = e.ref;
-                    });
+<script src=//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js></script>
+<script src=//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js></script>
 
-                $('#trigger_green_flag, #greenSlide').click(function() {
-                    flashPlayer.ASstartRunning();
-                });
+<script src=js/util/Timer.js></script>
+<script src=js/util/OffsetBuffer.js></script>
+<script src=js/util/Color.js></script>
+<script src=js/util/Rectangle.js></script>
+<script src=js/Sprite.js></script>
+<script src=js/Reporter.js></script>
+<script src=js/Stage.js></script>
+<script src=js/sound/WAVFile.js></script>
+<script src=js/sound/SoundDecoder.js></script>
+<script src=js/sound/SoundBank.js></script>
+<script src=js/sound/NotePlayer.js></script>
+<script src=soundbank/Instr.js></script>
+<script src=js/IO.js></script>
+<script src=js/primitives/VarListPrims.js></script>
+<script src=js/primitives/MotionAndPenPrims.js></script>
+<script src=js/primitives/LooksPrims.js></script>
+<script src=js/primitives/SensingPrims.js></script>
+<script src=js/primitives/SoundPrims.js></script>
+<script src=js/primitives/Primitives.js></script>
+<script src=js/Interpreter.js></script>
+<script src=js/Runtime.js></script>
+<script src=js/Scratch.js></script>
 
-                // Stop button behavior
-                $('#trigger_stop').click(function() {
-                    flashPlayer.ASstopRunning();
-                });
+<script>
+    var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
+</script>
 
-                flashLog = $('#flashDebug');
-                var jsLog = $('#jsDebug');
-                interp.debugOps = true;
-                interp.debugFunc = function(opCount, opName, args) {
-                    var text = opCount + ': '+opName+'('+args.join(', ')+')';
-                    jsLog.val(jsLog.val() + text + "\n");
-                }
+<script>
+    var flashLog = null;
+    $(function() {
+        // The flashvars tell flash about the project data (and autostart=true)
+        var flashvars = {
+            server: encodeURIComponent('scratch.mit.edu'),
+            debugOps: true,
+            debugOpCmd: 'debugFlash',
+            project_id: project_id
+        };
 
-                // Setup synchronized scrolling
-                flashLog.scroll(function() {
-                    jsLog.scrollTop(flashLog.scrollTop());
-                });
+        var params = {
+            allowscriptaccess: 'always',
+            allowfullscreen: 'false',
+            wmode: 'direct',
+            menu: 'false'
+        };
 
-                jsLog.scroll(function() {
-                    flashLog.scrollTop(jsLog.scrollTop());
-                });
+        var flashPlayer = null;
+        //var swf_url = "http://cdn.scratch.mit.edu/scratchr2/static/Scratch.swf";
+        var swf_url = "http://jiggler.media.mit.edu/shanemc/scratchr2/static/Scratch.swf";
+        swfobject.embedSWF(swf_url, "flash-scratch", "482", "402", "10.2.0",
+            "http://cdn.scratch.mit.edu/scratchr2/static/expressInstall.swf",
+            flashvars, params, null, function(e) {
+                $('#flash-scratch').css('visibility', 'visible');
+                if (e.success) flashPlayer = e.ref;
             });
 
-            function debugFlash(opCount, opName, args) {
-                var text = opCount + ': '+opName+'('+args.join(', ')+')';
-                flashLog.val(flashLog.val() + text + "\n");
-            }
-        </script>
-    </head>
-    <body>
-    <div class="playerContainer">
-        <div id="up">&#x25B2;</div>
-        <div id="ui-top">
-            <div id="info">Loading&hellip;</div>
-            <button id="trigger_stop">&#9632;</button>
-            <button id="trigger_green_flag">&#9873;</button>
-            <div class="clearer"></div>
+        $('#trigger-green-flag, #overlay').click(function() {
+            flashPlayer.ASstartRunning();
+        });
+
+        // Stop button behavior
+        $('#trigger-stop').click(function() {
+            flashPlayer.ASstopRunning();
+        });
+
+        flashLog = $('#flash-debug');
+        var jsLog = $('#js-debug');
+        interp.debugOps = true;
+        interp.debugFunc = function(opCount, opName, args) {
+            var text = opCount + ': ' + opName + '(' + args.join(', ') + ')';
+            jsLog.val(jsLog.val() + text + "\n");
+        };
+
+        // Setup synchronized scrolling
+        flashLog.scroll(function() {
+            jsLog.scrollTop(flashLog.scrollTop());
+        });
+
+        jsLog.scroll(function() {
+            flashLog.scrollTop(jsLog.scrollTop());
+        });
+    });
+
+    function debugFlash(opCount, opName, args) {
+        var text = opCount + ': '+opName+'('+args.join(', ')+')';
+        flashLog.val(flashLog.val() + text + "\n");
+    }
+</script>
+
+<div class=container>
+    <div id=player-container>
+        <div class="arrow vertical" id=up></div>
+        <div class="arrow vertical" id=down></div>
+        <div class="arrow horizontal" id=left></div>
+        <div class="arrow horizontal" id=right></div>
+        <div id=player-header>
+            <div id=player-header-preload></div>
+            <div id=player-header-version>HTML5</div>
+            <button id=toggle-fullscreen tabindex=1></button>
+            <button id=trigger-stop tabindex=3></button>
+            <button id=trigger-green-flag tabindex=2></button>
         </div>
-        <div id="left">&#x25c0;</div>
-        <div id="overContainer">
-          <div id="greenSlide"><div id="greenSlideFg"><img src="img/greenflag.png"></div></div>
-          <div id="container"></div>
+        <div id=player-content>
+            <div id=container></div>
+            <div id=overlay></div>
+            <div id=preloader>
+                <div id=preloader-progress><div id=preloader-progress-bar></div></div>
+                <div id=preloader-caption>Loading project&hellip;</div>
+                <div id=preloader-details></div>
+            </div>
         </div>
-        <div id="right">&#x25b6;</div>
-        <div id="ui-bottom">
-            <span id="address-hint">http://scratch.mit.edu/projects/</span><input type="text" name="project_id" id="project_id" placeholder="10000160" /><button id='go_project'>&rarr;</button></div>
-        <div id="down">&#x25BC;</div>
-        <textarea id="jsDebug"></textarea>
     </div>
-    <div class="playerContainer">
-        <div id="flashScratch" style="text-align:center;visibility:hidden;">
-            <p style="color:#aaa;font-size:22px;margin-top:14px;line-height:28px;">Oh Noes! Scratch project cannot display.<br/>Flash player is disabled, missing, or less than version 10.2.</p>
-            <a href="http://www.adobe.com/go/getflashplayer">
-                <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" target="_blank" />
-            </a>
-        </div>
-        <textarea id="flashDebug"></textarea>
+    <textarea id=js-debug readonly></textarea>
+    <div id=project-picker>
+        <span id=address-hint>http://scratch.mit.edu/projects/</span><input id=project-id placeholder=10000160><button id=go-project>&rarr;</button>
     </div>
-    </body>
-</html>
+</div><div class=container>
+    <div id=flash-scratch>
+        <p>Oh Noes! Scratch project cannot display.<br>Flash player is disabled, missing, or less than version 10.2.</p>
+        <a href=http://www.adobe.com/go/getflashplayer>
+            <img src=http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif alt="Get Adobe Flash player" target=_blank>
+        </a>
+    </div>
+    <textarea id=flash-debug readonly></textarea>
+</div>
