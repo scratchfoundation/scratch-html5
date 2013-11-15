@@ -89,6 +89,17 @@ var Sprite = function(data) {
     this.soundsLoaded = 0;
     this.instrument = 1;
 
+    // Image effects
+    this.filters = {
+        color: 0,
+        fisheye: 0,
+        whirl: 0,
+        pixelate: 0,
+        mosaic: 0,
+        brightness: 0,
+        ghost: 0
+    };
+
     // Incremented when images are loaded by the browser.
     this.costumesLoaded = 0;
 
@@ -308,6 +319,13 @@ Sprite.prototype.updateTransform = function() {
     this.updateLayer();
 };
 
+Sprite.prototype.updateFilters = function() {
+    $(this.mesh).css('opacity', 1 - this.filters.ghost / 100);
+    $(this.mesh).css('-webkit-filter',
+        'hue-rotate(' + (this.filters.color * 1.8) + 'deg) \
+        brightness(' + (this.filters.brightness < 0 ? this.filters.brightness / 100 + 1 : Math.min(2.5, this.filters.brightness * .015 + 1)) + ')');
+};
+
 Sprite.prototype.getTalkBubbleXY = function() {
     var texture = this.textures[this.currentCostumeIndex];
     var drawWidth = texture.width * this.scale;
@@ -464,4 +482,17 @@ Sprite.prototype.soundNamed = function(name) {
         return runtime.stage.sounds[name];
     }
     return null;
+};
+
+Sprite.prototype.resetFilters = function() {
+    this.filters = {
+        color: 0,
+        fisheye: 0,
+        whirl: 0,
+        pixelate: 0,
+        mosaic: 0,
+        brightness: 0,
+        ghost: 0
+    };
+    this.updateFilters();
 };
