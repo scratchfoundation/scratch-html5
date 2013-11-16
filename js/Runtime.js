@@ -90,14 +90,16 @@ Runtime.prototype.stopAll = function() {
     stopAllSounds();
     // Hide reporters
     for (var s = 0; s < runtime.sprites.length; s++) {
-        if (typeof runtime.sprites[s].hideBubble == 'function') {
+        if (runtime.sprites[s].hideBubble) {
             runtime.sprites[s].hideBubble();
         }
     }
     // Reset graphic effects
     runtime.stage.resetFilters();
     for (var s = 0; s < runtime.sprites.length; s++) {
-        runtime.sprites[s].resetFilters();
+        if (runtime.sprites[s].resetFilters) {
+            runtime.sprites[s].resetFilters();
+        }
     }
 };
 
