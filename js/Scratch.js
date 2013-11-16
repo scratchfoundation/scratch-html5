@@ -36,11 +36,14 @@ $(function() {
         delete runtime.keysDown[e.which];
     });
 
+    var address = $('#address-hint');
+    var project = $('#project-id');
+
     // Update the project ID field
-    $('#project-id').val(project_id);
+    project.val(project_id);
 
     // Validate project ID field
-    $('#project-id').keyup(function() {
+    project.keyup(function() {
         var n = this.value;
 
         // Allow URL pasting
@@ -55,8 +58,14 @@ $(function() {
     });
 
     // Focus the actual input when the user clicks on the URL hint
-    $('#address-hint').click(function() {
-        $('#project-id').select();
+    address.click(function() {
+        project.select();
+    });
+
+    var width = address.outerWidth();
+    project.css({
+        paddingLeft: width,
+        marginLeft: -width
     });
 
     // Go project button behavior

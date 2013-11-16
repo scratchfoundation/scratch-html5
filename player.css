@@ -204,36 +204,27 @@ button#trigger-stop:hover {
     font-size: 16px;
     line-height: 18px;
 }
-#project-id,
-#address-hint {
+#project-id {
     border: 1px solid #aaa;
     padding: 6px;
-}
-#project-id {
-    -webkit-box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, .3);
-    box-shadow: inset 0 3px 3px -3px rgba(0, 0, 0, .3);
+    -webkit-box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
+    box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
     background: 0;
-    padding-left: 0;
-    border-left: 0;
     margin: 0;
     font: inherit;
     width: 6em;
+    position: relative;
 }
 #project-id.error {
     background: #fee;
-    -webkit-box-shadow: inset 0 3px 3px -3px rgba(100, 0, 0, .3);
-    box-shadow: inset 0 3px 3px -3px rgba(100, 0, 0, .3);
-}
-#address-hint {
-    -webkit-box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
-    box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
-    padding-right: 0;
-    border-right: 0;
-}
-#address-hint.error {
-    background: #fee;
     -webkit-box-shadow: inset 3px 3px 3px -3px rgba(100, 0, 0, .3);
     box-shadow: inset 3px 3px 3px -3px rgba(100, 0, 0, .3);
+}
+#project-id:focus {
+    z-index: 1;
+}
+#address-hint {
+    padding-left: 6px;
 }
 #go-project {
     padding: 6px;
@@ -250,6 +241,7 @@ button#trigger-stop:hover {
     -webkit-box-shadow: inset 0 -1px rgba(255, 255, 255, .2);
     box-shadow: inset 0 -1px rgba(255, 255, 255, .2);
     cursor: pointer;
+    position: relative;
 }
 #go-project:active {
     background: -webkit-gradient(linear, left top, left bottom, from(#ddd), to(#eee));
