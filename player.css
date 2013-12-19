@@ -206,6 +206,7 @@ button#trigger-stop:hover {
 }
 #project-id {
     border: 1px solid #aaa;
+    -webkit-border-radius: 0;
     padding: 6px;
     -webkit-box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
     box-shadow: inset 3px 3px 3px -3px rgba(0, 0, 0, .3);
@@ -252,6 +253,18 @@ button#trigger-stop:hover {
     background: linear-gradient(#ddd, #eee);
     -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, .3), inset 0 2px 5px rgba(0, 0, 0, .1);
     box-shadow: inset 0 1px rgba(255, 255, 255, .3), inset 0 2px 5px rgba(0, 0, 0, .1);
+}
+
+#project-id,
+#go-project {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 18px;
+    vertical-align: middle;
+}
+#go-project::-moz-focus-inner {
+    border: 0;
+    padding: 0;
 }
 
 
