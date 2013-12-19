@@ -226,6 +226,7 @@ button#trigger-stop:hover {
 }
 #address-hint {
     padding-left: 6px;
+    vertical-align: middle;
 }
 #go-project {
     padding: 6px;
