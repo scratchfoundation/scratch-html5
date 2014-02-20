@@ -135,7 +135,7 @@ Interpreter.prototype.stepActiveThread = function() {
     if (b == null) return;
     this.yield = false;
     while (true) {
-        this.opCount++;
+        ++this.opCount;
         // Advance the "program counter" to the next block before running the primitive.
         // Control flow primitives (e.g. if) may change activeThread.nextBlock.
         this.activeThread.nextBlock = b.nextBlock;
@@ -210,7 +210,16 @@ Interpreter.prototype.restartThread = function(b, targetObj) {
 Interpreter.prototype.arg = function(block, index) {
     var arg = block.args[index];
     if ((typeof(arg) == 'object') && (arg.constructor == Block)) {
-        this.opCount++;
+        ++this.opCount;
+        if (this.debugOps && this.debugFunc) {
+            var finalArgs = [];
+            for (var i = 0; i < arg.args.length; ++i) {
+                finalArgs.push(this.arg(arg, i));
+            }
+
+            this.debugFunc(this.opCount2, arg.op, finalArgs);
+            ++this.opCount2;
+        }
         return arg.primFcn(arg); // expression
     }
     return arg;
