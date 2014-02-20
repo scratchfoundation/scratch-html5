@@ -8,35 +8,17 @@
 <script src=//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js></script>
 <script src=//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js></script>
 
-<script src=js/util/Timer.js></script>
-<script src=js/util/OffsetBuffer.js></script>
-<script src=js/util/Color.js></script>
-<script src=js/util/Rectangle.js></script>
-<script src=js/Sprite.js></script>
-<script src=js/Reporter.js></script>
-<script src=js/Stage.js></script>
-<script src=js/sound/WAVFile.js></script>
-<script src=js/sound/SoundDecoder.js></script>
-<script src=js/sound/SoundBank.js></script>
-<script src=js/sound/NotePlayer.js></script>
-<script src=soundbank/Instr.js></script>
-<script src=js/IO.js></script>
-<script src=js/primitives/VarListPrims.js></script>
-<script src=js/primitives/MotionAndPenPrims.js></script>
-<script src=js/primitives/LooksPrims.js></script>
-<script src=js/primitives/SensingPrims.js></script>
-<script src=js/primitives/SoundPrims.js></script>
-<script src=js/primitives/Primitives.js></script>
-<script src=js/Interpreter.js></script>
-<script src=js/Runtime.js></script>
-<script src=js/Scratch.js></script>
 
-<script>
+<script type="text/javascript">
+  $(document).ready(function() {
     var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
+    var scratch = new Scratch(project_id);
+  });
 </script>
 
 <script>
     var flashLog = null;
+    var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
     $(function() {
         // The flashvars tell flash about the project data (and autostart=true)
         var flashvars = {
@@ -133,3 +115,26 @@
     </div>
     <textarea id=flash-debug readonly></textarea>
 </div>
+
+<script src=js/util/Timer.js></script>
+<script src=js/util/OffsetBuffer.js></script>
+<script src=js/util/Color.js></script>
+<script src=js/util/Rectangle.js></script>
+<script src=js/Sprite.js></script>
+<script src=js/Reporter.js></script>
+<script src=js/Stage.js></script>
+<script src=js/sound/WAVFile.js></script>
+<script src=js/sound/SoundDecoder.js></script>
+<script src=js/sound/SoundBank.js></script>
+<script src=js/sound/NotePlayer.js></script>
+<script src=soundbank/Instr.js></script>
+<script src=js/IO.js></script>
+<script src=js/primitives/VarListPrims.js></script>
+<script src=js/primitives/MotionAndPenPrims.js></script>
+<script src=js/primitives/LooksPrims.js></script>
+<script src=js/primitives/SensingPrims.js></script>
+<script src=js/primitives/SoundPrims.js></script>
+<script src=js/primitives/Primitives.js></script>
+<script src=js/Interpreter.js></script>
+<script src=js/Runtime.js></script>
+<script src=js/Scratch.js></script>
