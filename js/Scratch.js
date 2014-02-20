@@ -23,7 +23,7 @@
 'use strict';
 
 var runtime, interp, io, iosAudioActive = false;
-$(function() {
+function Scratch(project_id) {
     runtime = new Runtime();
     runtime.init();
 
@@ -151,4 +151,4 @@ $(function() {
     // Load the requested project and go!
     io = new IO();
     io.loadProject(project_id);
-});
+};

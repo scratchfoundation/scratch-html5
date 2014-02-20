@@ -1,0 +1,7 @@
+*.swp
+test/lib/*
+
+logs
+
+npm-debug.log
+node_modules

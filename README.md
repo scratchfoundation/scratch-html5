@@ -19,3 +19,49 @@ Running the HTML5 player on your own website, or locally, you will need to have
 PHP so that the `proxy.php` file can be used to load assets from the same domain.  This is done to be compatible with Javascript security models in today's browsers.  To test the HTML5 player against the Flash player you can use the compare.html web page.
 
 See the file `TESTING.md` for more details.
+
+
+Unit Tests
+----------
+The tests are written using Karma and there should be a 100% passing rate in order to commit any code to the project.
+
+The expectation is to add a unit test for any code that you contribute to the project.
+
+
+Install Node (NPM) (https://npmjs.org/)
+---------------------------------------
+ 
+Brew:
+```
+$ brew install npm
+```
+ 
+Mac Ports:
+```
+$ port install npm
+```
+
+```
+$ npm install
+```
+
+Local copy of jQuery and mock-ajax
+----------------------------------
+
+```
+$ cd test/lib
+$ curl http://code.jquery.com/jquery-1.11.0.min.js > jquery-1.11.0.min.js
+$ curl http://cloud.github.com/downloads/pivotal/jasmine-ajax/mock-ajax.js > mock-ajax.js
+```
+
+To Run the tests
+----------------
+
+```
+$ ./scripts/test.sh
+```
+
+
+To configure the unit tests
+---------------------------
+The karam.conf.js file is location in the config directory
