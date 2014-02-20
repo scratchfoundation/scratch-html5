@@ -98,8 +98,9 @@ $(function() {
     });
 
     $('#container').mousemove(function(e) {
-        var absX = e.pageX - this.offsetLeft;
-        var absY = e.pageY - this.offsetTop;
+        var bb = this.getBoundingClientRect();
+        var absX = e.clientX - bb.left;
+        var absY = e.clientY - bb.top;
         runtime.mousePos = [absX-240, -absY+180];
     });
 
@@ -127,8 +128,9 @@ $(function() {
 
     $('#container').bind('touchmove', function(e) {
         var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-        var absX = touch.pageX - this.offsetLeft;
-        var absY = touch.pageY - this.offsetTop;
+        var bb = this.getBoundingClientRect();
+        var absX = touch.clientX - bb.left;
+        var absY = touch.clientY - bb.top;
         runtime.mousePos = [absX-240, -absY+180];
     });
 

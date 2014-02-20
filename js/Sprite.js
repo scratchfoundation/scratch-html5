@@ -219,21 +219,22 @@ Sprite.prototype.onClick = function(evt) {
         // we are forced not to do this for now by Chrome/Webkit SOP:
         // http://code.google.com/p/chromium/issues/detail?id=68568
         var canv = document.createElement('canvas');
-        $(canv).css('width', 480).css('height', 360);
+        canv.width = 480;
+        canv.height = 360;
         var ctx = canv.getContext('2d');
-        var drawWidth = this.textures[this.currentCostumeIndex].width * this.scale;
-        var drawHeight = this.textures[this.currentCostumeIndex].height * this.scale;
+        var drawWidth = this.textures[this.currentCostumeIndex].width;
+        var drawHeight = this.textures[this.currentCostumeIndex].height;
+        var scale = this.scale / (this.costumes[this.currentCostumeIndex].bitmapResolution || 1);
         var rotationCenterX = this.costumes[this.currentCostumeIndex].rotationCenterX;
         var rotationCenterY = this.costumes[this.currentCostumeIndex].rotationCenterY;
-        var drawX = this.scratchX + (480 / 2) - rotationCenterX;
-        var drawY = -this.scratchY + (360 / 2) - rotationCenterY;
+        ctx.translate(240 + this.scratchX, 180 - this.scratchY);
         ctx.rotate(this.rotation * Math.PI / 180.0);
-        ctx.drawImage(this.mesh, 0, 0, drawWidth, drawHeight);
+        ctx.scale(scale, scale);
+        ctx.translate(-rotationCenterX, -rotationCenterY);
+        ctx.drawImage(this.mesh, 0, 0);
+        document.body.appendChild(canv);
 
-        var offsetX = mouseX - drawX - 9; // the 9 is a hack - webkit/moz
-        var offsetY = mouseY - drawY - 9;
-
-        var idata = ctx.getImageData(offsetX, offsetY, 1, 1).data;
+        var idata = ctx.getImageData(mouseX, mouseY, 1, 1).data;
         var alpha = idata[3];
     } else {
         var alpha = 1;
@@ -245,7 +246,8 @@ Sprite.prototype.onClick = function(evt) {
     } else {
         // Otherwise, move back a layer and trigger the click event
         $(this.mesh).hide();
-        var underElement = document.elementFromPoint(mouseX, mouseY);
+        var bb = $('#container')[0].getBoundingClientRect();
+        var underElement = document.elementFromPoint(bb.left + mouseX, bb.top + mouseY);
         $(underElement).click();
         $(this.mesh).show();
     }
