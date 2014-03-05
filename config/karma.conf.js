@@ -4,17 +4,21 @@ module.exports = function(config){
 
     files : [
       'test/artifacts/**/*.js',
-      'test/lib/mock-ajax.js',
+      'test/lib/**/*.js',
       'test/unit/**/*.js',
-      'test/lib/jquery-1.11.0.min.js',
       'js/sound/SoundDecoder.js',
       'js/sound/**/*.js',
       'js/util/**/*.js',
-      'js/**/*.js'
+      'js/**/*.js',
+      'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
     ],
 
     exclude : [
     ],
+
+    preprocessors: {
+        '*.html': ['html2js']
+    },
 
     autoWatch : true,
 
@@ -23,15 +27,10 @@ module.exports = function(config){
     browsers : ['Chrome'],
 
     plugins : [
-            'karma-junit-reporter',
+            'karma-jasmine',
+            'jasmine-jquery',
+            'karma-html2js-preprocessor',
             'karma-chrome-launcher',
-            'karma-firefox-launcher',
-            'karma-jasmine'
-            ],
-
-    junitReporter : {
-      outputFile: 'test_out/unit.xml',
-      suite: 'unit'
-    }
-
+            'karma-firefox-launcher'
+            ]
 })}
