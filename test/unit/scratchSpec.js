@@ -2,10 +2,8 @@
 
 describe ('Scratch', function() {
     describe('Scratch - Load Project', function(){
-      var getScript, request, scratch;
-      var uri = "http://getScript.example.com";
+      var request, scratch;
       var callBack = jasmine.createSpy('onSuccess');
-      var testResponseText = 'This is a script';
 
       var TestResponses = { status: 200, responseText: returnData};
 

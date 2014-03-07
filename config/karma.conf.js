@@ -10,7 +10,8 @@ module.exports = function(config){
       'js/sound/**/*.js',
       'js/util/**/*.js',
       'js/**/*.js',
-      'node_modules/jasmine-jquery/lib/jasmine-jquery.js'
+      'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+      'node_modules/underscore/underscore.js'
     ],
 
     exclude : [
@@ -27,10 +28,10 @@ module.exports = function(config){
     browsers : ['Chrome'],
 
     plugins : [
-            'karma-jasmine',
-            'jasmine-jquery',
-            'karma-html2js-preprocessor',
-            'karma-chrome-launcher',
-            'karma-firefox-launcher'
-            ]
+      'karma-jasmine',
+      'jasmine-jquery',
+      'karma-html2js-preprocessor',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher'
+   ]
 })}
