@@ -1,6 +1,6 @@
 'use strict';
 
-var interpreterMock = function() {
+var spriteMock = function() {
   var args = createArgs(arguments);
 
   function getArgs(argKey) {
@@ -20,8 +20,8 @@ var interpreterMock = function() {
   }
 
   return {
-    'targetSprite' : function() { return getArgs('targetSprite'); },
-    'arg': function(block, index) { return getArgs('arg');},
-    'activeThread': undefined
+    'hideBubble' : function() { return getArgs('hideBubble'); },
+    'hideAsk': function() { return getArgs('hideAsk');},
+    'resetFilters': function() { return getArgs('resetFilters');}
   }
 };

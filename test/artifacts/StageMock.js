@@ -1,6 +1,6 @@
 'use strict';
 
-var interpreterMock = function() {
+var stageMock = function() {
   var args = createArgs(arguments);
 
   function getArgs(argKey) {
@@ -20,8 +20,6 @@ var interpreterMock = function() {
   }
 
   return {
-    'targetSprite' : function() { return getArgs('targetSprite'); },
-    'arg': function(block, index) { return getArgs('arg');},
-    'activeThread': undefined
+    'resetFilters' : function() { return getArgs('resetFilters'); }
   }
 };
