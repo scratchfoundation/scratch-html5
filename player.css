@@ -398,7 +398,7 @@ button#trigger-stop:hover {
 }
 
 /* Say/think bubble styles */
- .bubble-container {
+.bubble-container {
     position: absolute;
 }
 .bubble {
@@ -407,7 +407,6 @@ button#trigger-stop:hover {
     max-width: 120px;
     min-width: 40px;
     padding: 6px 11px 6px 11px;
-    border: 3px solid rgb(160, 160, 160);
     border-radius: 10px;
     background: #fff;
     font-family: sans-serif;
@@ -415,6 +414,20 @@ button#trigger-stop:hover {
     font-size: 14px;
     color: #000;
     text-align: center;
+}
+.bubble.say-think-border {
+    border: 3px solid rgb(160, 160, 160);
+}
+.bubble.ask-border, .ask-container {
+    border: 3px solid rgb(74, 173, 222);
+}
+.bubble-ask {
+    position: absolute;
+    margin-top: -3px;
+    margin-left: 8px;
+    width: 44px;
+    height: 18px;
+    background: url(img/ask-bottom.png) transparent no-repeat;
 }
 .bubble-say {
     position: absolute;
@@ -432,3 +445,33 @@ button#trigger-stop:hover {
     height: 19px;
     background: url(img/think-bottom.png) transparent no-repeat;
 }
+.ask-container {
+    position: absolute;
+    display: inline-block;
+    padding: 5px 0px 0px 5px;
+    border-radius: 5px;
+    background: #fff;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+}
+.ask-container .ask-field .ask-text-field {
+    width: 405px;
+    height: 16px;
+    font-family: sans-serif;
+    font-weight: light;
+    font-size: 12px;
+    background: #EAEAEA;
+}
+
+.ask-container .ask-button {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 25px;
+    height: 25px;
+    background: url(img/ask-button.png) transparent no-repeat;
+}
+
+

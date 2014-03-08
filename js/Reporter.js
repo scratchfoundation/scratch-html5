@@ -19,7 +19,6 @@ var Reporter = function(data) {
     this.cmd = data.cmd;
     this.color = data.color;
     this.isDiscrete = data.isDiscrete;
-    this.label = data.label;
     this.mode = data.mode;
     this.param = data.param;
     this.sliderMin = data.sliderMin;
@@ -35,11 +34,19 @@ var Reporter = function(data) {
     this.slider = null; // slider jQ element
 };
 
+Reporter.prototype.determineReporterLabel = function() {
+  if (this.target === 'Stage') {
+    return this.param;
+  } else {
+    return this.target + ': ' + this.param;
+  }
+}
+
 Reporter.prototype.attach = function(scene) {
     switch (this.mode) {
         case 1: // Normal
         case 3: // Slider
-            this.el = $('<div class="reporter-normal">' + this.label + '</div>');
+            this.el = $('<div class="reporter-normal">' + this.determineReporterLabel() + '</div>');
             this.valueEl = $('<div class="reporter-inset">null</div>');
             this.el.append(this.valueEl);
             if (this.mode == 3) {

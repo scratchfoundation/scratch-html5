@@ -1,7 +1,10 @@
-'use strict';
-
 var sensingData = {
   "objName": "Stage",
+  "variables": [{
+      "name": "myAnswer",
+      "value": 0,
+      "isPersistent": false
+    }],
   "costumes": [{
       "costumeName": "backdrop1",
       "baseLayerID": -1,
@@ -16,6 +19,15 @@ var sensingData = {
   "videoAlpha": 0.5,
   "children": [{
       "objName": "Sprite1",
+      "variables": [{
+          "name": "myAnswer2",
+          "value": 0,
+          "isPersistent": false
+        }, {
+          "name": "answer",
+          "value": 0,
+          "isPersistent": false
+        }],
       "scripts": [[42, 40.5, [["whenGreenFlag"], ["doAsk", "What's your name?"]]],
         [44.5,
           155.5,

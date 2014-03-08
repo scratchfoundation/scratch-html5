@@ -1,5 +1,6 @@
 *.swp
 test/lib/*
+.DS_Store
 
 logs
 

@@ -2,7 +2,9 @@
 
 var targetMock = function() {
   return {
-    'showBubble' : function() {}
+    'showBubble' : function() {},
+    'showAsk' : function() {},
+    'answer' : 22
   };
 
 }
