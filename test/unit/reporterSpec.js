@@ -64,6 +64,10 @@ describe ('Reporter', function() {
         expect(initReporter.z).toBe(4);
       });
 
+      it('should have a label variable', function() {
+        expect(initReporter.label).toBe('myAnswer');
+      });
+
       it('should have an el variable', function() {
         expect(initReporter.el).toBe(null);
       });
@@ -77,19 +81,27 @@ describe ('Reporter', function() {
       });
     });
   });
-  describe('determineReporterLabel', function() {
 
+  describe('determineReporterLabel', function() {
     it('should return a stage variable', function() {
       reporter.prototype.target = "Stage";
       reporter.prototype.param = "myAnswer";
+      reporter.prototype.cmd = "getVar:";
       expect(reporter.prototype.determineReporterLabel()).toBe('myAnswer');
     });
 
     it('should return a sprite variable', function() {
       reporter.prototype.target = "Sprite 1";
       reporter.prototype.param = "localAnswer";
+      reporter.prototype.cmd = "getVar:";
       expect(reporter.prototype.determineReporterLabel()).toBe('Sprite 1: localAnswer');
+    });
 
+    it('should return a stage answer variable', function() {
+      reporter.prototype.target = "Stage";
+      reporter.prototype.param = null;
+      reporter.prototype.cmd = "answer";
+      expect(reporter.prototype.determineReporterLabel()).toBe('answer');
     });
 
   });

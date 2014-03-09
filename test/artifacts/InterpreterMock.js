@@ -22,6 +22,7 @@ var interpreterMock = function() {
   return {
     'targetSprite' : function() { return getArgs('targetSprite'); },
     'arg': function(block, index) { return getArgs('arg');},
-    'activeThread': undefined
+    'activeThread': new threadMock(),
+    'targetStage': function() { var rtMock = new runtimeMock(); return rtMock.stage}
   }
 };

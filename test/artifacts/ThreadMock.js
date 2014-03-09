@@ -20,5 +20,6 @@ var threadMock = function() {
   }
 
   return {
+    'paused' : getArgs('paused')
   }
 };

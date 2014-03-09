@@ -29,14 +29,19 @@ var Reporter = function(data) {
     this.y = data.y;
     this.z = io.getCount();
 
+    //Set the label after hydrating the cmd and param variables
+    this.label = this.determineReporterLabel();
+
     this.el = null; // jQuery Element for the outer box
     this.valueEl = null; // jQ element containing the reporter value
     this.slider = null; // slider jQ element
 };
 
 Reporter.prototype.determineReporterLabel = function() {
-  if (this.target === 'Stage') {
+  if (this.target === 'Stage' && this.cmd === "getVar:") {
     return this.param;
+  } else if (this.target === 'Stage' && this.param === null) {
+    return this.cmd;
   } else {
     return this.target + ': ' + this.param;
   }
@@ -46,7 +51,7 @@ Reporter.prototype.attach = function(scene) {
     switch (this.mode) {
         case 1: // Normal
         case 3: // Slider
-            this.el = $('<div class="reporter-normal">' + this.determineReporterLabel() + '</div>');
+            this.el = $('<div class="reporter-normal">' + this.label + '</div>');
             this.valueEl = $('<div class="reporter-inset">null</div>');
             this.el.append(this.valueEl);
             if (this.mode == 3) {
@@ -84,6 +89,9 @@ Reporter.prototype.update = function() {
     var newValue = '';
     var target = runtime.spriteNamed(this.target);
     switch (this.cmd) {
+        case 'answer':
+            newValue = target.askAnswer;
+            break;
         case 'getVar:':
             newValue = target.variables[this.param];
             break;

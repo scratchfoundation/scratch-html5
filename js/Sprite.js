@@ -80,7 +80,6 @@ var Sprite = function(data) {
     this.askInputOn = false;
 
     // Internal variables used for rendering meshes.
-    this.askAnswer = null; //this is a private variable
     this.textures = [];
     this.materials = [];
     this.geometries = [];
@@ -161,9 +160,10 @@ Sprite.prototype.attach = function(scene) {
     this.askInput = $('<div class="ask-container"></div>');
     this.askInput.css('display', 'none');
     this.askInputField = $('<div class="ask-field"></div>');
-    this.askInputTextField = $('<input class="ask-text-field"></input>');
+    this.askInputTextField = $('<input type="text" class="ask-text-field"></input>');
     this.askInputField.append(this.askInputTextField);
     this.askInputButton = $('<div class="ask-button"></div>');
+    this.bindDoAskButton();
     this.askInput.append(this.askInputField);
     this.askInput.append(this.askInputButton);
 
@@ -368,8 +368,8 @@ Sprite.prototype.showBubble = function(text, type) {
     this.talkBubble.css('left', xy[0] + 'px');
     this.talkBubble.css('top', xy[1] + 'px');
 
-    this.talkBubble.removeClass('say-think-border');
-    this.talkBubble.removeClass('ask-border');
+    this.talkBubbleBox.removeClass('say-think-border');
+    this.talkBubbleBox.removeClass('ask-border');
     
     this.talkBubbleStyler.removeClass('bubble-say');
     this.talkBubbleStyler.removeClass('bubble-think');
@@ -412,7 +412,22 @@ Sprite.prototype.showAsk = function() {
 
 Sprite.prototype.hideAsk = function() {
     this.askInputOn = false;
+    this.askInputTextField.val('');
     this.askInput.css('display', 'none');
+};
+
+Sprite.prototype.bindDoAskButton = function() {
+  var self = this;
+  this.askInputButton.on("keypress click", function(e){
+    var eType = e.type;
+    if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
+      var stage = interp.targetStage();
+      stage.askAnswer = $(self.askInputTextField).val();
+      self.hideBubble();
+      self.hideAsk();
+      interp.activeThread.paused = false;
+    }
+  });
 };
 
 Sprite.prototype.setXY = function(x, y) {

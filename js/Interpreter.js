@@ -40,6 +40,7 @@ var Thread = function(block, target) {
     this.tmp = null; // used for thread operations like Timer
     this.tmpObj = []; // used for Sprite operations like glide
     this.firstTime = true;
+    this.paused = false;
 };
 
 var Interpreter = function() {
@@ -126,6 +127,13 @@ Interpreter.prototype.stepThreads = function() {
     }
 };
 
+Interpreter.prototype.pauseActiveThread = function() {
+    var self = this;
+    var timeoutId = setTimeout(function () {   
+        (self.activeThread.paused) ? self.pauseActiveThread() : clearTimeout(timeoutId);
+    }, 1000);
+}
+
 Interpreter.prototype.stepActiveThread = function() {
     // Run the active thread until it yields.
     if (typeof(this.activeThread) == 'undefined') {
@@ -135,6 +143,8 @@ Interpreter.prototype.stepActiveThread = function() {
     if (b == null) return;
     this.yield = false;
     while (true) {
+      if (this.activeThread.paused) return;
+
         ++this.opCount;
         // Advance the "program counter" to the next block before running the primitive.
         // Control flow primitives (e.g. if) may change activeThread.nextBlock.
@@ -245,6 +255,10 @@ Interpreter.prototype.boolarg = function(block, index) {
 
 Interpreter.prototype.targetSprite = function() {
     return this.activeThread.target;
+};
+
+Interpreter.prototype.targetStage = function() {
+    return runtime.stage;
 };
 
 // Timer

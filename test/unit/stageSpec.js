@@ -43,6 +43,10 @@ describe ('Stage', function() {
         expect(initStage.isStage).toBe(true);
       });
 
+      it('should have an askAnswer variable', function() {
+        expect(initStage.askAnswer).toBe("");
+      });
+
       it('should have called Sprite.call', function() {
         expect(Sprite.call).toHaveBeenCalled();
       });

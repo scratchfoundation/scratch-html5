@@ -20,6 +20,7 @@ var stageMock = function() {
   }
 
   return {
-    'resetFilters' : function() { return getArgs('resetFilters'); }
+    'resetFilters' : function() { return getArgs('resetFilters'); },
+    'askAnswer' : 12
   }
 };

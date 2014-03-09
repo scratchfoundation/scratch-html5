@@ -61,6 +61,7 @@ describe ('Runtime', function() {
   });
 
   describe('Stop All', function() {
+    var realThread;
     beforeEach(function() {
       runtime = new runtimeMock
       spyOn(window, "stopAllSounds");
@@ -68,18 +69,23 @@ describe ('Runtime', function() {
       spyOn(runtime.sprites[0], "hideBubble");
       spyOn(runtime.sprites[0], "resetFilters");
       spyOn(runtime.sprites[0], "hideAsk");
+      realThread = Thread;
       Thread = threadMock;
       interp = new interpreterMock();
     });
 
+    afterEach(function() {
+      Thread = realThread;
+    });
+
     it('should call a new Thread Object', function() {
       runtimeObj.prototype.stopAll();
-      expect(interp.activeThread).toEqual({});
+      expect(interp.activeThread).toEqual(new threadMock());
     });
 
     it('should call a blank thread array ', function() {
       runtimeObj.prototype.stopAll();
-      expect(interp.activeThread).toEqual([]);
+      expect(interp.activeThread).toEqual(new threadMock());
     });
 
     it('should call stopAllSounds', function() {

@@ -43,9 +43,6 @@ LooksPrims.prototype.addPrimsTo = function(primTable) {
     primTable['setGraphicEffect:to:']    = this.primSetEffect;
     primTable['filterReset']             = this.primClearEffects;
 
-    primTable['doAsk']              = this.primDoAsk;
-    primTable['answer']             = this.primAnswer;
-
     primTable['say:'] = function(b) { showBubble(b, 'say'); };
     primTable['say:duration:elapsed:from:'] = function(b) { showBubbleAndWait(b, 'say'); };
     primTable['think:'] = function(b) { showBubble(b, 'think'); };
@@ -173,25 +170,14 @@ LooksPrims.prototype.primClearEffects = function(b) {
     s.updateFilters();
 };
 
-LooksPrims.prototype.primDoAsk= function(b) {
-    showBubble(b, "doAsk");
-    var s = interp.targetSprite();
-    if (s != null) s.showAsk();
-};
-
-LooksPrims.prototype.primAnswer = function() {
-    var s = interp.targetSprite();
-    return ((s != null) ? s.answer : undefined);
-};
-
 var showBubble = function(b, type) {
     var s = interp.targetSprite();
-    if (s != null) s.showBubble(interp.arg(b, 0), type);
+    if (s !== null) s.showBubble(interp.arg(b, 0), type);
 };
 
 var showBubbleAndWait = function(b, type) {
     var s = interp.targetSprite();
-    if (s == null) return;
+    if (s === null) return;
     if (interp.activeThread.firstTime) {
         var text = interp.arg(b, 0);
         var secs = interp.numarg(b, 1);

@@ -78,4 +78,35 @@ describe ('SensingPrims', function() {
       expect(sensingPrims.prototype.primTimeDate(block)).toEqual(0);
     });
   });
+
+  describe('primAnswer', function(){
+    beforeEach(function() {
+      interp = interpreterMock({'targetSprite': new targetMock()});
+    });
+
+    it('should return the answer variable from the targetedSprite', function() {
+      expect(sensingPrims.prototype.primAnswer()).toBe(12);
+    });
+  });
+
+  describe('primDoAsk', function(){
+    var askBlock, targetSpriteMock;
+    beforeEach(function() {
+      targetSpriteMock = targetMock();
+      askBlock = {'args': 'what to ask'};
+      interp = interpreterMock({'targetSprite': targetSpriteMock}, {'arg': askBlock});
+
+    });
+
+    it('should call the showBubble method on the targetedSprite', function() {
+      spyOn(window, "showBubble");
+      spyOn(targetSpriteMock, "showAsk");
+      sensingPrims.prototype.primDoAsk(askBlock);
+      expect(window.showBubble).toHaveBeenCalledWith({args:'what to ask'}, 'doAsk');
+      expect(targetSpriteMock.showAsk).toHaveBeenCalled;
+      expect(interp.activeThread.paused).toBe(true);
+    });
+  });
+
+
 });

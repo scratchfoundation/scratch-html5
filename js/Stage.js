@@ -34,6 +34,7 @@ var Stage = function(data) {
     this.lineCanvas.height = 360;
     this.lineCache = this.lineCanvas.getContext('2d');
     this.isStage = true;
+    this.askAnswer = ""; //this is a private variable and should be blank
 
     Sprite.call(this, data);
 };
