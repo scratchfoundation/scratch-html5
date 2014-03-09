@@ -127,13 +127,6 @@ Interpreter.prototype.stepThreads = function() {
     }
 };
 
-Interpreter.prototype.pauseActiveThread = function() {
-    var self = this;
-    var timeoutId = setTimeout(function () {   
-        (self.activeThread.paused) ? self.pauseActiveThread() : clearTimeout(timeoutId);
-    }, 1000);
-}
-
 Interpreter.prototype.stepActiveThread = function() {
     // Run the active thread until it yields.
     if (typeof(this.activeThread) == 'undefined') {
