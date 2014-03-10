@@ -41,6 +41,8 @@ Mac Ports:
 $ port install npm
 ```
 
+In your local scratch directory
+
 ```
 $ npm install
 ```

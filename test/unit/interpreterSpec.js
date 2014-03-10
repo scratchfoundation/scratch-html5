@@ -77,14 +77,6 @@ describe ('Interpreter', function() {
     });
   });
 
-  describe('PauseActiveThread', function() {
-    it('should call clearTimeout', function() {
-      spyOn(window, "setTimeout");
-      interp.prototype.pauseActiveThread();
-      expect(window.setTimeout).toHaveBeenCalled();
-    });
-  });
-
   describe('TargetStage', function() {
     it('should return the target.stage object', function() {
       runtime = new runtimeMock();
