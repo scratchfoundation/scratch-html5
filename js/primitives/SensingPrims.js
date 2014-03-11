@@ -22,6 +22,9 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
     primTable['touchingColor:'] = this.primTouchingColor;
     primTable['color:sees:']    = this.primColorTouchingColor;
 
+    primTable['doAsk']              = this.primDoAsk;
+    primTable['answer']             = this.primAnswer;
+
     primTable['keyPressed:']  = this.primKeyPressed;
     primTable['mousePressed'] = function(b) { return runtime.mouseDown; };
     primTable['mouseX']       = function(b) { return runtime.mousePos[0]; };
@@ -173,6 +176,21 @@ var stageColorByColorHitTest = function(target, myColor, otherColor) {
     }
     return false;
 };
+
+SensingPrims.prototype.primDoAsk= function(b) {
+    showBubble(b, "doAsk");
+    var s = interp.targetSprite();
+    if (s !== null) {
+      interp.activeThread.paused = true;
+      s.showAsk();
+    }
+};
+
+SensingPrims.prototype.primAnswer = function(b) {
+    var s = interp.targetStage();
+    return (s !== null ? s.askAnswer : undefined);
+};
+
 
 SensingPrims.prototype.primKeyPressed = function(b) {
     var key = interp.arg(b, 0);

@@ -73,6 +73,12 @@ var Sprite = function(data) {
     this.talkBubbleStyler = null;
     this.talkBubbleOn = false;
 
+    // HTML element for the ask bubbles
+    this.askInput = null;
+    this.askInputField = null;
+    this.askInputButton = null;
+    this.askInputOn = false;
+
     // Internal variables used for rendering meshes.
     this.textures = [];
     this.materials = [];
@@ -142,14 +148,27 @@ Sprite.prototype.attach = function(scene) {
     this.updateVisible();
     this.updateTransform();
 
-    this.talkBubble = $('<div class="bubble-container"></div>');
-    this.talkBubble.css('display', 'none');
-    this.talkBubbleBox = $('<div class="bubble"></div>');
-    this.talkBubbleStyler = $('<div class="bubble-say"></div>');
-    this.talkBubble.append(this.talkBubbleBox);
-    this.talkBubble.append(this.talkBubbleStyler);
+    if (! this.isStage) {
+      this.talkBubble = $('<div class="bubble-container"></div>');
+      this.talkBubble.css('display', 'none');
+      this.talkBubbleBox = $('<div class="bubble"></div>');
+      this.talkBubbleStyler = $('<div class="bubble-say"></div>');
+      this.talkBubble.append(this.talkBubbleBox);
+      this.talkBubble.append(this.talkBubbleStyler);
+    }
+
+    this.askInput = $('<div class="ask-container"></div>');
+    this.askInput.css('display', 'none');
+    this.askInputField = $('<div class="ask-field"></div>');
+    this.askInputTextField = $('<input type="text" class="ask-text-field"></input>');
+    this.askInputField.append(this.askInputTextField);
+    this.askInputButton = $('<div class="ask-button"></div>');
+    this.bindDoAskButton();
+    this.askInput.append(this.askInputField);
+    this.askInput.append(this.askInputButton);
 
     runtime.scene.append(this.talkBubble);
+    runtime.scene.append(this.askInput);
 };
 
 // Load sounds from the server and buffer them
@@ -254,20 +273,20 @@ Sprite.prototype.onClick = function(evt) {
 };
 
 Sprite.prototype.setVisible = function(v) {
-    this.visible = v;
-    this.updateVisible();
+  this.visible = v;
+  this.updateVisible();
 };
 
 Sprite.prototype.updateLayer = function() {
     $(this.mesh).css('z-index', this.z);
     if (this.talkBubble) this.talkBubble.css('z-index', this.z);
+    if (this.askInput) this.askInput.css('z-index', this.z);
 };
 
 Sprite.prototype.updateVisible = function() {
     $(this.mesh).css('display', this.visible ? 'inline' : 'none');
-    if (this.talkBubbleOn) {
-        this.talkBubble.css('display', this.visible ? 'inline-block' : 'none');
-    }
+    if (this.talkBubbleOn) this.talkBubble.css('display', this.visible ? 'inline-block' : 'none');
+    if (this.askInputOn) this.askInput.css('display', this.visible ? 'inline-block' : 'none');
 };
 
 Sprite.prototype.updateTransform = function() {
@@ -347,13 +366,21 @@ Sprite.prototype.showBubble = function(text, type) {
     this.talkBubble.css('left', xy[0] + 'px');
     this.talkBubble.css('top', xy[1] + 'px');
 
-
+    this.talkBubbleBox.removeClass('say-think-border');
+    this.talkBubbleBox.removeClass('ask-border');
+    
     this.talkBubbleStyler.removeClass('bubble-say');
     this.talkBubbleStyler.removeClass('bubble-think');
+    this.talkBubbleStyler.removeClass('bubble-ask');
     if (type == 'say') {
+        this.talkBubbleBox.addClass('say-think-border');
         this.talkBubbleStyler.addClass('bubble-say');
     } else if (type == 'think') {
+        this.talkBubbleBox.addClass('say-think-border');
         this.talkBubbleStyler.addClass('bubble-think');
+    } else if (type == 'doAsk') {
+        this.talkBubbleBox.addClass('ask-border');
+        this.talkBubbleStyler.addClass('bubble-ask');
     }
 
     if (this.visible) {
@@ -365,6 +392,40 @@ Sprite.prototype.showBubble = function(text, type) {
 Sprite.prototype.hideBubble = function() {
     this.talkBubbleOn = false;
     this.talkBubble.css('display', 'none');
+};
+
+Sprite.prototype.showAsk = function() {
+    this.askInputOn = true;
+    this.askInput.css('z-index', this.z);
+    this.askInput.css('left', '15px');
+    this.askInput.css('right', '15px');
+    this.askInput.css('bottom', '7px');
+    this.askInput.css('height', '25px');
+
+    if (this.visible) {
+        this.askInput.css('display', 'inline-block');
+        this.askInputTextField.focus();
+    }
+};
+
+Sprite.prototype.hideAsk = function() {
+    this.askInputOn = false;
+    this.askInputTextField.val('');
+    this.askInput.css('display', 'none');
+};
+
+Sprite.prototype.bindDoAskButton = function() {
+  var self = this;
+  this.askInputButton.on("keypress click", function(e){
+    var eType = e.type;
+    if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
+      var stage = interp.targetStage();
+      stage.askAnswer = $(self.askInputTextField).val();
+      self.hideBubble();
+      self.hideAsk();
+      interp.activeThread.paused = false;
+    }
+  });
 };
 
 Sprite.prototype.setXY = function(x, y) {

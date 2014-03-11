@@ -19,7 +19,6 @@ var Reporter = function(data) {
     this.cmd = data.cmd;
     this.color = data.color;
     this.isDiscrete = data.isDiscrete;
-    this.label = data.label;
     this.mode = data.mode;
     this.param = data.param;
     this.sliderMin = data.sliderMin;
@@ -30,10 +29,23 @@ var Reporter = function(data) {
     this.y = data.y;
     this.z = io.getCount();
 
+    //Set the label after hydrating the cmd and param variables
+    this.label = this.determineReporterLabel();
+
     this.el = null; // jQuery Element for the outer box
     this.valueEl = null; // jQ element containing the reporter value
     this.slider = null; // slider jQ element
 };
+
+Reporter.prototype.determineReporterLabel = function() {
+  if (this.target === 'Stage' && this.cmd === "getVar:") {
+    return this.param;
+  } else if (this.target === 'Stage' && this.param === null) {
+    return this.cmd;
+  } else {
+    return this.target + ': ' + this.param;
+  }
+}
 
 Reporter.prototype.attach = function(scene) {
     switch (this.mode) {
@@ -77,6 +89,9 @@ Reporter.prototype.update = function() {
     var newValue = '';
     var target = runtime.spriteNamed(this.target);
     switch (this.cmd) {
+        case 'answer':
+            newValue = target.askAnswer;
+            break;
         case 'getVar:':
             newValue = target.variables[this.param];
             break;

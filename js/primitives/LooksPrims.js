@@ -172,12 +172,12 @@ LooksPrims.prototype.primClearEffects = function(b) {
 
 var showBubble = function(b, type) {
     var s = interp.targetSprite();
-    if (s != null) s.showBubble(interp.arg(b, 0), type);
+    if (s !== null) s.showBubble(interp.arg(b, 0), type);
 };
 
 var showBubbleAndWait = function(b, type) {
     var s = interp.targetSprite();
-    if (s == null) return;
+    if (s === null) return;
     if (interp.activeThread.firstTime) {
         var text = interp.arg(b, 0);
         var secs = interp.numarg(b, 1);

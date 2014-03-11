@@ -1,0 +1,11 @@
+{
+  "name": "scratch-html5",
+  "description": "HTML 5 based Scratch project player",
+  "repository": "https://github.com/LLK/scratch-html5",
+  "devDependencies": {
+      "karma" : "~0.10",
+      "jasmine-jquery" : "1.3.3",
+      "karma-html2js-preprocessor" : "~0.1.0",
+      "underscore" : "~1.6.0"
+  }
+}

@@ -88,19 +88,14 @@ Runtime.prototype.stopAll = function() {
     interp.activeThread = new Thread(null);
     interp.threads = [];
     stopAllSounds();
-    // Hide reporters
+    // Hide sprite bubbles, resetFilters and doAsk prompts
     for (var s = 0; s < runtime.sprites.length; s++) {
-        if (runtime.sprites[s].hideBubble) {
-            runtime.sprites[s].hideBubble();
-        }
+        if (runtime.sprites[s].hideBubble) runtime.sprites[s].hideBubble();
+        if (runtime.sprites[s].resetFilters) runtime.sprites[s].resetFilters();
+        if (runtime.sprites[s].hideAsk) runtime.sprites[s].hideAsk();
     }
     // Reset graphic effects
     runtime.stage.resetFilters();
-    for (var s = 0; s < runtime.sprites.length; s++) {
-        if (runtime.sprites[s].resetFilters) {
-            runtime.sprites[s].resetFilters();
-        }
-    }
 };
 
 // Step method for execution - called every 33 milliseconds
