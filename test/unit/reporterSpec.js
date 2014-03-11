@@ -1,6 +1,6 @@
 /* jasmine specs for Reporter.js go here */
 
-describe ('Reporter', function() {
+describe('Reporter', function() {
   var reporter, reporterValues;
 
   beforeEach(function() {
@@ -8,7 +8,7 @@ describe ('Reporter', function() {
     reporterValues = new ReporterValues();
   });
 
-  describe('Instantization variables', function() {
+  describe('Initialized variables', function() {
     var initReporter;
     beforeEach(function() {
       io = new ioMock({'getCount': 4});

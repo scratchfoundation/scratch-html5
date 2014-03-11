@@ -1,13 +1,13 @@
 /* jasmine specs for Runtime.js go here */
 
-describe ('Runtime', function() {
+describe('Runtime', function() {
   var runtimeObj;
 
   beforeEach(function() {
     runtimeObj = Runtime;
   });
 
-  describe('Instantization variables', function() {
+  describe('Initialized variables', function() {
     var initRuntime, lineCanvas;
     beforeEach(function() {
       initRuntime = new runtimeObj();
@@ -83,9 +83,9 @@ describe ('Runtime', function() {
       expect(interp.activeThread).toEqual(new threadMock());
     });
 
-    it('should call a blank thread array ', function() {
+    it('should intitialize an empty threads array', function() {
       runtimeObj.prototype.stopAll();
-      expect(interp.activeThread).toEqual(new threadMock());
+      expect(interp.threads).toEqual([]);
     });
 
     it('should call stopAllSounds', function() {

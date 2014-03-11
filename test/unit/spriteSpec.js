@@ -1,13 +1,13 @@
 /* jasmine specs for Sprite.js go here */
 
-describe ('Sprite', function() {
+describe('Sprite', function() {
   var sprite;
 
   beforeEach(function() {
     sprite = Sprite;
   });
 
-  describe('Instantization variables', function() {
+  describe('Initialized variables', function() {
     var initSprite;
     beforeEach(function() {
       var spriteObject = sensingData.children[0];
@@ -386,13 +386,5 @@ describe ('Sprite', function() {
       expect(spriteProto.visible).toBe(false);
       expect(spriteProto.updateVisible).toHaveBeenCalled();
     });
-
-    it('should set take no action on an invalid character', function() {
-      spriteProto.visible = true;
-      spriteProto.setVisible('hello');
-      expect(spriteProto.visible).toBe(true);
-      expect(spriteProto.updateVisible).not.toHaveBeenCalled();
-    });
   });
-
 });

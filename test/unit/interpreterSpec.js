@@ -1,13 +1,13 @@
 /* jasmine specs for Interpreter.js go here */
 
-describe ('Interpreter', function() {
+describe('Interpreter', function() {
   var interp;
 
   beforeEach(function() {
     interp = Interpreter;
   });
 
-  describe('Instantization variables', function() {
+  describe('Initialized variables', function() {
     var initInterp, realThread, realTimer;
     beforeEach(function() {
       realThread = Thread;

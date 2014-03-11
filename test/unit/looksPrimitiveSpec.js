@@ -1,13 +1,13 @@
 /* jasmine specs for primitives/LooksPrims.js go here */
 
-describe ('LooksPrims', function() {
+describe('LooksPrims', function() {
   var looksPrims, targetSpriteMock;
   beforeEach(function() {
     looksPrims = LooksPrims;
     targetSpriteMock = targetMock();
   });
 
-  describe('showBubble for Say', function(){
+  describe('showBubble for say', function(){
     var sayBlock;
     beforeEach(function() {
       sayBlock = {'args': ['what to say']};
@@ -21,7 +21,7 @@ describe ('LooksPrims', function() {
     });
   });
 
-  describe('showBubble for Think', function(){
+  describe('showBubble for think', function(){
     var thinkBlock;
     beforeEach(function() {
       thinkBlock = {'args': ['what to think']};
@@ -35,7 +35,7 @@ describe ('LooksPrims', function() {
     });
   });
 
-  describe('showBubble for Ask', function(){
+  describe('showBubble for ask', function(){
     var askBlock;
     beforeEach(function() {
       askBlock = {'args': ['what to ask']};

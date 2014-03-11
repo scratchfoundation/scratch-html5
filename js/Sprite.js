@@ -273,15 +273,13 @@ Sprite.prototype.onClick = function(evt) {
 };
 
 Sprite.prototype.setVisible = function(v) {
-  if (v === true || v === false) {
-    this.visible = v;
-    this.updateVisible();
-  }
+  this.visible = v;
+  this.updateVisible();
 };
 
 Sprite.prototype.updateLayer = function() {
     $(this.mesh).css('z-index', this.z);
-    if (this.talkBubble) $(this.talkBubble).css('z-index', this.z);
+    if (this.talkBubble) this.talkBubble.css('z-index', this.z);
     if (this.askInput) this.askInput.css('z-index', this.z);
 };
 

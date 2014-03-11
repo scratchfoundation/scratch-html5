@@ -1,13 +1,13 @@
 /* jasmine specs for Interpreter.js -> Thread go here */
 
-describe ('Thread', function() {
+describe('Thread', function() {
   var thread;
 
   beforeEach(function() {
     thread = Thread;
   });
 
-  describe('Instantization variables', function() {
+  describe('Initialized variables', function() {
     var initThread;
     beforeEach(function() {
       initThread = new thread('block', 'target');

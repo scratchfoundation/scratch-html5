@@ -20,72 +20,28 @@ var ReporterValues = function() {
   }
 };
 /*
-cmd
-  "getVar:"
+Additional Reporter examples
+cmd : "getVar:"
+color : 15629590
+isDiscrete : true
+mode : 1
+param : "myAnswer2"
+sliderMax : 100
+sliderMin : 0
+target : "Sprite1"
+visible : true
+x : 5
+y : 32
   
-color
-  15629590
-  
-isDiscrete
-  true
-  
-mode
-  1
-  
-param
-  "myAnswer2"
-  
-sliderMax
-  100
-  
-sliderMin
-  0
-  
-target
-  "Sprite1"
-  
-visible
-  true
-  
-x
-  5
-  
-y
-  32
-*/
-
-/*
-  
-cmd
-  "getVar:"
-  
-color
-  15629590
-  
-isDiscrete
-  true
-  
-mode
-  1
-  
-param
-  "answer"
-  
-sliderMax
-  100
-  
-sliderMin
-  0
-  
-target
-  "Sprite1"
-  
-visible
-  true
-  
-x
-  5
-  
-y
-  59
+cmd : "getVar:"
+color : 15629590
+isDiscrete : true
+mode : 1
+param : "answer"
+sliderMax : 100
+sliderMin : 0
+target : "Sprite1"
+visible : true
+x : 5
+y : 59
 */

@@ -1,13 +1,13 @@
 /* jasmine specs for Stage.js go here */
 
-describe ('Stage', function() {
+describe('Stage', function() {
   var stage;
 
   beforeEach(function() {
     stage = Stage;
   });
 
-  describe('Instantization variables', function() {
+  describe('Initialized variables', function() {
     var initStage, lineCanvas;
     beforeEach(function() {
       spyOn(Sprite, "call");

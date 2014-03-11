@@ -1,30 +1,36 @@
 /* jasmine specs for Scratch.js go here */
 
-describe ('Scratch', function() {
+describe('Scratch', function() {
+    var scratch;
+
+    beforeEach(function() {
+      spyOn(IO.prototype, "loadProject");
+      spyOn(Runtime.prototype, "init");
+      spyOn(Interpreter.prototype, "initPrims");
+      scratch = Scratch;
+    });
+
     describe('Scratch - Load Project', function(){
-      var request, scratch;
-      var callBack = jasmine.createSpy('onSuccess');
-
-      var TestResponses = { status: 200, responseText: returnData};
-
       beforeEach(function() {
-        jasmine.Ajax.useMock();
-        scratch = Scratch;
         scratch(project_id);
-        request = mostRecentAjaxRequest();
-        request.promise(TestResponses, callBack);
       });
 
-      it('should call the internalapi project', function() {
-        expect(request.url).toBe("proxy.php?resource=internalapi/project/" + project_id + "/get/");
-        expect(callBack).toHaveBeenCalled();
+      it('should call the IO loadProject Method', function() {
+        expect(IO.prototype.loadProject).toHaveBeenCalled();
+      });
+
+      it('should call the Runtime init method', function() {
+        expect(Runtime.prototype.init).toHaveBeenCalled();
+      });
+
+      it('should call the Interpreter initPrims method', function() {
+        expect(Interpreter.prototype.initPrims).toHaveBeenCalled();
       });
     });
 
     describe('Scratch - Click Green Flag', function(){
       beforeEach(function() {
         setFixtures('<button id=trigger-green-flag tabindex=2></button><div id="overlay"></div>');
-        scratch = Scratch;
         scratch(project_id);
       });
 
@@ -48,7 +54,6 @@ describe ('Scratch', function() {
     describe('Scratch - Click Stop', function(){
       beforeEach(function() {
         setFixtures('<button id=trigger-stop tabindex=3></button>');
-        scratch = Scratch;
         scratch(project_id);
       });
 

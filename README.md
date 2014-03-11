@@ -47,13 +47,12 @@ In your local scratch directory
 $ npm install
 ```
 
-Local copy of jQuery and mock-ajax
-----------------------------------
+Local copy of jQuery
+--------------------
 
 ```
 $ cd test/lib
 $ curl http://code.jquery.com/jquery-1.11.0.min.js > jquery-1.11.0.min.js
-$ curl http://cloud.github.com/downloads/pivotal/jasmine-ajax/mock-ajax.js > mock-ajax.js
 ```
 
 To Run the tests

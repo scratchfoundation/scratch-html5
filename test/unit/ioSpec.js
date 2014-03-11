@@ -13,10 +13,6 @@ describe('IO', function(){
     expect(io.data).toBe(null);
   });
 
-  it('should have "null" data', function() {
-    expect(io.data).toBe(null);
-  });
-
   it('should have a base', function() {
     expect(io.base).toBe(io_base);
   });
