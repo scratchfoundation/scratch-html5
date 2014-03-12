@@ -632,14 +632,14 @@ describe('Sprite', function() {
     it('should bind to the askInputButton and handle a click', function() {
       spriteProto.bindDoAskButton();
       $(spriteProto.askInputButton).click();
-      expect(spriteProto.persistDoAskInput).toHaveBeenCalled();
+      expect(spriteProto.persistDoAskInput).toHaveBeenCalledWith(undefined);
     });
 
     it('should bind to the askInputButton and handle a enter/return', function() {
       spriteProto.bindDoAskButton();
       var e = $.Event( "keypress", { which: 13 } );
       $(spriteProto.askInputButton).trigger(e);
-      expect(spriteProto.persistDoAskInput).toHaveBeenCalled();
+      expect(spriteProto.persistDoAskInput).toHaveBeenCalledWith(undefined);
     });
   });
 

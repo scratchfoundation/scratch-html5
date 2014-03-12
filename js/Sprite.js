@@ -442,7 +442,7 @@ Sprite.prototype.bindDoAskButton = function() {
     this.askInputButton.on("keypress click", function(e){
         var eType = e.type;
         if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
-            self.persistDoAskInput();
+            self.persistDoAskInput(self.objName);
         }
     });
 };
