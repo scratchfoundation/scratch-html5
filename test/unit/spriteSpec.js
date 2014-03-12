@@ -559,6 +559,7 @@ describe('Sprite', function() {
     it('should show the ask input if visible is true', function() {
       spriteProto.showAsk();
       expect($('.ask-container').css('display')).toBe('inline-block');
+      expect($('.ask-container').height()).toBe(25);
       expect($('.ask-container').css('z-index')).toBe('22');
       expect($('.ask-container').css('left')).toBe('15px');
       expect($('.ask-container').css('right')).toBe('15px');
@@ -575,6 +576,7 @@ describe('Sprite', function() {
       spriteProto.visible = false;
       spriteProto.showAsk('Hello World?');
       expect($('.ask-container').css('display')).toBe('inline-block');
+      expect($('.ask-container').height()).toBe(42);
       expect($('.ask-text-field').is(':focus')).toBe(true);
       expect($('.ask-input-hidden-text').css('display')).toBe('block');
       expect($('.ask-input-hidden-text').html()).toBe('Hello World?');
@@ -597,6 +599,7 @@ describe('Sprite', function() {
     it('should hide the ask input', function() {
       spriteProto.hideAsk();
       expect($('.ask-container').css('display')).toBe('none');
+      expect($('.ask-container').height()).toBe(25);
       expect(spriteProto.askInputOn).toBe(false);
       expect(spriteProto.askInputTextField.val()).toBe('');
       expect(spriteProto.askInputHiddenText.css('display')).toBe('none');

@@ -412,7 +412,7 @@ Sprite.prototype.showAsk = function(text) {
     this.askInputTextField.focus();
 
     if (! this.visible) {
-      this.askInput.css('height', 42);
+      this.askInput.css('height', '42px');
       this.askInputHiddenText.css('display', 'inline-block');
       this.askInputHiddenText.html(text);
     }
@@ -421,6 +421,7 @@ Sprite.prototype.showAsk = function(text) {
 Sprite.prototype.hideAsk = function() {
     this.askInputOn = false;
     this.askInputTextField.val('');
+    this.askInput.css('height', '25px');
     this.askInput.css('display', 'none');
     this.askInputHiddenText.css('display', 'none');
     this.askInputHiddenText.html('');
