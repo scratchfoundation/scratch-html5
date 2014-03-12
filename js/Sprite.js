@@ -149,14 +149,12 @@ Sprite.prototype.attach = function(scene) {
     this.updateVisible();
     this.updateTransform();
 
-    if (! this.isStage) {
-        this.talkBubble = $('<div class="bubble-container"></div>');
-        this.talkBubble.css('display', 'none');
-        this.talkBubbleBox = $('<div class="bubble"></div>');
-        this.talkBubbleStyler = $('<div class="bubble-say"></div>');
-        this.talkBubble.append(this.talkBubbleBox);
-        this.talkBubble.append(this.talkBubbleStyler);
-    }
+    this.talkBubble = $('<div class="bubble-container"></div>');
+    this.talkBubble.css('display', 'none');
+    this.talkBubbleBox = $('<div class="bubble"></div>');
+    this.talkBubbleStyler = $('<div class="bubble-say"></div>');
+    this.talkBubble.append(this.talkBubbleBox);
+    this.talkBubble.append(this.talkBubbleStyler);
 
     this.askInput = $('<div class="ask-container"></div>');
     this.askInputHiddenText = $('<div class="ask-input-hidden-text"></div>');
