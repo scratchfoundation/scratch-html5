@@ -181,8 +181,8 @@ SensingPrims.prototype.primDoAsk= function(b) {
     showBubble(b, "doAsk");
     var s = interp.targetSprite();
     if (s !== null) {
-        interp.activeThread.paused = true;
-        s.showAsk();
+        s.showAsk(interp.arg(b, 0));
+        interp.pauseAllThreads();
     }
 };
 

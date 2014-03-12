@@ -23,6 +23,10 @@ var interpreterMock = function() {
     'targetSprite' : function() { return getArgs('targetSprite'); },
     'arg': function(block, index) { return getArgs('arg');},
     'activeThread': new threadMock(),
+    'pauseThread': function() {},
+    'resumeThread': function() {},
+    'pauseAllThreads': function() {},
+    'resumeAllThreads': function() {},
     'targetStage': function() { var rtMock = new runtimeMock(); return rtMock.stage}
   }
 };

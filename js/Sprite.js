@@ -407,12 +407,12 @@ Sprite.prototype.hideBubble = function() {
 
 Sprite.prototype.showAsk = function(text) {
     this.askInputOn = true;
-    this.askInput.css('z-index', this.z);
+    this.askInput.css('z-index', this.z + 1);
 
     this.askInput.css('display', 'inline-block');
     this.askInputTextField.focus();
 
-    if (! this.visible) {
+    if (! this.visible || this.isStage) {
       this.askInput.css('height', '42px');
       this.askInputHiddenText.css('display', 'inline-block');
       this.askInputHiddenText.html(text);
@@ -434,7 +434,7 @@ Sprite.prototype.persistDoAskInput = function(spriteName) {
     var sprite = runtime.spriteNamed(spriteName);
     sprite.hideBubble();
     sprite.hideAsk();
-    interp.activeThread.paused = false;
+    interp.resumeAllThreads();
 };
 
 Sprite.prototype.bindDoAskButton = function() {

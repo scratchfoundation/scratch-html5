@@ -564,7 +564,7 @@ describe('Sprite', function() {
       spriteProto.showAsk();
       expect($('.ask-container').css('display')).toBe('inline-block');
       expect($('.ask-container').height()).toBe(25);
-      expect($('.ask-container').css('z-index')).toBe('22');
+      expect($('.ask-container').css('z-index')).toBe('23');
       expect($('.ask-container').css('left')).toBe('15px');
       expect($('.ask-container').css('right')).toBe('15px');
       expect($('.ask-container').css('bottom')).toBe('7px');
@@ -578,6 +578,17 @@ describe('Sprite', function() {
 
     it('should show the ask input if visible is false', function() {
       spriteProto.visible = false;
+      spriteProto.showAsk('Hello World?');
+      expect($('.ask-container').css('display')).toBe('inline-block');
+      expect($('.ask-container').height()).toBe(42);
+      expect($('.ask-text-field').is(':focus')).toBe(true);
+      expect($('.ask-input-hidden-text').css('display')).toBe('block');
+      expect($('.ask-input-hidden-text').html()).toBe('Hello World?');
+    });
+
+    it('should show the ask input on the stage', function() {
+      spriteProto.visible = true;
+      spriteProto.isStage = true;
       spriteProto.showAsk('Hello World?');
       expect($('.ask-container').css('display')).toBe('inline-block');
       expect($('.ask-container').height()).toBe(42);
@@ -668,9 +679,10 @@ describe('Sprite', function() {
       expect(localSprite.hideAsk).toHaveBeenCalled();
     });
 
-    it('should have interp.activeThread.paused be false', function() {
+    it('should have called interp.resumeThread', function() {
+      spyOn(interp, "resumeAllThreads");
       spriteProto.persistDoAskInput();
-      expect(interp.activeThread.paused).toBe(false);
+      expect(interp.resumeAllThreads).toHaveBeenCalled();
     });
   });
 
