@@ -437,6 +437,10 @@ describe('Sprite', function() {
         expect(initSprite.askInput).toBe(null);
       });
 
+      it('should have an askInputForm variable', function() {
+        expect(initSprite.askInputForm).toBe(null);
+      });
+
       it('should have an askInputHiddenText variable', function() {
         expect(initSprite.askInputHiddenText).toBe(null);
       });
@@ -610,48 +614,62 @@ describe('Sprite', function() {
   describe('bindAsk', function() {
     beforeEach(function() {
       spriteProto = deepCopy(sprite.prototype);
-      spriteProto.askInputTextField = $('<input type="text" class="ask-text-field"></input>');
       spriteProto.askInputButton = $('<div class="ask-button"></div>');
-      spyOn(spriteProto, "hideBubble");
-      spyOn(spriteProto, "hideAsk");
+      spyOn(spriteProto, "persistDoAskInput");
     });
 
     it('should bind to the askInputButton and handle a click', function() {
-      interp = new interpreterMock();
-      spyOn(interp, "targetStage").andCallThrough();
-      $(spriteProto.askInputTextField).val('Hellow World');
       spriteProto.bindDoAskButton();
       $(spriteProto.askInputButton).click();
-      expect(interp.targetStage).toHaveBeenCalled();
+      expect(spriteProto.persistDoAskInput).toHaveBeenCalled();
     });
 
     it('should bind to the askInputButton and handle a enter/return', function() {
-      interp = new interpreterMock();
-      spyOn(interp, "targetStage").andCallThrough();
       spriteProto.bindDoAskButton();
       var e = $.Event( "keypress", { which: 13 } );
       $(spriteProto.askInputButton).trigger(e);
+      expect(spriteProto.persistDoAskInput).toHaveBeenCalled();
+    });
+  });
+
+  describe('persistDoAskInput', function() {
+    var localSprite;
+    beforeEach(function() {
+      localSprite = new spriteMock();
+      spyOn(runtime, "spriteNamed").andReturn(localSprite);
+      spyOn(localSprite, "hideBubble");
+      spyOn(localSprite, "hideAsk");
+      spriteProto = deepCopy(sprite.prototype);
+      spriteProto.askInputTextField = $('<input type="text" class="ask-text-field"></input>');
+    });
+
+    it('should call the interp.targetStage method', function() {
+      interp = new interpreterMock();
+      spyOn(interp, "targetStage").andCallThrough();
+      $(spriteProto.askInputTextField).val('Hellow World');
+      spriteProto.persistDoAskInput();
       expect(interp.targetStage).toHaveBeenCalled();
     });
 
+    it('should call runtime.spriteNamed with the sprite name', function() {
+      spriteProto.persistDoAskInput('spriteName');
+      expect(runtime.spriteNamed).toHaveBeenCalledWith('spriteName');
+    });
 
     it('should call hideBubble', function() {
-      spriteProto.bindDoAskButton();
-      $(spriteProto.askInputButton).click();
-      expect(spriteProto.hideBubble).toHaveBeenCalled();
-      expect(spriteProto.hideAsk).toHaveBeenCalled();
+      spriteProto.persistDoAskInput('spriteName');
+      expect(runtime.spriteNamed).toHaveBeenCalledWith('spriteName');
+      expect(localSprite.hideBubble).toHaveBeenCalled();
     });
 
     it('should call hideAsk', function() {
-      spriteProto.bindDoAskButton();
-      $(spriteProto.askInputButton).click();
-      expect(spriteProto.hideAsk).toHaveBeenCalled();
+      spriteProto.persistDoAskInput('spriteName');
+      expect(runtime.spriteNamed).toHaveBeenCalledWith('spriteName');
+      expect(localSprite.hideAsk).toHaveBeenCalled();
     });
 
     it('should have interp.activeThread.paused be false', function() {
-      interp = new interpreterMock();
-      spriteProto.bindDoAskButton();
-      $(spriteProto.askInputButton).click();
+      spriteProto.persistDoAskInput();
       expect(interp.activeThread.paused).toBe(false);
     });
   });

@@ -75,6 +75,7 @@ var Sprite = function(data) {
 
     // HTML element for the ask bubbles
     this.askInput = null;
+    this.askInputForm = null;
     this.askInputHiddenText = null;
     this.askInputField = null;
     this.askInputButton = null;
@@ -157,15 +158,17 @@ Sprite.prototype.attach = function(scene) {
     this.talkBubble.append(this.talkBubbleStyler);
 
     this.askInput = $('<div class="ask-container"></div>');
+    this.askInputForm = $('<form onSubmit="Sprite.prototype.persistDoAskInput(\'' + this.objName + '\');"></form>');
     this.askInputHiddenText = $('<div class="ask-input-hidden-text"></div>');
     this.askInputField = $('<div class="ask-field"></div>');
     this.askInputTextField = $('<input type="text" class="ask-text-field"></input>');
     this.askInputField.append(this.askInputTextField);
     this.askInputButton = $('<div class="ask-button"></div>');
     this.bindDoAskButton();
-    this.askInput.append(this.askInputHiddenText);
-    this.askInput.append(this.askInputField);
-    this.askInput.append(this.askInputButton);
+    this.askInput.append(this.askInputForm);
+    this.askInputForm.append(this.askInputHiddenText);
+    this.askInputForm.append(this.askInputField);
+    this.askInputForm.append(this.askInputButton);
 
     runtime.scene.append(this.talkBubble);
     runtime.scene.append(this.askInput);
@@ -425,16 +428,21 @@ Sprite.prototype.hideAsk = function() {
     this.askInputHiddenText.html('');
 };
 
+Sprite.prototype.persistDoAskInput = function(spriteName) {
+    var stage = interp.targetStage();
+    stage.askAnswer = $(this.askInputTextField).val();
+    var sprite = runtime.spriteNamed(spriteName);
+    sprite.hideBubble();
+    sprite.hideAsk();
+    interp.activeThread.paused = false;
+};
+
 Sprite.prototype.bindDoAskButton = function() {
     var self = this;
-    this.askInputButton.on("keypress click", function(e) {
+    this.askInputButton.on("keypress click", function(e){
         var eType = e.type;
         if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
-            var stage = interp.targetStage();
-            stage.askAnswer = $(self.askInputTextField).val();
-            self.hideBubble();
-            self.hideAsk();
-            interp.activeThread.paused = false;
+            self.persistDoAskInput();
         }
     });
 };
