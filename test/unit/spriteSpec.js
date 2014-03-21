@@ -169,7 +169,10 @@ describe('Sprite', function() {
       expect($('.ask-container').css('bottom')).toBe('7px');
       expect($('.ask-container').css('height')).toBe('25px');
       expect($('.ask-container').css('height')).toBe('25px');
-      expect($('.ask-text-field').is(':focus')).toBe(true);
+      expect(
+        $('.ask-text-field').is(':focus') ||
+        document.activeElement.className.match(/ask-text-field/) !== null
+      ).toBe(true);
       expect(spriteProto.askInputOn).toBe(true);
     });
 
@@ -177,7 +180,10 @@ describe('Sprite', function() {
       spriteProto.visible = false;
       spriteProto.showAsk();
       expect($('.ask-container').css('display')).toBe('none');
-      expect($('.ask-text-field').is(':focus')).toBe(false);
+      expect(
+        $('.ask-text-field').is(':focus') ||
+        document.activeElement.className.match(/ask-text-field/) !== null
+      ).toBe(false);
     });
   });
 
