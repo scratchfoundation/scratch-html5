@@ -3,6 +3,7 @@
   "description": "HTML 5 based Scratch project player",
   "repository": "https://github.com/LLK/scratch-html5",
   "scripts": {
+    "postinstall": "curl http://code.jquery.com/jquery-1.11.0.min.js > ./test/lib/jquery-1.11.0.min.js",
     "test": "make test"
   },
   "dependencies": {},
