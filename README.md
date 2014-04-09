@@ -28,41 +28,18 @@ The tests are written using Karma and there should be a 100% passing rate in ord
 The expectation is to add a unit test for any code that you contribute to the project.
 
 
-Install Node (NPM) (https://npmjs.org/)
+Install Node
 ---------------------------------------
- 
-Brew:
-```
-$ brew install npm
-```
- 
-Mac Ports:
-```
-$ port install npm
-```
 
-In your local scratch directory
+To install [Node.js](http://nodejs.org) and [NPM](http://npmjs.org) simply go to [http://nodejs.org](http://nodejs.org/), download the package for your operating system and install. Once installed, navigate to your local scratch directory and run:
 
-```
-$ npm install
-```
-
-Local copy of jQuery
---------------------
-
-```
-$ cd test/lib
-$ curl http://code.jquery.com/jquery-1.11.0.min.js > jquery-1.11.0.min.js
+```bash
+npm install
 ```
 
 To Run the tests
 ----------------
 
+```bash
+npm test
 ```
-$ ./scripts/test.sh
-```
-
-
-To configure the unit tests
----------------------------
-The karam.conf.js file is location in the config directory
