@@ -27,21 +27,21 @@
 
 var NotePlayer = function(wavFileData, originalPitch, loopStart, loopEnd, env) {
     this.originalPitch = originalPitch || null;
-	this.index = 0;
-	this.samplesRemaining = 0; // determines note duration
+    this.index = 0;
+    this.samplesRemaining = 0; // determines note duration
 
-	// Looping
+    // Looping
     this.isLooped = false;
-	this.loopPoint = 0; // final sample in loop
-	this.loopLength = 0;
+    this.loopPoint = 0; // final sample in loop
+    this.loopLength = 0;
 
-	// Volume Envelope
-	this.envelopeValue = 1;
-	this.samplesSinceStart = 0;
-	this.attackEnd = 0;
-	this.attackRate = 0;
-	this.holdEnd = 0;
-	this.decayRate = 1;
+    // Volume Envelope
+    this.envelopeValue = 1;
+    this.samplesSinceStart = 0;
+    this.attackEnd = 0;
+    this.attackRate = 0;
+    this.holdEnd = 0;
+    this.decayRate = 1;
 
     if (wavFileData == null) wavFileData = new ArrayBuffer();
 
@@ -107,8 +107,8 @@ NotePlayer.prototype.interpolatedSample = function() {
 
 NotePlayer.prototype.rawSample = function(sampleIndex) {
     if (sampleIndex >= this.endOffset) {
-        if (this.isLooped) sampleIndex = this.loopPoint;
-        else return 0;
+        if (!this.isLooped) return 0;
+        sampleIndex = this.loopPoint;
     }
     var byteIndex = 2 * sampleIndex;
     var result = (this.soundData[byteIndex + 1] << 8) + this.soundData[byteIndex];

@@ -38,13 +38,9 @@ var Reporter = function(data) {
 };
 
 Reporter.prototype.determineReporterLabel = function() {
-  if (this.target === 'Stage' && this.cmd === "getVar:") {
-    return this.param;
-  } else if (this.target === 'Stage' && this.param === null) {
-    return this.cmd;
-  } else {
+    if (this.target === 'Stage' && this.cmd === "getVar:") return this.param;
+    if (this.target === 'Stage' && this.param === null) return this.cmd;
     return this.target + ': ' + this.param;
-  }
 }
 
 Reporter.prototype.attach = function(scene) {
@@ -114,13 +110,13 @@ Reporter.prototype.update = function() {
             newValue = target.currentCostumeIndex + 1;
             break;
         case 'timer':
-            newValue = '' + Math.round(interp.primitiveTable.timer() * 10) / 10;
+            newValue = (Math.round(interp.primitiveTable.timer() * 10) / 10).toString();
             break;
     }
     if (typeof newValue === 'number' && Math.abs(newValue) > 0.001) {
         newValue = Math.round(newValue * 1000) / 1000;
     }
-    newValue = '' + newValue;
+    newValue = newValue.toString();
     this.valueEl.html(newValue);
     if (this.mode == 3) {
         this.slider.val(Number(newValue));
@@ -164,10 +160,10 @@ List.prototype.attach = function(scene) {
     var c = this.containerEl = $('<div style="overflow:hidden;float:left;position:relative">').appendTo(this.el).width(this.width-13).height(this.height-34);
     var s = this.scrollbar = $('<div class="list-scrollbar-container"><div class="list-scrollbar">').appendTo(this.el);
     var sb = s.children('.list-scrollbar');
-    sb.mousedown(function(e){
+    sb.mousedown(function(e) {
         if (e.which===1) $(this).data({scrolling:true,startY:e.pageY}); // left button
     });
-    $('body').mousemove(function(e){
+    $('body').mousemove(function(e) {
         if (sb.data('scrolling')) {
             var offset = parseInt(sb.css('top'))+e.pageY-sb.data('startY');
             if (offset < 0) {
@@ -179,7 +175,7 @@ List.prototype.attach = function(scene) {
             sb.css('top',offset);
             c.scrollTop(c.height()/sb.height()*offset);
         }
-    }).mouseup(function(){
+    }).mouseup(function() {
         if ($.hasData(sb[0],'scrolling')) sb.removeData(['scrolling','startY']);
     });
 //    this.el.append('<div class="list-add">+'); // disabled because it doesn't do anything even in the original
@@ -194,14 +190,14 @@ List.prototype.attach = function(scene) {
     this.el.css('display', this.visible ? 'inline-block' : 'none');
 };
 
-List.prototype.update = function(){
+List.prototype.update = function() {
     this.contents = findList(runtime.spriteNamed(this.target),this.listName);
 
     this.el.css('display', this.visible ? 'inline-block' : 'none');
     if (!this.visible) return;
 
     var c = this.containerEl.html(''); // so that it can be used inside the forEach
-    this.contents.forEach(function(val,i){
+    this.contents.forEach(function(val,i) {
         $('<div style="clear:both">').appendTo(c).append('<div class="list-index">'+(i+1),'<div class="list-item">'+val);
     });
     c.find('.list-index').width(c.find('.list-index').last().width());

@@ -37,12 +37,12 @@ var IO = function() {
 };
 
 IO.prototype.loadProject = function(project_id) {
-    var runningIO = this;
+    var self = this;
     $.getJSON(this.project_base + project_id + this.project_suffix, function(data) {
-        runningIO.data = data;
-        runningIO.makeObjects();
-        runningIO.loadThreads();
-        runningIO.loadNotesDrums();
+        self.data = data;
+        self.makeObjects();
+        self.loadThreads();
+        self.loadNotesDrums();
         runtime.loadStart(); // Try to run the project.
     });
 };
@@ -126,8 +126,8 @@ IO.prototype.makeObjects = function() {
     $.each(this.data.children, function(index, obj) {
         createObj(obj, runtime.stage); // create children of stage - sprites, watchers, and stage's lists
     });
-    $.each(runtime.sprites.filter(function(sprite){return sprite instanceof Sprite}), function(index, sprite) { // list of sprites
-        $.each(sprite.lists, function(index, list){
+    $.each(runtime.sprites.filter(function(sprite) {return sprite instanceof Sprite}), function(index, sprite) { // list of sprites
+        $.each(sprite.lists, function(index, list) {
             createObj(list, sprite); // create local lists
         });
     });

@@ -33,7 +33,7 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
 
     primTable['getAttribute:of:'] = this.primGetAttribute;
 
-    primTable['timeAndDate']  = function(b){ return runtime.getTimeString(interp.arg(b, 0)); };
+    primTable['timeAndDate']  = function(b) { return runtime.getTimeString(interp.arg(b, 0)); };
     primTable['timestamp'] = this.primTimestamp;
 };
 
@@ -181,8 +181,8 @@ SensingPrims.prototype.primDoAsk= function(b) {
     showBubble(b, "doAsk");
     var s = interp.targetSprite();
     if (s !== null) {
-      interp.activeThread.paused = true;
-      s.showAsk();
+        interp.activeThread.paused = true;
+        s.showAsk();
     }
 };
 

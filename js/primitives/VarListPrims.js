@@ -109,8 +109,8 @@ function findList(targetSprite, listName) {
 VarListPrims.prototype.primReadList = function(b) {
     var list = findList(interp.targetSprite(), interp.arg(b, 0));
     if (list) {
-       var allOne = list.map(function(val) { return val.length; }).reduce(function(old,val) { return old + val; }, 0) === list.length;
-       return list.join(allOne ? '' : ' ');
+        var allOne = list.map(function(val) { return val.length; }).reduce(function(old,val) { return old + val; }, 0) === list.length;
+        return list.join(allOne ? '' : ' ');
     }
 };
 
@@ -123,9 +123,13 @@ VarListPrims.prototype.primListDeleteLine = function(b) {
     var list = findList(interp.targetSprite(), interp.arg(b, 1));
     if (!list) return;
     var line = interp.arg(b, 0);
-    if (line == 'all' || list.length == 0) list.length = 0;
-    else if (line == 'last') list.splice(list.length - 1, 1);
-    else if (parseInt(line, 10) - 1 in list) list.splice(parseInt(line, 10) - 1, 1);
+    if (line == 'all' || list.length == 0) {
+        list.length = 0;
+    } else if (line == 'last') {
+        list.splice(list.length - 1, 1);
+    } else if (parseInt(line, 10) - 1 in list) {
+        list.splice(parseInt(line, 10) - 1, 1);
+    }
 };
 
 VarListPrims.prototype.primListInsertAt = function(b) {
@@ -134,9 +138,13 @@ VarListPrims.prototype.primListInsertAt = function(b) {
     var newItem = interp.arg(b, 0);
 
     var position = interp.arg(b, 1);
-    if (position == 'last') position = list.length;
-    else if (position == 'random') position = Math.round(Math.random() * list.length);
-    else position = parseInt(position, 10) - 1;
+    if (position == 'last') {
+        position = list.length;
+    } else if (position == 'random') {
+        position = Math.round(Math.random() * list.length);
+    } else {
+        position = parseInt(position, 10) - 1;
+    }
     if (position > list.length) return;
 
     list.splice(position, 0, newItem);
@@ -148,12 +156,15 @@ VarListPrims.prototype.primListSetLine = function(b) {
     var newItem = interp.arg(b, 2);
     var position = interp.arg(b, 0);
 
-    if (position == 'last') position = list.length - 1;
-    else if (position == 'random') position = Math.floor(Math.random() * list.length);
-    else position = parseInt(position, 10) - 1;
+    if (position == 'last') {
+        position = list.length - 1;
+    } else if (position == 'random') {
+        position = Math.floor(Math.random() * list.length);
+    } else {
+        position = parseInt(position, 10) - 1;
+    }
 
     if (position > list.length - 1) return;
-
     list[position] = newItem;
 };
 
