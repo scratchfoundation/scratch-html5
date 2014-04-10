@@ -245,7 +245,7 @@ SensingPrims.prototype.primTimestamp = function(b) {
     var epoch = new Date(2000, 0, 1);
     var dst = now.getTimezoneOffset() - epoch.getTimezoneOffset();
     var msSince = now.getTime() - epoch.getTime();
-    msSince += (now.getTimezoneOffset() - dst) * 60000;
+    msSince -= dst * 60000;
     return msSince / 86400000;
 };
 

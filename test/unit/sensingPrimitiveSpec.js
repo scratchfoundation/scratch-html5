@@ -22,7 +22,7 @@ describe('SensingPrims', function() {
         });
 
         it('should return the days since 2000', function() {
-            expect(sensingPrims.prototype.primTimestamp()).toEqual(5280.25);
+            expect(sensingPrims.prototype.primTimestamp()).toBeCloseTo(5280);
         });
     });
 
