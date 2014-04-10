@@ -116,7 +116,7 @@ Reporter.prototype.update = function() {
     if (typeof newValue === 'number' && Math.abs(newValue) > 0.001) {
         newValue = Math.round(newValue * 1000) / 1000;
     }
-    newValue = newValue.toString();
+    newValue = '' + newValue;
     this.valueEl.html(newValue);
     if (this.mode == 3) {
         this.slider.val(Number(newValue));
