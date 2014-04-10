@@ -19,7 +19,6 @@
     "disallowSpaceAfterObjectKeys": true,
     "requireCommaBeforeLineBreak": true,
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
-    "disallowImplicitTypeConversion": ["numeric", "boolean", "binary", "string"],
     "validateIndentation": 4,
     "disallowMixedSpacesAndTabs": true,
     "disallowTrailingWhitespace": true,

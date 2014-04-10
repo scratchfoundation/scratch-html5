@@ -383,7 +383,7 @@ Interpreter.prototype.isRunning = function(b) {
 
 Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
     // Start the substack of a control structure command such as if or forever.
-    b.isLoop = Boolean(isLoop);
+    b.isLoop = !!isLoop;
     this.activeThread.stack.push(b); // remember the block that started the substack
     if (!secondSubstack) {
         this.activeThread.nextBlock = b.substack;

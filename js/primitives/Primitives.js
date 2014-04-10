@@ -46,7 +46,7 @@ Primitives.prototype.addPrimsTo = function(primTable) {
     primTable['computeFunction:of:'] = this.primMathFunction;
 
     // String primitives
-    primTable['concatenate:with:']  = function(b) { return (interp.arg(b, 0) + interp.arg(b, 1)).toString(); };
+    primTable['concatenate:with:']  = function(b) { return '' + interp.arg(b, 0) + interp.arg(b, 1); };
     primTable['letter:of:']         = this.primLetterOf;
     primTable['stringLength:']      = function(b) { return interp.arg(b, 0).length; };
 
