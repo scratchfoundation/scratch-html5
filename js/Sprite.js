@@ -129,14 +129,14 @@ Sprite.prototype.attach = function(scene) {
             $(sprite.textures[c]).css('display', sprite.currentCostumeIndex == c ? 'inline' : 'none');
             $(sprite.textures[c]).css('position', 'absolute').css('left', '0px').css('top', '0px');
             $(sprite.textures[c]).bind('dragstart', function(evt) { evt.preventDefault(); })
-              .bind('selectstart', function(evt) { evt.preventDefault(); })
-              .bind('touchend', function(evt) { sprite.onClick(evt); $(this).addClass('touched'); })
-              .click(function(evt) {
-                  if (!$(this).hasClass('touched')) {
-                      sprite.onClick(evt);
-                  } else {
-                      $(this).removeClass('touched');
-                  }
+                .bind('selectstart', function(evt) { evt.preventDefault(); })
+                .bind('touchend', function(evt) { sprite.onClick(evt); $(this).addClass('touched'); })
+                .click(function(evt) {
+                    if (!$(this).hasClass('touched')) {
+                        sprite.onClick(evt);
+                    } else {
+                        $(this).removeClass('touched');
+                    }
                 });
             scene.append($(sprite.textures[c]));
         })
@@ -149,12 +149,12 @@ Sprite.prototype.attach = function(scene) {
     this.updateTransform();
 
     if (! this.isStage) {
-      this.talkBubble = $('<div class="bubble-container"></div>');
-      this.talkBubble.css('display', 'none');
-      this.talkBubbleBox = $('<div class="bubble"></div>');
-      this.talkBubbleStyler = $('<div class="bubble-say"></div>');
-      this.talkBubble.append(this.talkBubbleBox);
-      this.talkBubble.append(this.talkBubbleStyler);
+        this.talkBubble = $('<div class="bubble-container"></div>');
+        this.talkBubble.css('display', 'none');
+        this.talkBubbleBox = $('<div class="bubble"></div>');
+        this.talkBubbleStyler = $('<div class="bubble-say"></div>');
+        this.talkBubble.append(this.talkBubbleBox);
+        this.talkBubble.append(this.talkBubbleStyler);
     }
 
     this.askInput = $('<div class="ask-container"></div>');
@@ -173,9 +173,9 @@ Sprite.prototype.attach = function(scene) {
 
 // Load sounds from the server and buffer them
 Sprite.prototype.loadSounds = function() {
-    var spr = this;
+    var self = this;
     $.each(this.sounds, function(index, sound) {
-        io.soundRequest(sound, spr);
+        io.soundRequest(sound, self);
     });
 };
 
@@ -273,8 +273,8 @@ Sprite.prototype.onClick = function(evt) {
 };
 
 Sprite.prototype.setVisible = function(v) {
-  this.visible = v;
-  this.updateVisible();
+    this.visible = v;
+    this.updateVisible();
 };
 
 Sprite.prototype.updateLayer = function() {
@@ -308,21 +308,27 @@ Sprite.prototype.updateTransform = function() {
         // sign to the X scale.
     }
 
-    $(this.mesh).css('transform',
-                'translatex(' + drawX + 'px) \
-                 translatey(' + drawY + 'px) \
-                 rotate(' + this.rotation + 'deg) \
-                 scaleX(' + scaleXprepend + (this.scale / resolution) + ') scaleY(' +  (this.scale / resolution) + ')');
-    $(this.mesh).css('-moz-transform',
-                'translatex(' + drawX + 'px) \
-                 translatey(' + drawY + 'px) \
-                 rotate(' + this.rotation + 'deg) \
-                 scaleX(' + scaleXprepend + this.scale + ') scaleY(' +  this.scale / resolution + ')');
-    $(this.mesh).css('-webkit-transform',
-                'translatex(' + drawX + 'px) \
-                 translatey(' + drawY + 'px) \
-                 rotate(' + this.rotation + 'deg) \
-                 scaleX(' + scaleXprepend + (this.scale / resolution) + ') scaleY(' +  (this.scale / resolution) + ')');
+    $(this.mesh).css(
+        'transform',
+        'translatex(' + drawX + 'px) ' +
+        'translatey(' + drawY + 'px) ' +
+        'rotate(' + this.rotation + 'deg) ' +
+        'scaleX(' + scaleXprepend + (this.scale / resolution) + ') scaleY(' +  (this.scale / resolution) + ')'
+    );
+    $(this.mesh).css(
+        '-moz-transform',
+        'translatex(' + drawX + 'px) ' +
+        'translatey(' + drawY + 'px) ' +
+        'rotate(' + this.rotation + 'deg) ' +
+        'scaleX(' + scaleXprepend + this.scale + ') scaleY(' +  this.scale / resolution + ')'
+    );
+    $(this.mesh).css(
+        '-webkit-transform',
+        'translatex(' + drawX + 'px) ' +
+        'translatey(' + drawY + 'px) ' +
+        'rotate(' + this.rotation + 'deg) ' +
+        'scaleX(' + scaleXprepend + (this.scale / resolution) + ') scaleY(' +  (this.scale / resolution) + ')'
+    );
 
     $(this.mesh).css('-webkit-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
     $(this.mesh).css('-moz-transform-origin', rotationCenterX + 'px ' + rotationCenterY + 'px');
@@ -342,9 +348,11 @@ Sprite.prototype.updateTransform = function() {
 
 Sprite.prototype.updateFilters = function() {
     $(this.mesh).css('opacity', 1 - this.filters.ghost / 100);
-    $(this.mesh).css('-webkit-filter',
-        'hue-rotate(' + (this.filters.color * 1.8) + 'deg) \
-        brightness(' + (this.filters.brightness < 0 ? this.filters.brightness / 100 + 1 : Math.min(2.5, this.filters.brightness * .015 + 1)) + ')');
+    $(this.mesh).css(
+        '-webkit-filter',
+        'hue-rotate(' + (this.filters.color * 1.8) + 'deg) ' +
+        'brightness(' + (this.filters.brightness < 0 ? this.filters.brightness / 100 + 1 : Math.min(2.5, this.filters.brightness * .015 + 1)) + ')'
+    );
 };
 
 Sprite.prototype.getTalkBubbleXY = function() {
@@ -368,7 +376,7 @@ Sprite.prototype.showBubble = function(text, type) {
 
     this.talkBubbleBox.removeClass('say-think-border');
     this.talkBubbleBox.removeClass('ask-border');
-    
+
     this.talkBubbleStyler.removeClass('bubble-say');
     this.talkBubbleStyler.removeClass('bubble-think');
     this.talkBubbleStyler.removeClass('bubble-ask');
@@ -415,17 +423,17 @@ Sprite.prototype.hideAsk = function() {
 };
 
 Sprite.prototype.bindDoAskButton = function() {
-  var self = this;
-  this.askInputButton.on("keypress click", function(e){
-    var eType = e.type;
-    if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
-      var stage = interp.targetStage();
-      stage.askAnswer = $(self.askInputTextField).val();
-      self.hideBubble();
-      self.hideAsk();
-      interp.activeThread.paused = false;
-    }
-  });
+    var self = this;
+    this.askInputButton.on("keypress click", function(e) {
+        var eType = e.type;
+        if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
+            var stage = interp.targetStage();
+            stage.askAnswer = $(self.askInputTextField).val();
+            self.hideBubble();
+            self.hideAsk();
+            interp.activeThread.paused = false;
+        }
+    });
 };
 
 Sprite.prototype.setXY = function(x, y) {

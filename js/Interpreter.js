@@ -136,7 +136,7 @@ Interpreter.prototype.stepActiveThread = function() {
     if (b == null) return;
     this.yield = false;
     while (true) {
-      if (this.activeThread.paused) return;
+        if (this.activeThread.paused) return;
 
         ++this.opCount;
         // Advance the "program counter" to the next block before running the primitive.
@@ -319,8 +319,11 @@ Interpreter.prototype.lookupPrim = function(op) {
 Interpreter.prototype.primNoop = function(b) { console.log(b.op); };
 
 Interpreter.prototype.primWait = function(b) {
-    if (interp.activeThread.firstTime) interp.startTimer(interp.numarg(b, 0));
-    else interp.checkTimer();
+    if (interp.activeThread.firstTime) {
+        interp.startTimer(interp.numarg(b, 0));
+    } else {
+        interp.checkTimer();
+    }
 };
 
 Interpreter.prototype.primRepeat = function(b) {
@@ -348,7 +351,9 @@ Interpreter.prototype.broadcast = function(b, waitFlag) {
             }
         }
         runtime.allStacksDo(findReceivers);
-        for (pair in receivers) interp.restartThread(receivers[pair][0], receivers[pair][1]);
+        for (pair in receivers) {
+            interp.restartThread(receivers[pair][0], receivers[pair][1]);
+        }
         if (!waitFlag) return;
         interp.activeThread.tmpObj = receivers;
         interp.activeThread.firstTime = false;

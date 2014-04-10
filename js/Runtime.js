@@ -42,11 +42,11 @@ Runtime.prototype.init = function() {
     this.scene = $('#container');
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext();
-		try{
-	    this.audioGain = this.audioContext.createGain();
-		}catch(err){
-			this.audioGain = this.audioContext.createGainNode();
-		}
+    try {
+        this.audioGain = this.audioContext.createGain();
+    } catch(err) {
+        this.audioGain = this.audioContext.createGainNode();
+    }
     this.audioGain.connect(runtime.audioContext.destination);
 };
 
@@ -120,7 +120,7 @@ Runtime.prototype.allStacksDo = function(f) {
         }
     }
     $.each(stage.stacks, function(index, stack) {
-       f(stack, stage);
+        f(stack, stage);
     });
 };
 
