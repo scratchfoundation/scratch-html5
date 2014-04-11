@@ -1,5 +1,5 @@
 JSCS_PATH = ./node_modules/.bin/jscs
-KARMA_PATH = ./node_modules/.bin/karma
+KARMA_PATH = ./node_modules/karma/bin/karma
 KARMA_CONFIG = ./test/fixtures/karma.conf.js
 
 # Performs code governance (lint + style) test
