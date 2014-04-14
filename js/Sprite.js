@@ -413,9 +413,9 @@ Sprite.prototype.showAsk = function(text) {
     this.askInputTextField.focus();
 
     if (! this.visible || this.isStage) {
-      this.askInput.css('height', '42px');
-      this.askInputHiddenText.css('display', 'inline-block');
-      this.askInputHiddenText.html(text);
+        this.askInput.css('height', '42px');
+        this.askInputHiddenText.css('display', 'inline-block');
+        this.askInputHiddenText.html(text);
     }
 };
 
@@ -439,7 +439,7 @@ Sprite.prototype.persistDoAskInput = function(spriteName) {
 
 Sprite.prototype.bindDoAskButton = function() {
     var self = this;
-    this.askInputButton.on("keypress click", function(e){
+    this.askInputButton.on("keypress click", function(e) {
         var eType = e.type;
         if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
             self.persistDoAskInput(self.objName);
