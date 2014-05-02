@@ -23,7 +23,7 @@
 var Block = function(opAndArgs, optionalSubstack) {
     this.op = opAndArgs[0];
     this.primFcn = interp.lookupPrim(this.op);
-    this.args = opAndArgs.slice(1); // arguments can be either or constants (numbers, boolean strings, etc.) or expressions (Blocks)
+    this.args = opAndArgs.slice(1); // arguments can be either constants (numbers, boolean strings, etc.) or expressions (Blocks)
     this.isLoop = false; // set to true for loop blocks the first time they run
     this.substack = optionalSubstack;
     this.subStack2 = null;
