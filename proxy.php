@@ -6,7 +6,7 @@
 * proxy.php should be removed from the server.
 */
 
-$resource = 'http://scratch.mit.edu/' . $_GET['resource'];
+$resource = 'http://' . (isset($_GET['domain']) ? $_GET['domain'] : 'scratch.mit.edu') . '/' . $_GET['resource'];
 
 // Strip the /get/ suffix for calculating the extension
 // and then get the file extension to pass on to the browser.
