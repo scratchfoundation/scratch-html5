@@ -85,7 +85,7 @@ Primitives.prototype.primModulo = function(b) {
 }
 
 Primitives.prototype.primMathFunction = function(b) {
-    var op = interp.numarg(b, 0);
+    var op = interp.arg(b, 0);
     var n = interp.numarg(b, 1);
     switch(op) {
         case 'abs': return Math.abs(n);
