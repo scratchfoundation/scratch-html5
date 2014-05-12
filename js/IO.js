@@ -28,9 +28,9 @@ var IO = function() {
     // since we won't be hampered by the same-origin policy.
     this.base = 'proxy.php?resource=internalapi/';
     //this.base = 'http://scratch.mit.edu/internalapi/'; // Final base
-    this.project_base = 'proxy.php?domain=projects.scratch.mit.edu&resource=internalapi/project/';
+    this.project_base = 'http://projects.scratch.mit.edu/internalapi/project/';
     this.project_suffix = '/get/';
-    this.asset_base = 'proxy.php?domain=cdn.scratch.mit.edu&resource=internalapi/asset/';
+    this.asset_base = 'http://cdn.scratch.mit.edu/internalapi/asset/';
     this.asset_suffix = '/get/';
     this.soundbank_base = 'soundbank/';
     this.spriteLayerCount = 0;

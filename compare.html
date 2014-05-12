@@ -37,8 +37,7 @@
         };
 
         var flashPlayer = null;
-        //var swf_url = "http://cdn.scratch.mit.edu/scratchr2/static/Scratch.swf";
-        var swf_url = "http://jiggler.media.mit.edu/shanemc/scratchr2/static/Scratch.swf";
+        var swf_url = "http://cdn.scratch.mit.edu/scratchr2/static/Scratch.swf?brkCache="+project_id;
         swfobject.embedSWF(swf_url, "flash-scratch", "482", "402", "10.2.0",
             "http://cdn.scratch.mit.edu/scratchr2/static/expressInstall.swf",
             flashvars, params, null, function(e) {
