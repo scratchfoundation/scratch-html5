@@ -1,37 +1,40 @@
 /* jasmine specs for Scratch.js go here */
 
+var Scratch = require('../../js/Scratch'),
+    Interpreter = require('../../js/Interpreter'),
+    Runtime = require('../../js/Runtime'),
+    IO = require('../../js/IO');
+
 describe('Scratch', function() {
+
+    var project_id = 123456789;
     var scratch;
 
-    beforeEach(function() {
-        spyOn(IO.prototype, "loadProject");
-        spyOn(Runtime.prototype, "init");
-        spyOn(Interpreter.prototype, "initPrims");
-        scratch = Scratch;
-    });
-
     describe('Scratch - Load Project', function() {
-        beforeEach(function() {
-            scratch(project_id);
-        });
+        // Chicken meet Egg. Egg, Chicken.
+        // beforeEach(function() {
+        //     spyOn(io, "loadProject");
+        //     spyOn(runtime, "init");
+        //     spyOn(interp, "initPrims");
+        // });
 
-        it('should call the IO loadProject Method', function() {
-            expect(IO.prototype.loadProject).toHaveBeenCalled();
-        });
+        // it('should call the IO loadProject Method', function() {
+        //     expect(io.loadProject).toHaveBeenCalled();
+        // });
 
-        it('should call the Runtime init method', function() {
-            expect(Runtime.prototype.init).toHaveBeenCalled();
-        });
+        // it('should call the Runtime init method', function() {
+        //     expect(runtime.init).toHaveBeenCalled();
+        // });
 
-        it('should call the Interpreter initPrims method', function() {
-            expect(Interpreter.prototype.initPrims).toHaveBeenCalled();
-        });
+        // it('should call the Interpreter initPrims method', function() {
+        //     expect(interp.initPrims).toHaveBeenCalled();
+        // });
     });
 
-    describe('Scratch - Click Green Flag', function() {
+    describe('Click Green Flag', function() {
         beforeEach(function() {
             setFixtures('<button id=trigger-green-flag tabindex=2></button><div id="overlay"></div>');
-            scratch(project_id);
+            scratch = new Scratch(project_id);
         });
 
         it('should not click on the green flag if the project is loading', function() {
@@ -54,7 +57,7 @@ describe('Scratch', function() {
     describe('Scratch - Click Stop', function() {
         beforeEach(function() {
             setFixtures('<button id=trigger-stop tabindex=3></button>');
-            scratch(project_id);
+            scratch = new Scratch(project_id);
         });
 
         it('should not click on the green flag if the project is loading', function() {

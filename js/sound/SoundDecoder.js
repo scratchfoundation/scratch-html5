@@ -20,6 +20,8 @@
 
 // Based almost entirely on John Maloney's AS implementation.
 
+var WAVFile = require('./WAVFile');
+
 var SoundDecoder = function(wavFileData) {
     this.scratchSound = null;
 
@@ -189,3 +191,4 @@ SoundDecoder.prototype.getSampleADPCM = function() {
     }
 }
 
+module.exports = SoundDecoder;

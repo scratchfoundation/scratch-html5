@@ -15,6 +15,9 @@
 
 'use strict';
 
+var Timer = require('../util/Timer'),
+    LooksPrims = require('./LooksPrims');
+
 var SensingPrims = function() {};
 
 SensingPrims.prototype.addPrimsTo = function(primTable) {
@@ -178,7 +181,7 @@ var stageColorByColorHitTest = function(target, myColor, otherColor) {
 };
 
 SensingPrims.prototype.primDoAsk= function(b) {
-    showBubble(b, "doAsk");
+    LooksPrims.prototype.showBubble("doAsk", b);
     var s = interp.targetSprite();
     if (s !== null) {
         interp.activeThread.paused = true;
@@ -229,11 +232,11 @@ SensingPrims.prototype.primGetAttribute = function(b) {
 
 SensingPrims.prototype.primTimeDate = function(b) {
     var dt = interp.arg(b, 0);
-    var now = new Date();
+    var now = Timer.now();
     if (dt == 'year') return now.getFullYear();
     if (dt == 'month') return now.getMonth()+1;
     if (dt == 'date') return now.getDate();
-    if (dt == 'day of week') return now.getDay()+1;
+    if (dt == 'day of week') return now.getDay();
     if (dt == 'hour') return now.getHours();
     if (dt == 'minute') return now.getMinutes();
     if (dt == 'second') return now.getSeconds();
@@ -241,7 +244,7 @@ SensingPrims.prototype.primTimeDate = function(b) {
 };
 
 SensingPrims.prototype.primTimestamp = function(b) {
-    var now = new Date();
+    var now = Timer.now();
     var epoch = new Date(2000, 0, 1);
     var dst = now.getTimezoneOffset() - epoch.getTimezoneOffset();
     var msSince = now.getTime() - epoch.getTime();
@@ -261,3 +264,5 @@ SensingPrims.prototype.mouseOrSpritePosition = function(arg) {
     }
     return null;
 };
+
+module.exports = SensingPrims;

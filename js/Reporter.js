@@ -211,3 +211,4 @@ List.prototype.updateLayer = function() {
     this.el.css('z-index', this.z);
 };
 
+module.exports = Reporter;

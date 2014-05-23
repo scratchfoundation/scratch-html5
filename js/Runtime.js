@@ -21,6 +21,13 @@
 
 'use strict';
 
+var Thread = require('./Interpreter').Thread,
+    SoundPrims = require('./primitives/SoundPrims'),
+    Instr = require('../soundbank/Instr'),
+    Sprite = require('./Sprite'),
+    Timer = require('./util/Timer'),
+    $ = require('jquery');
+
 var t = new Timer();
 
 var Runtime = function() {
@@ -87,7 +94,7 @@ Runtime.prototype.greenFlag = function() {
 Runtime.prototype.stopAll = function() {
     interp.activeThread = new Thread(null);
     interp.threads = [];
-    stopAllSounds();
+    SoundPrims.stopAllSounds();
     // Hide sprite bubbles, resetFilters and doAsk prompts
     for (var s = 0; s < runtime.sprites.length; s++) {
         if (runtime.sprites[s].hideBubble) runtime.sprites[s].hideBubble();
@@ -231,3 +238,5 @@ Runtime.prototype.reassignZ = function(target, move) {
         newZ++;
     });
 };
+
+module.exports = Runtime;

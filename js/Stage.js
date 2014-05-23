@@ -21,6 +21,9 @@
 
 'use strict';
 
+var Sprite = require('./Sprite'),
+    $ = require('jquery');
+
 var Stage = function(data) {
     // Place the background layer in the very back.
     // The pen layer is right above the stage background,
@@ -69,3 +72,5 @@ Stage.prototype.stroke = function(from, to, width, color) {
     this.lineCache.strokeStyle = 'rgb(' + (color >> 16) + ',' + (color >> 8 & 255) + ',' + (color & 255) + ')';
     this.lineCache.stroke();
 };
+
+module.exports = Stage;

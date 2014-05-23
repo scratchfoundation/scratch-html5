@@ -22,6 +22,13 @@
 
 'use strict';
 
+var LooksPrims = require('./LooksPrims'),
+    MotionAndPenPrims = require('./MotionAndPenPrims'),
+    SensingPrims = require('./SensingPrims'),
+    SoundPrims = require('./SoundPrims'),
+    VarListPrims = require('./VarListPrims');
+
+
 var Primitives = function() {}
 
 Primitives.prototype.addPrimsTo = function(primTable) {
@@ -104,3 +111,4 @@ Primitives.prototype.primMathFunction = function(b) {
     return 0;
 }
 
+module.exports = Primitives;

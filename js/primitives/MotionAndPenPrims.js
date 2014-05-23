@@ -324,3 +324,5 @@ var ensureOnStageOnBounce = function(s) {
         moveSpriteTo(s, s.scratchX, s.scratchY + (r.bottom - 360));
     }
 };
+
+module.exports = MotionAndPenPrims;

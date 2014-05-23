@@ -212,3 +212,5 @@ VarListPrims.prototype.primShowList = function(b) {
         }
     }
 };
+
+module.exports = VarListPrims;

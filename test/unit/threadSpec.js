@@ -1,49 +1,46 @@
 /* jasmine specs for Interpreter.js -> Thread go here */
 
-describe('Thread', function() {
-    var thread;
+var Interpreter = require('../../js/Interpreter');
 
-    beforeEach(function() {
-        thread = Thread;
-    });
+describe('Thread', function() {
 
     describe('Initialized variables', function() {
-        var initThread;
+        var thread;
         beforeEach(function() {
-            initThread = new thread('block', 'target');
+            thread = new Interpreter.Thread('block', 'target');
         });
 
         describe('Thread Variables', function() {
             it('should have a nextBlock variable', function() {
-                expect(initThread.nextBlock).toBe('block');
+                expect(thread.nextBlock).toBe('block');
             });
 
             it('should have a firstBlock variable', function() {
-                expect(initThread.firstBlock).toBe('block');
+                expect(thread.firstBlock).toBe('block');
             });
 
             it('should have a stack variable', function() {
-                expect(initThread.stack).toEqual([]);
+                expect(thread.stack).toEqual([]);
             });
 
             it('should have a target variable', function() {
-                expect(initThread.target).toBe('target');
+                expect(thread.target).toBe('target');
             });
 
             it('should have a tmp variable', function() {
-                expect(initThread.tmp).toBe(null);
+                expect(thread.tmp).toBe(null);
             });
 
             it('should have a tmpObj variable', function() {
-                expect(initThread.tmpObj).toEqual([]);
+                expect(thread.tmpObj).toEqual([]);
             });
 
             it('should have a firstTime variable', function() {
-                expect(initThread.firstTime).toBe(true);
+                expect(thread.firstTime).toBe(true);
             });
 
             it('should have a paused variable', function() {
-                expect(initThread.paused).toBe(false);
+                expect(thread.paused).toBe(false);
             });
         });
     });

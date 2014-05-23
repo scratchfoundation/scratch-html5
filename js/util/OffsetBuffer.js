@@ -79,3 +79,5 @@ OffsetBuffer.prototype.ab2uint = function(buf) {
 OffsetBuffer.prototype.ab2short = function(buf) {
     return new Int16Array(buf)[0];
 };
+
+module.exports = OffsetBuffer;

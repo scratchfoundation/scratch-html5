@@ -211,3 +211,6 @@ SoundPrims.prototype.primVolume = function(b) {
     var s = interp.targetSprite();
     return s != null ? s.volume : 0;
 };
+
+module.exports = SoundPrims;
+module.exports.stopAllSounds = stopAllSounds;
