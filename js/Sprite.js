@@ -255,6 +255,7 @@ Sprite.prototype.onClick = function(evt) {
 
         var idata = ctx.getImageData(mouseX, mouseY, 1, 1).data;
         var alpha = idata[3];
+        document.body.removeChild(canv);
     } else {
         var alpha = 1;
     }
