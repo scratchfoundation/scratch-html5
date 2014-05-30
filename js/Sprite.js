@@ -251,7 +251,6 @@ Sprite.prototype.onClick = function(evt) {
         ctx.scale(scale, scale);
         ctx.translate(-rotationCenterX, -rotationCenterY);
         ctx.drawImage(this.mesh, 0, 0);
-        document.body.appendChild(canv);
 
         var idata = ctx.getImageData(mouseX, mouseY, 1, 1).data;
         var alpha = idata[3];
