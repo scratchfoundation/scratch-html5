@@ -141,7 +141,7 @@ Sprite.prototype.attach = function(scene) {
             scene.append($(sprite.textures[c]));
         })
         .attr({
-            'crossOrigin': 'annonymous',
+            'crossOrigin': 'anonymous',
             'src': io.asset_base + this.costumes[c].baseLayerMD5 + io.asset_suffix
         });
     }
