@@ -28,6 +28,8 @@ var Instr = require('../soundbank/Instr'),
     Stage = require('./Stage'),
     Sprite = require('./Sprite'),
     OffsetBuffer = require('./util/OffsetBuffer'),
+    Reporter = require('./Reporter'),
+    List = Reporter.List,
     $ = require('jquery');
 
 var IO = function() {

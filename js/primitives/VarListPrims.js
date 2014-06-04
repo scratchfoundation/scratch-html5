@@ -96,7 +96,7 @@ VarListPrims.prototype.primShowVar = function(b) {
 // List primitive implementations
 
 // Take a list name and target sprite and return the JS list itself
-function findList(targetSprite, listName) {
+VarListPrims.findList = function(targetSprite, listName) {
     if (targetSprite == null) targetSprite = runtime.stage;
     if (listName in targetSprite.lists) {
         return targetSprite.lists[listName].contents;
@@ -107,7 +107,7 @@ function findList(targetSprite, listName) {
 }
 
 VarListPrims.prototype.primReadList = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 0));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 0));
     if (list) {
         var allOne = list.map(function(val) { return val.length; }).reduce(function(old,val) { return old + val; }, 0) === list.length;
         return list.join(allOne ? '' : ' ');
@@ -115,12 +115,12 @@ VarListPrims.prototype.primReadList = function(b) {
 };
 
 VarListPrims.prototype.primListAppend = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 1));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 1));
     if (list) list.push(interp.arg(b, 0));
 };
 
 VarListPrims.prototype.primListDeleteLine = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 1));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 1));
     if (!list) return;
     var line = interp.arg(b, 0);
     if (line == 'all' || list.length == 0) {
@@ -133,7 +133,7 @@ VarListPrims.prototype.primListDeleteLine = function(b) {
 };
 
 VarListPrims.prototype.primListInsertAt = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 2));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 2));
     if (!list) return;
     var newItem = interp.arg(b, 0);
 
@@ -151,7 +151,7 @@ VarListPrims.prototype.primListInsertAt = function(b) {
 };
 
 VarListPrims.prototype.primListSetLine = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 1));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 1));
     if (!list) return;
     var newItem = interp.arg(b, 2);
     var position = interp.arg(b, 0);
@@ -169,13 +169,13 @@ VarListPrims.prototype.primListSetLine = function(b) {
 };
 
 VarListPrims.prototype.primListLength = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 0));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 0));
     if (!list) return 0;
     return list.length;
 };
 
 VarListPrims.prototype.primListGetLine = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 1));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 1));
     if (!list) return 0;
     var line = interp.arg(b, 0);
     if (list.length == 0) return 0;
@@ -186,7 +186,7 @@ VarListPrims.prototype.primListGetLine = function(b) {
 };
 
 VarListPrims.prototype.primListContains = function(b) {
-    var list = findList(interp.targetSprite(), interp.arg(b, 0));
+    var list = VarListPrims.findList(interp.targetSprite(), interp.arg(b, 0));
     if (!list) return 0;
     var searchItem = interp.arg(b, 1);
     if (parseFloat(searchItem) == searchItem) searchItem = parseFloat(searchItem);
