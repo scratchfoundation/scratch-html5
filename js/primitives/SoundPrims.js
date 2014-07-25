@@ -39,7 +39,7 @@ SoundPrims.prototype.addPrimsTo = function(primTable) {
 var playSound = function(snd) {
     if (snd.source) {
         // If this particular sound is already playing, stop it.
-        snd.source.noteOff(0);
+        snd.source.disconnect();
         snd.source = null;
     }
 
@@ -62,7 +62,7 @@ var playSound = function(snd) {
     window.setTimeout(snd.source.finished, snd.buffer.duration * 1000);
     // Add the global list of playing sounds and start playing.
     runtime.audioPlaying.push(snd);
-    snd.source.noteOn(0);
+    snd.source.start();
     return snd.source;
 };
 
@@ -108,7 +108,7 @@ var stopAllSounds = function() {
     runtime.audioPlaying = [];
     for (var s = 0; s < oldPlaying.length; s++) {
         if (oldPlaying[s].source) {
-            oldPlaying[s].source.noteOff(0);
+            oldPlaying[s].source.disconnect();
             oldPlaying[s].source.finished();
         }
     }
