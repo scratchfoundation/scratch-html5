@@ -532,15 +532,19 @@ Sprite.prototype.updateCachedPenColor = function() {
 };
 
 Sprite.prototype.stamp = function(canvas, opacity) {
-    var drawWidth = this.textures[this.currentCostumeIndex].width * this.scale;
-    var drawHeight = this.textures[this.currentCostumeIndex].height * this.scale;
+    var resolution = this.costumes[this.currentCostumeIndex].bitmapResolution || 1;
+    var drawWidth = this.textures[this.currentCostumeIndex].width;
+    var drawHeight = this.textures[this.currentCostumeIndex].height;
     var drawX = this.scratchX + (480 / 2);
     var drawY = -this.scratchY + (360 / 2);
+    var rotationCenterX = this.costumes[this.currentCostumeIndex].rotationCenterX;
+    var rotationCenterY = this.costumes[this.currentCostumeIndex].rotationCenterY;
     canvas.globalAlpha = opacity / 100.0;
     canvas.save();
     canvas.translate(drawX, drawY);
+    canvas.scale(this.scale / resolution, this.scale / resolution);
     canvas.rotate(this.rotation * Math.PI / 180.0);
-    canvas.drawImage(this.mesh, -drawWidth/2, -drawHeight/2, drawWidth, drawHeight);
+    canvas.drawImage(this.mesh, -rotationCenterX, -rotationCenterY, drawWidth, drawHeight);
     canvas.restore();
     canvas.globalAlpha = 1;
 };
