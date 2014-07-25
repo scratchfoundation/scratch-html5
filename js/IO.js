@@ -112,7 +112,7 @@ IO.prototype.makeObjects = function() {
             }
             return newSprite;
         }
-        if (obj.objName) { // sprite
+        if (typeof(obj.objName) === "string") { // sprite
             newSprite = createSprite(obj);
             sprite = newSprite;
         } else {
