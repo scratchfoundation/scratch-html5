@@ -439,6 +439,10 @@ Interpreter.prototype.stopScripts = function(b) {
                 }
             }
             break;
+        case "all":
+            interp.activeThread = new Thread(null);
+            interp.threads = [];
+            break;
         default:
             console.log("stopScripts hasn't implemented: " + target);
             break;
