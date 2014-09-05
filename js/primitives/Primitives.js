@@ -100,6 +100,8 @@ Primitives.prototype.primMathFunction = function(b) {
         case 'log': return Math.log(n) / Math.LN10;
         case 'e ^': return Math.exp(n);
         case '10 ^': return Math.exp(n * Math.LN10);
+        case 'floor': return Math.floor(n);
+        case 'ceiling': return Math.ceil(n);
     }
     return 0;
 }
