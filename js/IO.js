@@ -24,10 +24,6 @@
 
 var IO = function() {
     this.data = null;
-    // In production, simply use the local path (no proxy)
-    // since we won't be hampered by the same-origin policy.
-    this.base = 'proxy.php?resource=internalapi/';
-    //this.base = 'http://scratch.mit.edu/internalapi/'; // Final base
     this.project_base = 'http://projects.scratch.mit.edu/internalapi/project/';
     this.project_suffix = '/get/';
     this.asset_base = 'http://cdn.scratch.mit.edu/internalapi/asset/';
