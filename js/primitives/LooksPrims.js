@@ -43,10 +43,10 @@ LooksPrims.prototype.addPrimsTo = function(primTable) {
     primTable['setGraphicEffect:to:']    = this.primSetEffect;
     primTable['filterReset']             = this.primClearEffects;
 
-    primTable['say:'] = function(b) { showBubble(b, 'say'); };
-    primTable['say:duration:elapsed:from:'] = function(b) { showBubbleAndWait(b, 'say'); };
-    primTable['think:'] = function(b) { showBubble(b, 'think'); };
-    primTable['think:duration:elapsed:from:'] = function(b) { showBubbleAndWait(b, 'think'); };
+    primTable['say:'] = this.showBubble.bind(this, 'say');
+    primTable['say:duration:elapsed:from:'] = this.showBubbleAndWait.bind(this, 'say');
+    primTable['think:'] = this.showBubble.bind(this, 'think');
+    primTable['think:duration:elapsed:from:'] = this.showBubbleAndWait.bind(this, 'think');
 };
 
 LooksPrims.prototype.primShow = function(b) {
@@ -170,12 +170,12 @@ LooksPrims.prototype.primClearEffects = function(b) {
     s.updateFilters();
 };
 
-var showBubble = function(b, type) {
+LooksPrims.prototype.showBubble = function(type, b) {
     var s = interp.targetSprite();
     if (s !== null) s.showBubble(interp.arg(b, 0), type);
 };
 
-var showBubbleAndWait = function(b, type) {
+LooksPrims.prototype.showBubbleAndWait = function(type, b) {
     var s = interp.targetSprite();
     if (s === null) return;
     if (interp.activeThread.firstTime) {
@@ -188,3 +188,5 @@ var showBubbleAndWait = function(b, type) {
         if (interp.checkTimer()) s.hideBubble();
     }
 };
+
+module.exports = LooksPrims;

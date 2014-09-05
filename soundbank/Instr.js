@@ -106,3 +106,5 @@ Instr.wavs = {
 };
 
 Instr.wavCount = Object.keys(Instr.wavs).length;
+
+module.exports = Instr;

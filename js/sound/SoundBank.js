@@ -19,6 +19,8 @@
 //
 // A collection of instrument and drum resources to support the note and drum commands.
 
+var NotePlayer = require('./NotePlayer');
+
 var SoundBank = function() {};
 
 // -----------------------------
@@ -233,3 +235,5 @@ SoundBank.getDrumPlayer = function(drumNum, secs) {
     player.setNoteAndDuration(60 + entry[1], 0);
     return player;
 };
+
+module.exports = SoundBank;

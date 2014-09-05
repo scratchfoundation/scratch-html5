@@ -3,18 +3,21 @@
   "description": "HTML 5 based Scratch project player",
   "repository": "https://github.com/LLK/scratch-html5",
   "scripts": {
-    "postinstall": "curl http://code.jquery.com/jquery-1.11.0.min.js > ./test/lib/jquery-1.11.0.min.js",
     "test": "make test"
   },
   "engines": {
     "node": ">=0.10"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "^2.1.1"
+  },
   "devDependencies": {
+    "browserify": "^4.1.5",
     "jasmine-jquery": "~1.3.3",
     "jscs": "~1.3.0",
     "karma": "~0.10",
+    "karma-browserify": "^0.2.1",
     "karma-html2js-preprocessor": "~0.1.0",
-    "underscore": "~1.6.0"
+    "watchify": "^0.10.2"
   }
 }

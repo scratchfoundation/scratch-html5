@@ -10,16 +10,6 @@
 <link rel=stylesheet href=player.css>
 <link rel=stylesheet href=index.css>
 
-<script src=//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js></script>
-
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
-    var scratch = new Scratch(project_id);
-  });
-</script>
-
 <div id=player-container>
     <div class="arrow vertical" id=up></div>
     <div class="arrow vertical" id=down></div>
@@ -50,26 +40,10 @@
 <h1>Scratch HTML5 player</h1>
 <p>The Scratch HTML5 player is still in development. Feedback is welcome! Please report any bugs (or differences from the Flash player) <a href=https://github.com/LLK/scratch-html5>on Github</a>.</p>
 
-<script src=js/util/Timer.js></script>
-<script src=js/util/OffsetBuffer.js></script>
-<script src=js/util/Color.js></script>
-<script src=js/util/Rectangle.js></script>
-<script src=js/Sprite.js></script>
-<script src=js/Reporter.js></script>
-<script src=js/Stage.js></script>
-<script src=js/sound/WAVFile.js></script>
-<script src=js/sound/SoundDecoder.js></script>
-<script src=js/sound/SoundBank.js></script>
-<script src=js/sound/NotePlayer.js></script>
-<script src=soundbank/Instr.js></script>
-<script src=js/IO.js></script>
-<script src=js/primitives/VarListPrims.js></script>
-<script src=js/primitives/MotionAndPenPrims.js></script>
-<script src=js/primitives/LooksPrims.js></script>
-<script src=js/primitives/SensingPrims.js></script>
-<script src=js/primitives/SoundPrims.js></script>
-<script src=js/primitives/Primitives.js></script>
-<script src=js/Interpreter.js></script>
-<script src=js/Runtime.js></script>
-<!-- <script src=js/Scratch.js></script> -->
-<script type="text/JavaScript" src="js/Scratch.js"></script> 
+<script type="text/JavaScript" src="Scratch.js"></script>
+<script type="text/javascript">
+  (function() {
+    var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
+    new Scratch(project_id);
+  }());
+</script>

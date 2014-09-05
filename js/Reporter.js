@@ -15,6 +15,9 @@
 
 'use strict';
 
+var $ = require('jquery'),
+    VarListPrims = require('./primitives/VarListPrims');
+
 var Reporter = function(data) {
     this.cmd = data.cmd;
     this.color = data.color;
@@ -191,7 +194,7 @@ List.prototype.attach = function(scene) {
 };
 
 List.prototype.update = function() {
-    this.contents = findList(runtime.spriteNamed(this.target),this.listName);
+    this.contents = VarListPrims.findList(runtime.spriteNamed(this.target),this.listName);
 
     this.el.css('display', this.visible ? 'inline-block' : 'none');
     if (!this.visible) return;
@@ -211,3 +214,5 @@ List.prototype.updateLayer = function() {
     this.el.css('z-index', this.z);
 };
 
+module.exports = Reporter;
+module.exports.List = List;

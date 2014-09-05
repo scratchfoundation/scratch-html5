@@ -24,7 +24,7 @@ var Timer = function() {
 };
 
 Timer.prototype.time = function() {
-    return Date.now();
+    return Timer.now();
 };
 
 Timer.prototype.start = function() {
@@ -58,3 +58,12 @@ Timer.prototype.print = function(element) {
         console.log(text);
     }
 };
+
+/**
+ * Utility to allow current Date to be overriden in tests.
+ */
+Timer.now = function() {
+    return new Date();
+};
+
+module.exports = Timer;

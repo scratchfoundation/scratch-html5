@@ -20,6 +20,9 @@
 
 'use strict';
 
+var Primitives = require('./primitives/Primitives'),
+    Timer = require('./util/Timer');
+
 var Block = function(opAndArgs, optionalSubstack) {
     this.op = opAndArgs[0];
     this.primFcn = interp.lookupPrim(this.op);
@@ -373,7 +376,7 @@ Interpreter.prototype.broadcast = function(b, waitFlag) {
 };
 
 Interpreter.prototype.isRunning = function(b) {
-    for (t in interp.threads) {
+    for (var t in interp.threads) {
         if (interp.threads[t].firstBlock == b) {
             return true;
         }
@@ -391,3 +394,7 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
         this.activeThread.nextBlock = b.substack2;
     }
 };
+
+module.exports = Interpreter;
+module.exports.Thread = Thread;
+module.exports.Block = Block;

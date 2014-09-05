@@ -87,3 +87,5 @@ Color.random = function() {
     var v = 0.6 + (0.4 * Math.random());
     return Color.fromHSV(h, s, v);
 };
+
+module.exports = Color;

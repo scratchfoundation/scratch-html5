@@ -17,6 +17,8 @@
 // Utility class for reading and decoding WAV file metadata
 // Based directly on John Maloney's AS version for the Scratch Flash Player
 
+var OffsetBuffer = require('../util/OffsetBuffer');
+
 var WAVFile = function() {};
 
 WAVFile.decode = function(waveData) {
@@ -108,3 +110,5 @@ WAVFile.dataChunkStartAndSize = function(data) {
     }
     return [0, 0]; // chunk not found; bad wave file
 };
+
+module.exports = WAVFile;

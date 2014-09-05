@@ -22,9 +22,14 @@
 
 'use strict';
 
-var runtime, interp, io, iosAudioActive = false;
+var Interpreter = require('./Interpreter'),
+    Runtime = require('./Runtime'),
+    IO = require('./IO'),
+    $ = require('jquery');
+
+var iosAudioActive = false;
 function Scratch(project_id) {
-    runtime = new Runtime();
+    global.runtime = new Runtime();
     runtime.init();
 
     $(window).keydown(function(e) {
@@ -145,10 +150,12 @@ function Scratch(project_id) {
     $('#down').bind('touchend', function(e) { delete runtime.keysDown[40]; });
 
     // Load the interpreter and primitives
-    interp = new Interpreter();
+    global.interp = new Interpreter();
     interp.initPrims();
 
     // Load the requested project and go!
-    io = new IO();
+    global.io = new IO();
     io.loadProject(project_id);
 };
+
+module.exports = Scratch;

@@ -24,6 +24,13 @@ PHP so that the `proxy.php` file can be used to load assets from the same domain
 
 See the file `TESTING.md` for more details.
 
+To run the app, you'll need to run the following -
+
+```bash
+make build
+```
+
+This creates a single bundle file ```Scratch.js``` containing all the resolved dependencies of ```js/Scratch```, exposing it as a global ```window.Scratch``` and containing source maps for easy debugging.
 
 Unit Tests
 ----------
