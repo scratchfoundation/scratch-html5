@@ -29,7 +29,20 @@ var Block = function(opAndArgs, optionalSubstack) {
     this.subStack2 = null;
     this.nextBlock = null;
     this.tmp = -1;
+    // used in procedure blocks and call blocks
+    // in procedure blocks it's a map of parameter name to array [position, default value]
+    // in call blocks it's a map of parameter name to evaluated value
+    this.namedParams = {};
+    this.asyncFlag = false; // used in procedure hats
     interp.fixArgs(this);
+};
+
+Block.copyBlock = function (srcBlock) {
+    var dstBlock = new Block([srcBlock.op]);
+    ['primFcn', 'args', 'isLoop', 'substack', 'subStack2', 'nextBlock', 'tmp', 'namedParams', 'asyncFlag'].forEach(function (property) {
+        dstBlock[property] = srcBlock[property];
+    });
+    return dstBlock;
 };
 
 var Thread = function(block, target) {
@@ -306,6 +319,11 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['timerReset'] = function(b) { interp.timerBase = Date.now(); };
     this.primitiveTable['timer'] = function(b) { return (Date.now() - interp.timerBase) / 1000; };
 
+    // procedure primatives
+    this.primitiveTable['procDef']             = this.primProcDef;
+    this.primitiveTable["getParam"]            = this.primGetParam;
+    this.primitiveTable['call']                = this.primCall;
+
     new Primitives().addPrimsTo(this.primitiveTable);
 };
 
@@ -390,4 +408,67 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
     } else {
         this.activeThread.nextBlock = b.substack2;
     }
+};
+
+Interpreter.prototype.primProcDef = function (b) {
+    var namedParams = b.args.slice(1); // proc name was 0, and async flag is last
+    b.asyncFlag = namedParams.pop();
+    var i;
+    for (i = 0; i < namedParams.length; i += 2) {
+        b.namedParams[namedParams[i].op] = [i / 2, namedParams[i + 1].op];
+    }
+};
+
+Interpreter.prototype.primGetParam = function (b) {
+    // the last call block on the stack is the one with the parameters
+    var callBlock;
+    for (var i = interp.activeThread.stack.length - 1; i >= 0; i--) {
+        if (interp.activeThread.stack[i].op === 'call') {
+            callBlock = interp.activeThread.stack[i];
+            break;
+        }
+    }
+    if (!callBlock) {
+        console.log('failed to find a callBlock to get parameters from');
+        return;
+    }
+
+    var paramName = interp.arg(b, 0);
+
+    if (!callBlock.namedParams.hasOwnProperty(paramName)) {
+        console.log('got getParam block missing parameter name', paramName);
+        return;
+    }
+
+    return callBlock.namedParams[paramName];
+};
+
+Interpreter.prototype.primCall = function (b) {
+    // first make a copy of the block (so recursive calls can evaluate
+    // parameters as different values)
+    b = Block.copyBlock(b);
+
+    var procedure = interp.targetSprite().procedures[interp.arg(b, 0)];
+    // any parameterss for the procedure will be in the block at the top of
+    // the stack, but if there are any blocks as parameters, we need to
+    // evaluate them now, and save the values in place in the call block
+
+    var paramNames = Object.keys(procedure.namedParams);
+    var args = b.args.slice(1);
+
+    paramNames.forEach(function (paramName) {
+        var i = procedure.namedParams[paramName][0];
+        // searching for paramName
+        if (i < args.length) {
+            b.namedParams[paramName] = interp.arg(b, i + 1);
+        } else {
+            b.namedParams[paramName] = procedure.namedParams[paramName][1];
+        }
+    });
+
+    // push the copy block onto the stack, so when the call returns we can continue
+    interp.activeThread.stack.push(b);
+
+    // jump to the procedure, should probably check args first
+    interp.activeThread.nextBlock = procedure;
 };

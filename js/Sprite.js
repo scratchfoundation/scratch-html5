@@ -111,6 +111,9 @@ var Sprite = function(data) {
 
     // Stacks to be pushed to the interpreter and run
     this.stacks = [];
+
+    // Procedures by name
+    this.procedures = {};
 };
 
 // Attaches a Sprite (<img>) to a Scratch scene

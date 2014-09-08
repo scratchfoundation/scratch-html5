@@ -105,4 +105,3 @@ Primitives.prototype.primMathFunction = function(b) {
     }
     return 0;
 }
-

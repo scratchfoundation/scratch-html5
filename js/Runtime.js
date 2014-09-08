@@ -70,6 +70,13 @@ Runtime.prototype.loadStart = function() {
         setTimeout(function(runtime) { runtime.loadStart(); }, 50, this);
         return;
     }
+    runtime.allStacksDo(function (stack, target) {
+        if (stack.op === 'procDef') {
+            target.procedures[stack.args[0]] = stack;
+            stack.primFcn(stack); // initialize parameters
+        }
+    });
+
     $('#preloader').css('display', 'none');
     setInterval(this.step, 33);
     this.projectLoaded = true;
