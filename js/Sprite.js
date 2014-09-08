@@ -234,31 +234,30 @@ Sprite.prototype.onClick = function(evt) {
     var mouseX = runtime.mousePos[0] + 240;
     var mouseY = 180 - runtime.mousePos[1];
 
-    if (this.mesh.src.indexOf('.svg') == -1) {
-        // HACK - if the image SRC doesn't indicate it's an SVG,
-        // then we'll try to detect if the point we clicked is transparent
-        // by rendering the sprite on a canvas.  With an SVG,
-        // we are forced not to do this for now by Chrome/Webkit SOP:
-        // http://code.google.com/p/chromium/issues/detail?id=68568
-        var canv = document.createElement('canvas');
-        canv.width = 480;
-        canv.height = 360;
-        var ctx = canv.getContext('2d');
-        var drawWidth = this.textures[this.currentCostumeIndex].width;
-        var drawHeight = this.textures[this.currentCostumeIndex].height;
-        var scale = this.scale / (this.costumes[this.currentCostumeIndex].bitmapResolution || 1);
-        var rotationCenterX = this.costumes[this.currentCostumeIndex].rotationCenterX;
-        var rotationCenterY = this.costumes[this.currentCostumeIndex].rotationCenterY;
-        ctx.translate(240 + this.scratchX, 180 - this.scratchY);
-        ctx.rotate(this.rotation * Math.PI / 180.0);
-        ctx.scale(scale, scale);
-        ctx.translate(-rotationCenterX, -rotationCenterY);
-        ctx.drawImage(this.mesh, 0, 0);
+    var canv = document.createElement('canvas');
+    canv.width = 480;
+    canv.height = 360;
+    var ctx = canv.getContext('2d');
+    var drawWidth = this.textures[this.currentCostumeIndex].width;
+    var drawHeight = this.textures[this.currentCostumeIndex].height;
+    var scale = this.scale / (this.costumes[this.currentCostumeIndex].bitmapResolution || 1);
+    var rotationCenterX = this.costumes[this.currentCostumeIndex].rotationCenterX;
+    var rotationCenterY = this.costumes[this.currentCostumeIndex].rotationCenterY;
+    ctx.translate(240 + this.scratchX, 180 - this.scratchY);
+    ctx.rotate(this.rotation * Math.PI / 180.0);
+    ctx.scale(scale, scale);
+    ctx.translate(-rotationCenterX, -rotationCenterY);
+    ctx.drawImage(this.mesh, 0, 0);
 
+    var alpha;
+    try {
         var idata = ctx.getImageData(mouseX, mouseY, 1, 1).data;
-        var alpha = idata[3];
-    } else {
-        var alpha = 1;
+        alpha = idata[3];
+    } catch (e) {
+        // as of 2014-09-06, WebKit/Safari still throws a security exception trying to read
+        // image data from a canvas after any svg has been draw to it. Version 7.0.6 (9537.78.2)
+        // WebKit-nightly (SVN-r173347) does not have this issue.
+        alpha = 1;
     }
 
     if (alpha > 0) {
