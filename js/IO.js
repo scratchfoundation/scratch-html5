@@ -24,9 +24,9 @@
 
 var IO = function() {
     this.data = null;
-    this.project_base = 'http://projects.scratch.mit.edu/internalapi/project/';
+    this.project_base = 'http://cdn.projects.scratch.mit.edu/internalapi/project/';
     this.project_suffix = '/get/';
-    this.asset_base = 'http://cdn.scratch.mit.edu/internalapi/asset/';
+    this.asset_base = 'http://cdn.assets.scratch.mit.edu/internalapi/asset/';
     this.asset_suffix = '/get/';
     this.soundbank_base = 'soundbank/';
     this.spriteLayerCount = 0;
