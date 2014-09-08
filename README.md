@@ -19,8 +19,7 @@ Thank you for your interest in helping out with the Scratch HTML5 Player.  [@scl
 
 ## Installation
 
-Running the HTML5 player on your own website, or locally, you will need to have
-PHP so that the `proxy.php` file can be used to load assets from the same domain.  This is done to be compatible with Javascript security models in today's browsers.  To test the HTML5 player against the Flash player you can use the compare.html web page.
+Special headers are sent on the Scratch asset servers to allow for cross-origin image manipulation.  A proxy is no longer needed provided you are using projects hosted on the Scratch website.  This is compatible with Javascript security models in today's browsers.  See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) for more information.  To test the HTML5 player against the Flash player you can use the compare.html web page.
 
 See the file `TESTING.md` for more details.
 
