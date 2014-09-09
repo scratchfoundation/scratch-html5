@@ -34,34 +34,93 @@ var IO = function() {
     this.asset_suffix = '/get/';
     this.soundbank_base = 'soundbank/';
     this.spriteLayerCount = 0;
+    this.zip = null;       // if loaded locally from a sb2 file
+};
+
+IO.prototype.initProject = function() {
+    this.makeObjects();
+    this.loadThreads();
+    this.loadNotesDrums();
+    runtime.loadStart(); // Try to run the project.
 };
 
 IO.prototype.loadProject = function(project_id) {
     var self = this;
     $.getJSON(this.project_base + project_id + this.project_suffix, function(data) {
         self.data = data;
-        self.makeObjects();
-        self.loadThreads();
-        self.loadNotesDrums();
-        runtime.loadStart(); // Try to run the project.
+        self.initProject();
+    });
+};
+
+IO.prototype.loadProjectFromFile = function(file_obj) {
+    var self = this;
+    var reader = new FileReader();
+    reader.onload = function (load_event) {
+        var loaded = false;
+        try {
+            self.zip = new JSZip(load_event.target.result);
+            $.each(self.zip.files, function (index, zip_entry) {
+                if (loaded) {
+                    return;
+                }
+                if (zip_entry.name === 'project.json') {
+                    try {
+                        self.data = JSON.parse(zip_entry.asText());
+                    } catch (err) {
+                        console.log('invalid JSON in package.json', err);
+                        return;
+                    }
+                    loaded = true;
+                    self.initProject();
+                }
+            });
+        } catch (err) {
+            console.log('error loading file', file_obj.name, err);
+            return;
+        }
+    };
+    reader.readAsArrayBuffer(file_obj);
+};
+
+IO.prototype.processSoundData = function (sound, soundData, sprite) {
+    // Decode the waveData and populate a buffer channel with the samples
+    var snd = new SoundDecoder(soundData);
+    var samples = snd.getAllSamples();
+    sound.buffer = runtime.audioContext.createBuffer(1, samples.length, runtime.audioContext.sampleRate);
+    var data = sound.buffer.getChannelData(0);
+    for (var i = 0; i < data.length; i++) {
+        data[i] = samples[i];
+    }
+    sprite.soundsLoaded++;
+};
+
+IO.prototype.loadSoundFromZip = function (sound, sprite) {
+    var self = this;
+    var extension = sound.md5.substr(-4);
+    var name = sound.soundID.toString() + extension;
+    var found = false;
+    $.each(self.zip.files, function (index, zip_entry) {
+        if (found) {
+            return;
+        }
+        if (zip_entry.name === name) {
+            found = true;
+            self.processSoundData(sound, zip_entry.asArrayBuffer(), sprite);
+        }
     });
 };
 
 IO.prototype.soundRequest = function(sound, sprite) {
+    var self = this;
+    if (self.zip) {
+        return self.loadSoundFromZip(sound, sprite);
+    }
     var request = new XMLHttpRequest();
-    request.open('GET', this.asset_base + sound['md5'] + this.asset_suffix, true);
+    request.open('GET', self.asset_base + sound['md5'] + self.asset_suffix, true);
     request.responseType = 'arraybuffer';
     request.onload = function() {
         var waveData = request.response;
-        // Decode the waveData and populate a buffer channel with the samples
-        var snd = new SoundDecoder(waveData);
-        var samples = snd.getAllSamples();
-        sound.buffer = runtime.audioContext.createBuffer(1, samples.length, runtime.audioContext.sampleRate);
-        var data = sound.buffer.getChannelData(0);
-        for (var i = 0; i < data.length; i++) {
-            data[i] = samples[i];
-        }
-        sprite.soundsLoaded++;
+        self.processSoundData(sound, waveData, sprite);
     };
     request.send();
 };
@@ -157,4 +216,34 @@ IO.prototype.getCount = function() {
     var rv = this.spriteLayerCount;
     this.spriteLayerCount++;
     return rv;
+};
+
+IO.prototype.getCostumeUrl = function (costume) {
+    if (!this.zip) {
+        return this.asset_base + costume.baseLayerMD5 + this.asset_suffix;
+    }
+    // get the file as a data url
+    var base64;
+    var extension = costume.baseLayerMD5.substr(-4);
+    var file = costume.baseLayerID.toString() + extension;
+    $.each(this.zip.files, function (index, zip_entry) {
+        if (base64) {
+            return;
+        }
+        if (zip_entry.name === file) {
+            base64 = JSZip.base64.encode(zip_entry.asBinary());
+        }
+    });
+    if (!base64) {
+        console.log('failed to convert costume to base64');
+        return '';
+    }
+    if (extension === '.png') {
+        return 'data:image/png;base64,' + base64;
+    }
+    if (extension === '.svg') {
+        return 'data:image/svg+xml;base64,' + base64;
+    }
+    console.log('unknown extension:', extension);
+    return '';
 };

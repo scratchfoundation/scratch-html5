@@ -142,7 +142,7 @@ Sprite.prototype.attach = function(scene) {
         })
         .attr({
             'crossOrigin': 'anonymous',
-            'src': io.asset_base + this.costumes[c].baseLayerMD5 + io.asset_suffix
+            'src': io.getCostumeUrl(this.costumes[c]) // this will either be a remote
         });
     }
 
