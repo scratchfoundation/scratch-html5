@@ -52,20 +52,20 @@ IO.prototype.loadProject = function(project_id) {
     });
 };
 
-IO.prototype.loadProjectFromFile = function(file_obj) {
+IO.prototype.loadProjectFromFile = function(fileObj) {
     var self = this;
     var reader = new FileReader();
     reader.onload = function (load_event) {
         var loaded = false;
         try {
             self.zip = new JSZip(load_event.target.result);
-            $.each(self.zip.files, function (index, zip_entry) {
+            $.each(self.zip.files, function (index, zipEntry) {
                 if (loaded) {
                     return;
                 }
-                if (zip_entry.name === 'project.json') {
+                if (zipEntry.name === 'project.json') {
                     try {
-                        self.data = JSON.parse(zip_entry.asText());
+                        self.data = JSON.parse(zipEntry.asText());
                     } catch (err) {
                         console.log('invalid JSON in package.json', err);
                         return;
@@ -75,11 +75,11 @@ IO.prototype.loadProjectFromFile = function(file_obj) {
                 }
             });
         } catch (err) {
-            console.log('error loading file', file_obj.name, err);
+            console.log('error loading file', fileObj.name, err);
             return;
         }
     };
-    reader.readAsArrayBuffer(file_obj);
+    reader.readAsArrayBuffer(fileObj);
 };
 
 IO.prototype.processSoundData = function (sound, soundData, sprite) {
@@ -99,29 +99,28 @@ IO.prototype.loadSoundFromZip = function (sound, sprite) {
     var extension = sound.md5.substr(-4);
     var name = sound.soundID.toString() + extension;
     var found = false;
-    $.each(self.zip.files, function (index, zip_entry) {
+    $.each(self.zip.files, function (index, zipEntry) {
         if (found) {
             return;
         }
-        if (zip_entry.name === name) {
+        if (zipEntry.name === name) {
             found = true;
-            self.processSoundData(sound, zip_entry.asArrayBuffer(), sprite);
+            self.processSoundData(sound, zipEntry.asArrayBuffer(), sprite);
         }
     });
 };
 
 IO.prototype.soundRequest = function(sound, sprite) {
-    var self = this;
-    if (self.zip) {
-        return self.loadSoundFromZip(sound, sprite);
+    if (this.zip) {
+        return this.loadSoundFromZip(sound, sprite);
     }
     var request = new XMLHttpRequest();
-    request.open('GET', self.asset_base + sound['md5'] + self.asset_suffix, true);
+    request.open('GET', this.asset_base + sound['md5'] + this.asset_suffix, true);
     request.responseType = 'arraybuffer';
     request.onload = function() {
         var waveData = request.response;
-        self.processSoundData(sound, waveData, sprite);
-    };
+        this.processSoundData(sound, waveData, sprite);
+    }.bind(this);
     request.send();
 };
 
@@ -226,12 +225,12 @@ IO.prototype.getCostumeUrl = function (costume) {
     var base64;
     var extension = costume.baseLayerMD5.substr(-4);
     var file = costume.baseLayerID.toString() + extension;
-    $.each(this.zip.files, function (index, zip_entry) {
+    $.each(this.zip.files, function (index, zipEntry) {
         if (base64) {
             return;
         }
-        if (zip_entry.name === file) {
-            base64 = JSZip.base64.encode(zip_entry.asBinary());
+        if (zipEntry.name === file) {
+            base64 = JSZip.base64.encode(zipEntry.asBinary());
         }
     });
     if (!base64) {

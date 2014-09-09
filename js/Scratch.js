@@ -23,7 +23,7 @@
 'use strict';
 
 var runtime, interp, io, iosAudioActive = false;
-function Scratch(project_id_or_file) {
+function Scratch(projectIdOrFile) {
     runtime = new Runtime();
     runtime.init();
 
@@ -40,13 +40,13 @@ function Scratch(project_id_or_file) {
     var address = $('#address-hint');
     var project = $('#project-id');
 
-    if (typeof project_id_or_file === 'string') {
-        project_id = project_id_or_file;
+    if (typeof projectIdOrFile === 'string') {
+        project_id = projectIdOrFile;
 
         // Update the project ID field
         project.val(project_id);
     } else {
-        project.val(project_id_or_file.name);
+        project.val(projectIdOrFile.name);
     }
 
     // Validate project ID field
@@ -160,7 +160,7 @@ function Scratch(project_id_or_file) {
     if (project_id) {
         io.loadProject(project_id);
     } else {
-        console.log('loading', project_id_or_file.name);
-        io.loadProjectFromFile(project_id_or_file);
+        console.log('loading', projectIdOrFile.name);
+        io.loadProjectFromFile(projectIdOrFile);
     }
 };
