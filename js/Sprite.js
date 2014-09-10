@@ -39,7 +39,7 @@ var Sprite = function(data) {
     this.rotationStyle = data.rotationStyle || 'normal';
     this.isFlipped = data.direction < 0 && data.rotationStyle == 'leftRight';
     this.costumes = data.costumes || [];
-    this.currentCostumeIndex = data.currentCostumeIndex || 0;
+    this.currentCostumeIndex = Math.floor(data.currentCostumeIndex) || 0;
     this.previousCostumeIndex = -1;
 
     this.objName = data.objName || '';
