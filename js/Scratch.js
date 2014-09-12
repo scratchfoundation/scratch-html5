@@ -113,7 +113,7 @@ function Scratch(project_id) {
             var isource = runtime.audioContext.createBufferSource();
             isource.buffer = ibuffer;
             isource.connect(runtime.audioContext.destination);
-            isource.noteOn(0);
+            isource.start();
             iosAudioActive = true;
         }
     });

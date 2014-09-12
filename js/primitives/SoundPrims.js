@@ -39,7 +39,7 @@ SoundPrims.prototype.addPrimsTo = function(primTable) {
 var playSound = function(snd) {
     if (snd.source) {
         // If this particular sound is already playing, stop it.
-        snd.source.stop();
+        snd.source.disconnect();
         snd.source = null;
     }
 
@@ -108,7 +108,7 @@ var stopAllSounds = function() {
     runtime.audioPlaying = [];
     for (var s = 0; s < oldPlaying.length; s++) {
         if (oldPlaying[s].source) {
-            oldPlaying[s].source.noteOff(0);
+            oldPlaying[s].source.disconnect();
             oldPlaying[s].source.finished();
         }
     }
