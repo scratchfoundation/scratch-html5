@@ -13,10 +13,6 @@ describe('IO', function() {
         expect(io.data).toBe(null);
     });
 
-    it('should have a base', function() {
-        expect(io.base).toBe(io_base);
-    });
-
     it('should have a project_base', function() {
         expect(io.project_base).toBe(project_base);
     });
