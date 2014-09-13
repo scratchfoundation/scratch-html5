@@ -52,34 +52,24 @@ IO.prototype.loadProject = function(project_id) {
     });
 };
 
-IO.prototype.loadProjectFromFile = function(fileObj) {
-    var self = this;
-    var reader = new FileReader();
-    reader.onload = function (load_event) {
-        var loaded = false;
-        try {
-            self.zip = new JSZip(load_event.target.result);
-            $.each(self.zip.files, function (index, zipEntry) {
-                if (loaded) {
-                    return;
-                }
-                if (zipEntry.name === 'project.json') {
-                    try {
-                        self.data = JSON.parse(zipEntry.asText());
-                    } catch (err) {
-                        console.log('invalid JSON in package.json', err);
-                        return;
-                    }
-                    loaded = true;
-                    self.initProject();
-                }
-            });
-        } catch (err) {
-            console.log('error loading file', fileObj.name, err);
+IO.prototype.loadProjectFromFile = function(fileContents) {
+    var loaded = false;
+    this.zip = new JSZip(fileContents);
+    return $.each(this.zip.files, function (index, zipEntry) {
+        if (loaded) {
             return;
         }
-    };
-    reader.readAsArrayBuffer(fileObj);
+        if (zipEntry.name === 'project.json') {
+            try {
+                this.data = JSON.parse(zipEntry.asText());
+            } catch (err) {
+                console.log('invalid JSON in package.json', err);
+                return;
+            }
+            loaded = true;
+            this.initProject();
+        }
+    }.bind(this));
 };
 
 IO.prototype.processSoundData = function (sound, soundData, sprite) {
