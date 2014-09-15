@@ -30,9 +30,9 @@ var Block = function(opAndArgs, optionalSubstack) {
     this.nextBlock = null;
     this.tmp = -1;
     // used in procedure blocks and call blocks
-    // in procedure blocks it's a map of parameter name to array [position, default value]
-    // in call blocks it's a map of parameter name to evaluated value
-    this.namedParams = {};
+    // in procedure blocks it's an array of parameter names, index is their position
+    // in call blocks it's an array of evaluated parameter values, index is position
+    this.procParams = [];
     this.asyncFlag = false; // used in procedure hats
     interp.fixArgs(this);
 };
@@ -411,17 +411,20 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
 };
 
 Interpreter.prototype.primProcDef = function (b) {
-    var namedParams = b.args.slice(1); // proc name was 0, and async flag is last
-    b.asyncFlag = namedParams.pop();
-    var i;
-    for (i = 0; i < namedParams.length; i += 2) {
-        b.namedParams[namedParams[i].op] = [i / 2, namedParams[i + 1].op];
-    }
+    // proc name is arg 0
+    // fake block with param names is arg 1 ('op' is first block, 'args' is the rest)
+    // fake block default values for params is arg 2
+    // and async flag is arg 3
+    b.procParams = [b.args[1].op].concat(b.args[1].args);
+    b.asyncFlag = b.args[3];
+    // console.log('set param names for', b.args[0], ':', b.procParams);
 };
 
 Interpreter.prototype.primGetParam = function (b) {
+    var paramName = interp.arg(b, 0);
     // the last call block on the stack is the one with the parameters
     var callBlock;
+    var procedure;
     for (var i = interp.activeThread.stack.length - 1; i >= 0; i--) {
         if (interp.activeThread.stack[i].op === 'call') {
             callBlock = interp.activeThread.stack[i];
@@ -433,14 +436,24 @@ Interpreter.prototype.primGetParam = function (b) {
         return;
     }
 
-    var paramName = interp.arg(b, 0);
-
-    if (!callBlock.namedParams.hasOwnProperty(paramName)) {
-        console.log('got getParam block missing parameter name', paramName);
+    procedure = interp.activeThread.target.procedures[callBlock.args[0]];
+    if (!procedure) {
+        console.log('missing procedure for getParam block');
         return;
     }
 
-    return callBlock.namedParams[paramName];
+    var index;
+    for (index = 0; index < procedure.procParams.length; index++) {
+        if (paramName === procedure.procParams[index]) {
+            // console.log('getParam for', paramName, 'from procedure call to', callBlock.args[0], callBlock.procParams[index]);
+            return callBlock.procParams[index];
+        }
+    }
+
+    // didn't find it
+    console.log('couldn\'t find', paramName, 'in procedure', procedure.args[0]);
+    console.log('procParams:', procedure.procParams);
+    return;
 };
 
 Interpreter.prototype.primCall = function (b) {
@@ -448,27 +461,21 @@ Interpreter.prototype.primCall = function (b) {
     // parameters as different values)
     b = Block.copyBlock(b);
 
-    var procedure = interp.targetSprite().procedures[interp.arg(b, 0)];
     // any parameterss for the procedure will be in the block at the top of
     // the stack, but if there are any blocks as parameters, we need to
     // evaluate them now, and save the values in place in the call block
-
-    var paramNames = Object.keys(procedure.namedParams);
     var args = b.args.slice(1);
 
-    paramNames.forEach(function (paramName) {
-        var i = procedure.namedParams[paramName][0];
-        // searching for paramName
-        if (i < args.length) {
-            b.namedParams[paramName] = interp.arg(b, i + 1);
-        } else {
-            b.namedParams[paramName] = procedure.namedParams[paramName][1];
-        }
+    b.procParams = args.map(function (arg, i) {
+        return interp.arg(b, i + 1);
     });
+
+    var procedure = interp.activeThread.target.procedures[b.args[0]];
 
     // push the copy block onto the stack, so when the call returns we can continue
     interp.activeThread.stack.push(b);
 
-    // jump to the procedure, should probably check args first
-    interp.activeThread.nextBlock = procedure;
+    // jump to the procedure
+    // console.log('calling procedure', procedure.args[0], b.procParams);
+    interp.activeThread.nextBlock = procedure.nextBlock;
 };
