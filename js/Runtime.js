@@ -35,6 +35,8 @@ var Runtime = function() {
     this.audioPlaying = [];
     this.notesPlaying = [];
     this.projectLoaded = false;
+    this.audioLiveSource = null;
+    this.audioMicrophoneAmplitude = 0;
 };
 
 // Initializer for the drawing and audio contexts.
@@ -48,6 +50,41 @@ Runtime.prototype.init = function() {
         this.audioGain = this.audioContext.createGainNode();
     }
     this.audioGain.connect(runtime.audioContext.destination);
+    
+    //Cross-browser for getUserMedia
+    navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    //Make sure that both the audio context and getUserMedia exists
+    if (this.audioContext && navigator.getUserMedia) {
+        //We will call to get user media for the microphone
+        navigator.getUserMedia({ audio: true }, function(stream) {
+            
+            this.audioLiveSource = runtime.audioContext.createMediaStreamSource(stream);
+            
+            var levelChecker = runtime.audioContext.createScriptProcessor(4096, 1, 1);
+            this.audioLiveSource.connect(levelChecker);
+            
+            levelChecker.connect(runtime.audioContext.destination);
+            
+            levelChecker.onaudioprocess = window.audioProcess = function(e){
+                var buffer = e.inputBuffer.getChannelData(0);
+                
+                var maxVal = 0;
+                //Iterate through buffer to check if any of the |values| exceeds the set maxVal.
+                for(var i = 0; i < buffer.length; i++)
+                {
+                    if (maxVal < buffer[i]) {
+                        maxVal = buffer[i];
+                    }
+                }
+                
+                runtime.audioMicrophoneAmplitude = (maxVal * 100);
+            };
+            
+        }, function(err) {
+            console.error("Error in getUserMedia: " + err);
+        });
+    }
+    
 };
 
 // Load start waits for the stage and the sprites to be loaded, without
@@ -198,6 +235,15 @@ Runtime.prototype.getTimeString = function(which) {
         case 'day of week': return now.getDay() + 1; // 1-7, where 1 is Sunday
     }
     return ''; // shouldn't happen
+};
+
+//Sound level
+Runtime.prototype.soundLevel = function() {
+    return Math.floor(runtime.audioMicrophoneAmplitude);
+};
+Runtime.prototype.isLoud = function() {
+    //Sound considered loud if above 10%
+    return (runtime.soundLevel() > 10);
 };
 
 // Reassigns z-indices for layer functions
