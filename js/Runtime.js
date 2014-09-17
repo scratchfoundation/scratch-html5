@@ -37,7 +37,7 @@ var Runtime = function() {
     this.projectLoaded = false;
     this.audioLiveSource = null;
     this.audioRequestMic = true;
-    this.audioMicrophoneAmplitude = 0;
+    this.audioMicrophoneAmplitude = -1;
     this.allowProcessEdgeTriggerHats = false;
 };
 
