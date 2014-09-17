@@ -189,7 +189,6 @@ Runtime.prototype.startEdgeTriggeredHats = function() {
     runtime.allStacksDo(startIfEdgeTriggered);
 };
 Runtime.prototype.processEdgeTriggeredHats = function() {
-    console.log("triggering");
     if (runtime.allowProcessEdgeTriggerHats){
         runtime.startEdgeTriggeredHats();
     }
