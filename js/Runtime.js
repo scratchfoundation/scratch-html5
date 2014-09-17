@@ -36,6 +36,7 @@ var Runtime = function() {
     this.notesPlaying = [];
     this.projectLoaded = false;
     this.audioLiveSource = null;
+    this.audioRequestMic = true;
     this.audioMicrophoneAmplitude = 0;
 };
 
@@ -50,41 +51,6 @@ Runtime.prototype.init = function() {
         this.audioGain = this.audioContext.createGainNode();
     }
     this.audioGain.connect(runtime.audioContext.destination);
-    
-    //Cross-browser for getUserMedia
-    navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-    //Make sure that both the audio context and getUserMedia exists
-    if (this.audioContext && navigator.getUserMedia) {
-        //We will call to get user media for the microphone
-        navigator.getUserMedia({ audio: true }, function(stream) {
-            
-            this.audioLiveSource = runtime.audioContext.createMediaStreamSource(stream);
-            
-            var levelChecker = runtime.audioContext.createScriptProcessor(4096, 1, 1);
-            this.audioLiveSource.connect(levelChecker);
-            
-            levelChecker.connect(runtime.audioContext.destination);
-            
-            levelChecker.onaudioprocess = window.audioProcess = function(e){
-                var buffer = e.inputBuffer.getChannelData(0);
-                
-                var maxVal = 0;
-                //Iterate through buffer to check if any of the |values| exceeds the set maxVal.
-                for(var i = 0; i < buffer.length; i++)
-                {
-                    if (maxVal < buffer[i]) {
-                        maxVal = buffer[i];
-                    }
-                }
-                
-                runtime.audioMicrophoneAmplitude = (maxVal * 100);
-            };
-            
-        }, function(err) {
-            console.error("Error in getUserMedia: " + err);
-        });
-    }
-    
 };
 
 // Load start waits for the stage and the sprites to be loaded, without
@@ -239,6 +205,50 @@ Runtime.prototype.getTimeString = function(which) {
 
 //Sound level
 Runtime.prototype.soundLevel = function() {
+    if (runtime.audioRequestMic) {
+        //If live source isn't set, we need to set it
+        //Cross-browser for getUserMedia
+        navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+        //Make sure that both the audio context and getUserMedia exists
+        if (this.audioContext && navigator.getUserMedia) {
+            //We will call to get user media for the microphone
+            navigator.getUserMedia({ audio: true }, function(stream) {
+                
+                runtime.audioLiveSource = runtime.audioContext.createMediaStreamSource(stream);
+                
+                var levelChecker = runtime.audioContext.createScriptProcessor(4096, 1, 1);
+                runtime.audioLiveSource.connect(levelChecker);
+                
+                levelChecker.connect(runtime.audioContext.destination);
+                
+                levelChecker.onaudioprocess = window.audioProcess = function(e){
+                    var buffer = e.inputBuffer.getChannelData(0);
+                    
+                    var maxVal = 0;
+                    //Iterate through buffer to check if any of the |values| exceeds the set maxVal.
+                    for(var i = 0; i < buffer.length; i++)
+                    {
+                        if (maxVal < buffer[i]) {
+                            maxVal = buffer[i];
+                        }
+                    }
+                    
+                    runtime.audioMicrophoneAmplitude = (maxVal * 100);
+                };
+                
+            }, function(err) {
+                console.error("Error in getUserMedia: " + err);
+            });
+            
+            //We asked the browser...
+            runtime.audioRequestMic = false;
+            //Wait 60 seconds to ask again (assuming we need to)
+            //setTimeout(function(){
+            //    runtime.audioRequestMic = true;
+            //}, 60000);
+        }
+    }
+    
     return Math.floor(runtime.audioMicrophoneAmplitude);
 };
 Runtime.prototype.isLoud = function() {
