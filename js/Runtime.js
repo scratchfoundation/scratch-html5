@@ -38,6 +38,7 @@ var Runtime = function() {
     this.audioLiveSource = null;
     this.audioRequestMic = true;
     this.audioMicrophoneAmplitude = 0;
+    this.allowProcessEdgeTriggerHats = false;
 };
 
 // Initializer for the drawing and audio contexts.
@@ -84,6 +85,7 @@ Runtime.prototype.greenFlag = function() {
         interp.threads = [];
         interp.primitiveTable.timerReset();
         this.startGreenFlags();
+        runtime.allowProcessEdgeTriggerHats = true;
     }
 };
 
@@ -107,6 +109,7 @@ Runtime.prototype.step = function() {
     for (var r = 0; r < runtime.reporters.length; r++) {
         runtime.reporters[r].update();
     }
+    runtime.processEdgeTriggeredHats();
 };
 
 // Stack functions -- push and remove stacks
@@ -168,6 +171,28 @@ Runtime.prototype.startClickedHats = function(sprite) {
         }
     }
     runtime.allStacksDo(startIfClicked);
+};
+
+Runtime.prototype.startEdgeTriggeredHats = function() {
+    function startIfEdgeTriggered(stack, target) {
+        if (stack.op == "whenSensorGreaterThan" && !interp.isRunning(stack)) {
+            var sensorName = interp.arg(stack, 0);
+            var threshold = interp.numarg(stack, 1);
+            
+            if ((sensorName == "loudness" && runtime.soundLevel() > threshold) ||
+                (sensorName == "timer" && interp.primitiveTable.timer() > threshold) /* ||
+                Video Motion goes here, but will leave blank until video is added */) {
+                interp.toggleThread(stack, target);
+            }
+        }
+    }
+    runtime.allStacksDo(startIfEdgeTriggered);
+};
+Runtime.prototype.processEdgeTriggeredHats = function() {
+    console.log("triggering");
+    if (runtime.allowProcessEdgeTriggerHats){
+        runtime.startEdgeTriggeredHats();
+    }
 };
 
 // Returns true if a key is pressed.
