@@ -26,7 +26,7 @@ var Block = function(opAndArgs, optionalSubstack) {
     this.args = opAndArgs.slice(1); // arguments can be either or constants (numbers, boolean strings, etc.) or expressions (Blocks)
     this.isLoop = false; // set to true for loop blocks the first time they run
     this.substack = optionalSubstack;
-    this.subStack2 = null;
+    this.substack2 = null;
     this.nextBlock = null;
     this.tmp = -1;
     // used in procedure blocks and call blocks
@@ -39,7 +39,7 @@ var Block = function(opAndArgs, optionalSubstack) {
 
 Block.copyBlock = function (srcBlock) {
     var dstBlock = new Block([srcBlock.op]);
-    ['primFcn', 'args', 'isLoop', 'substack', 'subStack2', 'nextBlock', 'tmp', 'namedParams', 'asyncFlag'].forEach(function (property) {
+    ['primFcn', 'args', 'isLoop', 'substack', 'substack2', 'nextBlock', 'tmp', 'namedParams', 'asyncFlag'].forEach(function (property) {
         dstBlock[property] = srcBlock[property];
     });
     return dstBlock;
@@ -166,6 +166,7 @@ Interpreter.prototype.stepActiveThread = function() {
         }
         b.primFcn(b);
         if (this.yield) { this.activeThread.nextBlock = b; return; }
+
         b = this.activeThread.nextBlock; // refresh local variable b in case primitive did some control flow
         while (!b) {
             // end of a substack; pop the owning control flow block from stack
@@ -346,6 +347,8 @@ Interpreter.prototype.primWait = function(b) {
 
 Interpreter.prototype.primRepeat = function(b) {
     if (b.tmp == -1) {
+        // need to copy the first time it is pushed onto the stack in startSubstack()
+        b = Block.copyBlock(b);
         b.tmp = Math.max(interp.numarg(b, 0), 0); // Initialize repeat count on this block
     }
     if (b.tmp > 0) {
@@ -403,6 +406,8 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
     // Start the substack of a control structure command such as if or forever.
     b.isLoop = !!isLoop;
     this.activeThread.stack.push(b); // remember the block that started the substack
+    //console.log('pushed', b.op, 'onto stack', interp.activeThread.stack.map(function (frame) { return frame.op; }));
+
     if (!secondSubstack) {
         this.activeThread.nextBlock = b.substack;
     } else {
@@ -474,8 +479,10 @@ Interpreter.prototype.primCall = function (b) {
 
     // push the copy block onto the stack, so when the call returns we can continue
     interp.activeThread.stack.push(b);
+    //console.log('pushed call onto stack with args:', b.procParams, interp.activeThread.stack.map(function (frame) { return frame.op; }));
 
     // jump to the procedure
-    // console.log('calling procedure', procedure.args[0], b.procParams);
+    // need to set a noop block so that if the procedure starts with an
+    // console.log('running procedure.nextBlock:', procedure.nextBlock);
     interp.activeThread.nextBlock = procedure.nextBlock;
 };
