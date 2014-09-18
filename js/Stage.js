@@ -66,6 +66,6 @@ Stage.prototype.stroke = function(from, to, width, color) {
     // Use .5 offsets for canvas rigid pixel drawing
     this.lineCache.moveTo(from[0] + 240.5, 180.5 - from[1]);
     this.lineCache.lineTo(to[0] + 240.5, 180.5 - to[1]);
-    this.lineCache.strokeStyle = 'rgb(' + (color >> 16) + ',' + (color >> 8 & 255) + ',' + (color & 255) + ')';
+    this.lineCache.strokeStyle = 'rgb(' + (color >>> 16 & 255) + ',' + (color >>> 8 & 255) + ',' + (color >>> 0 & 255) + ')';
     this.lineCache.stroke();
 };
