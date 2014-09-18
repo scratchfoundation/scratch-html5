@@ -80,7 +80,7 @@ Interpreter.prototype.fixArgs = function(b) {
     var newArgs = [];
     for (var i = 0; i < b.args.length; i++) {
         var arg = b.args[i];
-        if (arg && arg.constructor == Array) {
+        if (b.op !== 'procDef' && arg && arg.constructor == Array) {
             if ((arg.length > 0) && (arg[0].constructor == Array)) {
                 // if first element arg is itself an array, then arg is a substack
                 if (!b.substack) {
@@ -93,7 +93,7 @@ Interpreter.prototype.fixArgs = function(b) {
                 newArgs.push(new Block(arg));
             }
         } else {
-            newArgs.push(arg); // arg is a constant
+            newArgs.push(arg); // arg is a constant or procDef arguments
         }
     }
     b.args = newArgs;
@@ -417,10 +417,10 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
 
 Interpreter.prototype.primProcDef = function (b) {
     // proc name is arg 0
-    // fake block with param names is arg 1 ('op' is first block, 'args' is the rest)
-    // fake block default values for params is arg 2
+    // array with param names is arg 1
+    // array with default values for params is arg 2
     // and async flag is arg 3
-    b.procParams = [b.args[1].op].concat(b.args[1].args);
+    b.procParams = b.args[1];
     b.asyncFlag = b.args[3];
     // console.log('set param names for', b.args[0], ':', b.procParams);
 };
