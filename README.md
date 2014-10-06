@@ -19,7 +19,7 @@ Thank you for your interest in helping out with the Scratch HTML5 Player.  [@scl
 
 ## Installation
 
-Special headers are sent on the Scratch asset servers to allow for cross-origin image manipulation.  A proxy is no longer needed provided you are using projects hosted on the Scratch website.  This is compatible with Javascript security models in today's browsers.  See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) for more information.  To test the HTML5 player against the Flash player you can use the compare.html web page.
+Special headers are sent on the Scratch asset servers to allow for cross-origin image manipulation.  A proxy is no longer needed provided you are using projects hosted on the Scratch website.  However, the project must either run locally with "Disabled Local File Restrictions" (Safari) or the `--disable-web-security` parameter (Google Chrome/Chromium) or you can always use a development server like [http-server](https://www.npmjs.org/package/http-server).  This is compatible with Javascript security models in today's browsers.  See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) for more information.  To test the HTML5 player against the Flash player you can use the compare.html web page.
 
 See the file `TESTING.md` for more details.
 
