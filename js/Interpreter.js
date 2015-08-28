@@ -306,6 +306,9 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['timerReset'] = function(b) { interp.timerBase = Date.now(); };
     this.primitiveTable['timer'] = function(b) { return (Date.now() - interp.timerBase) / 1000; };
 
+	// added by Lucas
+	this.primitiveTable['stopScripts'] = function(b) { interp.activeThread = new Thread(null); interp.threads = []; };
+	
     new Primitives().addPrimsTo(this.primitiveTable);
 };
 
