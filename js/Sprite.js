@@ -113,6 +113,11 @@ var Sprite = function(data) {
     this.stacks = [];
 };
 
+// Creates a formatted URI for a costume image resource.
+Sprite.prototype.formatCostumeImageUri = function(costume, io) {
+	return io.asset_base + costume.baseLayerMD5 + io.asset_suffix;
+};
+
 // Attaches a Sprite (<img>) to a Scratch scene
 Sprite.prototype.attach = function(scene) {
     // Create textures and materials for each of the costumes.
@@ -142,7 +147,7 @@ Sprite.prototype.attach = function(scene) {
         })
         .attr({
             'crossOrigin': 'anonymous',
-            'src': io.asset_base + this.costumes[c].baseLayerMD5 + io.asset_suffix
+			'src': this.formatCostumeImageUri(this.costumes[c], io)
         });
     }
 
