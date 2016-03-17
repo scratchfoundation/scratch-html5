@@ -1,0 +1,113 @@
+<!DOCTYPE html><html><head> 
+    <!-- iPad properties: set width, disable pinch zoom -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="user-scalable=no, width=540">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Untitled on Scratch HTML5</title></head><body>
+<a href="home.html"><img src="Scratch Logo.sprite2"><h1>HTML5 Player Home</h1></a>
+<a href="https://scratch.mit.edu/explore">Explore</a>
+<a href="https://scratch.mit.edu/discuss">Discuss</a>
+<a href="http://wiki.scratch.mit.edu/Scratch_Wiki_Home">Scratch Wiki</a>
+<a href="https://scratch.mit.edu/about/">About</a>
+<a href="https://scratch.mit.edu/help/">Help</a>
+<a href="Index.html">Search</a>
+<link rel=stylesheet href=player.css>
+<link rel=stylesheet href=index.css>
+<style>
+table ,td ,th { border: solid 1px red}{background-color: #ffffcc }
+tr.textbox { vertical-algin: top}
+</style>
+    <link rel="stylesheet" href="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__/vendor/redmond/jquery.ui.all.css" />
+    
+        <link href="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__/css/main.css" rel="stylesheet" type="text/css" />
+   
+   <link rel="stylesheet" href="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__//css/handheld.css" media="handheld, only screen and (max-device-width:480px)"/>
+
+    
+    
+        <link href="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__/css/project_base.css" rel="stylesheet" type="text/css" />
+    
+    <link href="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__//vendor/redmond/jquery-ui.css" rel="stylesheet">
+    <script type="text/javascript" src="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__//js/swfobject.js"></script>
+
+    <script type="text/javascript" src="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__//js/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.scratch.mit.edu/scratchr2/static/__937f088a133dc228065bf12d2cbcd1d9__/js/lib/underscore-min.js"></script>
+<table>
+<tr>
+<th colspan=90><h1>Untitled</h1>by<a href="https://scratch.mit.edu/users/echaroenpitaks"> echaroenpitaks</a> scripts sprites <a href="http://www.scratchjr.org">ScratchJr</a></th></tr>
+<tr>
+<td><button onclick="fullscreen()"><img src="fullScreenOff.png"><img src="fullScreenOn.png"></button></th>
+<td colspan=2></td><td><button onclick="start()"><img src="greenFlagOff.png"><img src="greenFlagOn.png"><img src="stopOff.png"><img src="stopOn.png"></button></th></td></tr>
+<tr><td rowspan=30 colspan=30 ><button onclick="start()"><img src = playerStartflag.png>
+<!-- Start template project/includes/flash_player_object.html -->
+<div id="scratch-loader"></div>
+<div id="scratch" style="text-align:center;margin-top:30px;visibility:hidden;position:relative;">
+    
+    <img src="//cdn2.scratch.mit.edu/get_image/project/100280488_144x108.png?v=1367469294.0" width="144" height="108" class="image" />
+    
+    <div class="scratch_unsupported" style="display: none;">
+        <p style="color:#aaa;font-size:22px;margin-top:14px;line-height:28px;">
+            Oh no! We're having trouble displaying this Scratch project.<br/>
+            Your JavaScript/LiveScript player might be disabled, missing, or out of date. Visit <a href="https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&es_th=1&ie=UTF-8#q=turn+on+javascript">this page</a> to update JavaScript/LiveScript.<br/>
+        </p>
+        
+        
+    </div>
+    <div class="scratch_loading">Loading...</div>
+</div><!--Stage--></button></td><td rowspan=15 colspan=30 class=textbox><div class="text-block"> 
+	<b>Instructions</b>
+  <div  id="instructions" class="editable-empty read instructions">
+	  <span data-content="prompt">Tell people how to use your project</br>(such as which keys to press).</span>
+    <form>
+      <textarea name="instructions"></textarea>
+      <div class="loading-img s48"></div>
+    </form>
+  </div>
+  
+</div></td></tr>
+<tr><td rowspan=9 colspan=10 class=textbox>
+<div id="description-wrapper" class="text-block controls">
+<div class="tooltip-target">
+	<b>Notes and Credits </b>
+  <div id="description" class="editable-empty read instructions">
+    <span data-content="prompt">How did you make the project?</br>Did you use ideas, scripts, or artwork from other people? Thank them here.</span>
+    <form>
+      <textarea name="description"></textarea>
+      <div class="loading-img s48"></div>
+    </form>
+  </div>
+</div></td></table>
+<script>
+alert(" Welcome to Scratch HTML5 Player!")
+var fullscreen=off
+function fullscreen() {
+if fullscreen=off
+fullscreen=on}
+if fullscreen=on
+fullscreen=off}
+var on=false
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src=Timer.js></script>
+<script src=OffsetBuffer.js></script>
+<script src=Color.js></script>
+<script src=Rectangle.js></script>
+<script src=Sprite.js></script>
+<script src=Reporter.js></script>
+<script src=Stage.js></script>
+<script src=WAVFile.js></script>
+<script src=SoundDecoder.js></script>
+<script src=SoundBank.js></script>
+<script src=NotePlayer.js></script>
+<script src=Instr.js></script>
+<script src=IO.js></script>
+<script src=VarListPrims.js></script>
+<script src=MotionAndPenPrims.js></script>
+<script src=LooksPrims.js></script>
+<script src=SensingPrims.js></script>
+<script src=SoundPrims.js></script>
+<script src=Primitives.js></script>
+<script src=Interpreter.js></script>
+<script src=Runtime.js></script>
+<script src=Scratch.js></script>
+<script type="text/JavaScript" src="Scratch.js"></script> </html>
