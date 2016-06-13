@@ -23,7 +23,7 @@ var runtimeMock = function() {
     'sprites' : [ 
       new spriteMock()
     ],
+    'spriteNamed' : function(){ return getArgs('spriteName') || new spriteMock();},
     'stage': new stageMock()
-
   }
 };

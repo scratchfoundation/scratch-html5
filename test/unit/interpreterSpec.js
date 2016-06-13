@@ -75,12 +75,56 @@ describe('Interpreter', function() {
                 expect(initInterp.opCount2).toBe(0);
             });
         });
+
+        describe('TargetStage', function() {
+            it('should return the target.stage object', function() {
+                runtime = new runtimeMock();
+                expect(interp.prototype.targetStage()).toEqual(runtime.stage);
+            });
+        });
     });
 
-    describe('TargetStage', function() {
-        it('should return the target.stage object', function() {
-            runtime = new runtimeMock();
-            expect(interp.prototype.targetStage()).toEqual(runtime.stage);
+    describe('Pause and Resume Single Threads', function() {
+        var initInterp;
+
+        beforeEach(function() {
+            initInterp = new interp();
+        });
+
+        it('should pause the current activeThread', function() {
+            initInterp.pauseThread();
+            expect(initInterp.activeThread.paused).toEqual(true);
+        });
+
+        it('should resume the current activeThread', function() {
+            initInterp.resumeThread();
+            expect(initInterp.activeThread.paused).toEqual(false);
+        });
+    });
+
+    describe('Pause and Resume All Threads', function() {
+        var initInterp;
+
+        beforeEach(function() {
+            initInterp = new interp();
+            initInterp.threads.push(new threadMock());
+            initInterp.threads.push(new threadMock());
+        });
+
+        it('should pause the current activeThread', function() {
+            initInterp.pauseAllThreads();
+            _.each(initInterp.threads, function(thread) {
+                expect(thread.paused).toEqual(true);
+            });
+            expect(initInterp.threads.length).toBe(2);
+        });
+
+        it('should resume the current activeThread', function() {
+            initInterp.resumeAllThreads();
+            _.each(initInterp.threads, function(thread) {
+                expect(thread.paused).toEqual(false);
+            });
+            expect(initInterp.threads.length).toBe(2);
         });
     });
 });

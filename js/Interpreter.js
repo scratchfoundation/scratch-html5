@@ -175,6 +175,26 @@ Interpreter.prototype.stepActiveThread = function() {
     }
 };
 
+Interpreter.prototype.resumeThread = function() {
+    this.activeThread.paused = false;
+}
+
+Interpreter.prototype.pauseThread = function() {
+    this.activeThread.paused = true;
+}
+
+Interpreter.prototype.resumeAllThreads = function() {
+    for(var index=0; index<this.threads.length; index++) {
+        this.threads[index].paused = false;
+    }
+}
+
+Interpreter.prototype.pauseAllThreads = function() {
+    for(var index=0; index<this.threads.length; index++) {
+        this.threads[index].paused = true;
+    }
+}
+
 Interpreter.prototype.toggleThread = function(b, targetObj) {
     var newThreads = [], wasRunning = false;
     for (var i = 0; i < this.threads.length; i++) {

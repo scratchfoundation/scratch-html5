@@ -392,5 +392,13 @@ describe('Sprite', function() {
             expect(spriteProto.visible).toBe(false);
             expect(spriteProto.updateVisible).toHaveBeenCalled();
         });
+
+        it('should have a penShade variable', function() {
+            expect(initSprite.penShade).toBe(50);
+        });
+
+        it('should have a penColorCache variable', function() {
+            expect(initSprite.penColorCache).toBe(0x0000FF);
+        });
     });
 });

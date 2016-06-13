@@ -75,6 +75,8 @@ var Sprite = function(data) {
 
     // HTML element for the ask bubbles
     this.askInput = null;
+    this.askInputForm = null;
+    this.askInputHiddenText = null;
     this.askInputField = null;
     this.askInputButton = null;
     this.askInputOn = false;
@@ -151,24 +153,25 @@ Sprite.prototype.attach = function(scene) {
     this.updateVisible();
     this.updateTransform();
 
-    if (! this.isStage) {
-        this.talkBubble = $('<div class="bubble-container"></div>');
-        this.talkBubble.css('display', 'none');
-        this.talkBubbleBox = $('<div class="bubble"></div>');
-        this.talkBubbleStyler = $('<div class="bubble-say"></div>');
-        this.talkBubble.append(this.talkBubbleBox);
-        this.talkBubble.append(this.talkBubbleStyler);
-    }
+    this.talkBubble = $('<div class="bubble-container"></div>');
+    this.talkBubble.css('display', 'none');
+    this.talkBubbleBox = $('<div class="bubble"></div>');
+    this.talkBubbleStyler = $('<div class="bubble-say"></div>');
+    this.talkBubble.append(this.talkBubbleBox);
+    this.talkBubble.append(this.talkBubbleStyler);
 
     this.askInput = $('<div class="ask-container"></div>');
-    this.askInput.css('display', 'none');
+    this.askInputForm = $('<form onSubmit="Sprite.prototype.persistDoAskInput(\'' + this.objName + '\');"></form>');
+    this.askInputHiddenText = $('<div class="ask-input-hidden-text"></div>');
     this.askInputField = $('<div class="ask-field"></div>');
     this.askInputTextField = $('<input type="text" class="ask-text-field"></input>');
     this.askInputField.append(this.askInputTextField);
     this.askInputButton = $('<div class="ask-button"></div>');
     this.bindDoAskButton();
-    this.askInput.append(this.askInputField);
-    this.askInput.append(this.askInputButton);
+    this.askInput.append(this.askInputForm);
+    this.askInputForm.append(this.askInputHiddenText);
+    this.askInputForm.append(this.askInputField);
+    this.askInputForm.append(this.askInputButton);
 
     runtime.scene.append(this.talkBubble);
     runtime.scene.append(this.askInput);
@@ -403,24 +406,36 @@ Sprite.prototype.hideBubble = function() {
     this.talkBubble.css('display', 'none');
 };
 
-Sprite.prototype.showAsk = function() {
+Sprite.prototype.showAsk = function(text) {
     this.askInputOn = true;
-    this.askInput.css('z-index', this.z);
-    this.askInput.css('left', '15px');
-    this.askInput.css('right', '15px');
-    this.askInput.css('bottom', '7px');
-    this.askInput.css('height', '25px');
+    this.askInput.css('z-index', this.z + 1);
 
-    if (this.visible) {
-        this.askInput.css('display', 'inline-block');
-        this.askInputTextField.focus();
+    this.askInput.css('display', 'inline-block');
+    this.askInputTextField.focus();
+
+    if (! this.visible || this.isStage) {
+        this.askInput.css('height', '42px');
+        this.askInputHiddenText.css('display', 'inline-block');
+        this.askInputHiddenText.html(text);
     }
 };
 
 Sprite.prototype.hideAsk = function() {
     this.askInputOn = false;
     this.askInputTextField.val('');
+    this.askInput.css('height', '25px');
     this.askInput.css('display', 'none');
+    this.askInputHiddenText.css('display', 'none');
+    this.askInputHiddenText.html('');
+};
+
+Sprite.prototype.persistDoAskInput = function(spriteName) {
+    var stage = interp.targetStage();
+    stage.askAnswer = $(this.askInputTextField).val();
+    var sprite = runtime.spriteNamed(spriteName);
+    sprite.hideBubble();
+    sprite.hideAsk();
+    interp.resumeAllThreads();
 };
 
 Sprite.prototype.bindDoAskButton = function() {
@@ -428,11 +443,7 @@ Sprite.prototype.bindDoAskButton = function() {
     this.askInputButton.on("keypress click", function(e) {
         var eType = e.type;
         if (eType === 'click' || (eType === 'keypress' && e.which === 13)) {
-            var stage = interp.targetStage();
-            stage.askAnswer = $(self.askInputTextField).val();
-            self.hideBubble();
-            self.hideAsk();
-            interp.activeThread.paused = false;
+            self.persistDoAskInput(self.objName);
         }
     });
 };

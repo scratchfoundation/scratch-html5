@@ -98,6 +98,7 @@ describe('SensingPrims', function() {
         });
 
         it('should call the showBubble method on the targetedSprite', function() {
+            spyOn(interp, "pauseAllThreads");
             spyOn(window, "showBubble");
             spyOn(targetSpriteMock, "showAsk");
             sensingPrims.prototype.primDoAsk(askBlock);
