@@ -30,6 +30,9 @@ function Scratch(project_id) {
     $(window).keydown(function(e) {
         runtime.keysDown[e.which] = true;
         runtime.startKeyHats(e.which);
+        if (e.target==document.body) {
+            e.preventDefault();
+        }
     });
 
     $(window).keyup(function(e) {
