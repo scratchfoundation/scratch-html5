@@ -11,7 +11,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "jasmine-jquery": "~1.3.3",
+    "jasmine-jquery": "~2.0.5",
     "jscs": "~1.3.0",
     "karma": "~0.10",
     "karma-html2js-preprocessor": "~0.1.0",

@@ -1,75 +1,73 @@
 <!DOCTYPE html>
-<meta charset=utf-8>
-<title>Scratch HTML5</title>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Scratch HTML5</title>
 
-<!-- iPad properties: set width, disable pinch zoom -->
-<meta name=apple-mobile-web-app-capable content=yes>
-<meta name=viewport content="user-scalable=no, width=540">
-<meta name=apple-mobile-web-app-status-bar-style content=black>
+    <!-- iPad properties: set width, disable pinch zoom -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="user-scalable=no, width=540">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel=stylesheet href=player.css>
-<link rel=stylesheet href=index.css>
+    <!-- Stylesheets -->
+    <link rel=stylesheet href="player.css">
+    <link rel=stylesheet href="index.css">
 
-<script src=http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js></script>
-
-
-<script type="text/javascript">
-  $(document).ready(function() {
-    var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
-    var scratch = new Scratch(project_id);
-  });
-</script>
-
-<div id=player-container>
-    <div class="arrow vertical" id=up></div>
-    <div class="arrow vertical" id=down></div>
-    <div class="arrow horizontal" id=left></div>
-    <div class="arrow horizontal" id=right></div>
-    <div id=player-header>
-        <div id=player-header-preload></div>
-        <div id=player-header-version>HTML5</div>
-        <button id=toggle-fullscreen tabindex=1></button>
-        <button id=trigger-stop tabindex=3></button>
-        <button id=trigger-green-flag tabindex=2></button>
-    </div>
-    <div id=player-content>
-        <div id=container></div>
-        <div id=overlay></div>
-        <div id=preloader>
-            <div id=preloader-progress><div id=preloader-progress-bar></div></div>
-            <div id=preloader-caption>Loading project&hellip;</div>
-            <div id=preloader-details></div>
+    <!-- Scripts -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="js/util/Timer.js" defer></script>
+    <script src="js/util/OffsetBuffer.js" defer></script>
+    <script src="js/util/Color.js" defer></script>
+    <script src="js/util/Rectangle.js" defer></script>
+    <script src="js/Sprite.js" defer></script>
+    <script src="js/Reporter.js" defer></script>
+    <script src="js/Stage.js" defer></script>
+    <script src="js/sound/WAVFile.js" defer></script>
+    <script src="js/sound/SoundDecoder.js" defer></script>
+    <script src="js/sound/SoundBank.js" defer></script>
+    <script src="js/sound/NotePlayer.js" defer></script>
+    <script src="soundbank/Instr.js" defer></script>
+    <script src="js/IO.js" defer></script>
+    <script src="js/primitives/VarListPrims.js" defer></script>
+    <script src="js/primitives/MotionAndPenPrims.js" defer></script>
+    <script src="js/primitives/LooksPrims.js" defer></script>
+    <script src="js/primitives/SensingPrims.js" defer></script>
+    <script src="js/primitives/SoundPrims.js" defer></script>
+    <script src="js/primitives/Primitives.js" defer></script>
+    <script src="js/Interpreter.js" defer></script>
+    <script src="js/Runtime.js" defer></script>
+    <script src="js/Scratch.js" defer></script> 
+    <script src="js/init.js" defer></script>
+</head>
+<body>
+    <div id=player-container>
+        <div class="arrow vertical" id=up></div>
+        <div class="arrow vertical" id=down></div>
+        <div class="arrow horizontal" id=left></div>
+        <div class="arrow horizontal" id=right></div>
+        <div id=player-header>
+            <div id=player-header-preload></div>
+            <div id=player-header-version>HTML5</div>
+            <button id=toggle-fullscreen tabindex=1></button>
+            <button id=trigger-stop tabindex=3></button>
+            <button id=trigger-green-flag tabindex=2></button>
+        </div>
+        <div id=player-content>
+            <div id=container></div>
+            <div id=overlay></div>
+            <div id=preloader>
+                <div id=preloader-progress><div id=preloader-progress-bar></div></div>
+                <div id=preloader-caption>Loading project&hellip;</div>
+                <div id=preloader-details></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div id=project-picker>
-    <span id=address-hint>http://scratch.mit.edu/projects/</span><input id=project-id placeholder=10000160><button id=go-project>&rarr;</button>
-</div>
+    <div id=project-picker>
+        <span id=address-hint>http://scratch.mit.edu/projects/</span><input id=project-id placeholder=10000160><button id=go-project>&rarr;</button>
+    </div>
 
-<h1>Scratch HTML5 player</h1>
-<p>The Scratch HTML5 player is still in development. Feedback is welcome! Please report any bugs (or differences from the Flash player) <a href=https://github.com/LLK/scratch-html5>on Github</a>.</p>
-
-<script src=js/util/Timer.js></script>
-<script src=js/util/OffsetBuffer.js></script>
-<script src=js/util/Color.js></script>
-<script src=js/util/Rectangle.js></script>
-<script src=js/Sprite.js></script>
-<script src=js/Reporter.js></script>
-<script src=js/Stage.js></script>
-<script src=js/sound/WAVFile.js></script>
-<script src=js/sound/SoundDecoder.js></script>
-<script src=js/sound/SoundBank.js></script>
-<script src=js/sound/NotePlayer.js></script>
-<script src=soundbank/Instr.js></script>
-<script src=js/IO.js></script>
-<script src=js/primitives/VarListPrims.js></script>
-<script src=js/primitives/MotionAndPenPrims.js></script>
-<script src=js/primitives/LooksPrims.js></script>
-<script src=js/primitives/SensingPrims.js></script>
-<script src=js/primitives/SoundPrims.js></script>
-<script src=js/primitives/Primitives.js></script>
-<script src=js/Interpreter.js></script>
-<script src=js/Runtime.js></script>
-<!-- <script src=js/Scratch.js></script> -->
-<script type="text/JavaScript" src="js/Scratch.js"></script> 
+    <h1>Scratch HTML5 player</h1>
+    <p>The Scratch HTML5 player is still in development. Feedback is welcome! Please report any bugs (or differences from the Flash player) <a href=https://github.com/LLK/scratch-html5>on Github</a>.</p>
+</body>
+</html>
