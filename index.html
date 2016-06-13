@@ -12,10 +12,22 @@
 
 <script src=http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js></script>
 
-
 <script type="text/javascript">
   $(document).ready(function() {
-    var project_id = location.hash && parseInt(location.hash.substr(1)) || 10000160;
+    var project_id = 10000160; // default
+    if (location.hash) {
+      if (location.hash === '#file') {
+        if (sessionStorage.getItem('filename')) {
+          // signal to Scratch to load the file contents from localStorage
+          project_id = 'file';
+        } else {
+          // no file stored, reset to default
+          location.hash = '';
+        }
+      } else if (!Number.isNaN(Number(location.hash.substr(1)))) {
+        project_id = parseInt(location.hash.substr(1), 10);
+      }
+    }
     var scratch = new Scratch(project_id);
   });
 </script>
@@ -44,7 +56,8 @@
 </div>
 
 <div id=project-picker>
-    <span id=address-hint>http://scratch.mit.edu/projects/</span><input id=project-id placeholder=10000160><button id=go-project>&rarr;</button>
+    <span id=address-hint>http://scratch.mit.edu/projects/</span><input id=project-id placeholder=10000160><button id=go-project>&rarr;</button><br/>
+    <input type="file" id="file-picker" name="file-picker" />
 </div>
 
 <h1>Scratch HTML5 player</h1>
@@ -72,4 +85,5 @@
 <script src=js/Interpreter.js></script>
 <script src=js/Runtime.js></script>
 <!-- <script src=js/Scratch.js></script> -->
-<script type="text/JavaScript" src="js/Scratch.js"></script> 
+<script type="text/javascript" src="js/util/jszip.min.js"></script>
+<script type="text/JavaScript" src="js/Scratch.js"></script>

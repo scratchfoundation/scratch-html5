@@ -23,7 +23,8 @@
 'use strict';
 
 var runtime, interp, io, iosAudioActive = false;
-function Scratch(project_id) {
+function Scratch(projectIdOrFile) {
+    console.log('new Scratch project:', typeof projectIdOrFile, projectIdOrFile);
     runtime = new Runtime();
     runtime.init();
 
@@ -36,11 +37,18 @@ function Scratch(project_id) {
         delete runtime.keysDown[e.which];
     });
 
+    var project_id;
     var address = $('#address-hint');
     var project = $('#project-id');
 
-    // Update the project ID field
-    project.val(project_id);
+    if (typeof projectIdOrFile === 'number') {
+        project_id = projectIdOrFile;
+
+        // Update the project ID field
+        project.val(project_id);
+    } else {
+        project.val(sessionStorage.getItem('filename'));
+    }
 
     // Validate project ID field
     project.keyup(function() {
@@ -72,6 +80,19 @@ function Scratch(project_id) {
     $('#go-project').click(function() {
         window.location = '#' + parseInt($('#project-id').val());
         window.location.reload(true);
+    });
+
+    // Load a .sb2 file locally
+    $("#file-picker").on('change', function (evnt) {
+        var fileObj = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function (load_event) {
+            sessionStorage.setItem('filename', fileObj.name);
+            sessionStorage.setItem('file-contents', load_event.target.result);
+            window.location = '#file';
+            window.location.reload(true);
+        };
+        reader.readAsBinaryString(fileObj);
     });
 
     // Green flag behavior
@@ -150,5 +171,10 @@ function Scratch(project_id) {
 
     // Load the requested project and go!
     io = new IO();
-    io.loadProject(project_id);
+    if (project_id) {
+        io.loadProject(project_id);
+    } else {
+        console.log('loading', sessionStorage.getItem('filename'));
+        io.loadProjectFromFile(sessionStorage.getItem('file-contents'));
+    }
 };
