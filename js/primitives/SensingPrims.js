@@ -30,6 +30,8 @@ SensingPrims.prototype.addPrimsTo = function(primTable) {
     primTable['mouseX']       = function(b) { return runtime.mousePos[0]; };
     primTable['mouseY']       = function(b) { return runtime.mousePos[1]; };
     primTable['distanceTo:']  = this.primDistanceTo;
+    primTable['soundLevel']  = function(b) { return runtime.soundLevel(); };
+    primTable['isLoud'] = function(b) { return runtime.isLoud(); };
 
     primTable['getAttribute:of:'] = this.primGetAttribute;
 

@@ -35,6 +35,10 @@ var Runtime = function() {
     this.audioPlaying = [];
     this.notesPlaying = [];
     this.projectLoaded = false;
+    this.audioLiveSource = null;
+    this.audioRequestMic = true;
+    this.audioMicrophoneAmplitude = -1;
+    this.allowProcessEdgeTriggerHats = false;
 };
 
 // Initializer for the drawing and audio contexts.
@@ -81,6 +85,7 @@ Runtime.prototype.greenFlag = function() {
         interp.threads = [];
         interp.primitiveTable.timerReset();
         this.startGreenFlags();
+        runtime.allowProcessEdgeTriggerHats = true;
     }
 };
 
@@ -104,6 +109,7 @@ Runtime.prototype.step = function() {
     for (var r = 0; r < runtime.reporters.length; r++) {
         runtime.reporters[r].update();
     }
+    runtime.processEdgeTriggeredHats();
 };
 
 // Stack functions -- push and remove stacks
@@ -167,6 +173,27 @@ Runtime.prototype.startClickedHats = function(sprite) {
     runtime.allStacksDo(startIfClicked);
 };
 
+Runtime.prototype.startEdgeTriggeredHats = function() {
+    function startIfEdgeTriggered(stack, target) {
+        if (stack.op == "whenSensorGreaterThan" && !interp.isRunning(stack)) {
+            var sensorName = interp.arg(stack, 0);
+            var threshold = interp.numarg(stack, 1);
+            
+            if ((sensorName == "loudness" && runtime.soundLevel() > threshold) ||
+                (sensorName == "timer" && interp.primitiveTable.timer() > threshold) /* ||
+                Video Motion goes here, but will leave blank until video is added */) {
+                interp.toggleThread(stack, target);
+            }
+        }
+    }
+    runtime.allStacksDo(startIfEdgeTriggered);
+};
+Runtime.prototype.processEdgeTriggeredHats = function() {
+    if (runtime.allowProcessEdgeTriggerHats){
+        runtime.startEdgeTriggeredHats();
+    }
+};
+
 // Returns true if a key is pressed.
 Runtime.prototype.keyIsDown = function(ch) {
     return this.keysDown[ch] || false;
@@ -198,6 +225,59 @@ Runtime.prototype.getTimeString = function(which) {
         case 'day of week': return now.getDay() + 1; // 1-7, where 1 is Sunday
     }
     return ''; // shouldn't happen
+};
+
+//Sound level
+Runtime.prototype.soundLevel = function() {
+    if (runtime.audioRequestMic) {
+        //If live source isn't set, we need to set it
+        //Cross-browser for getUserMedia
+        navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+        //Make sure that both the audio context and getUserMedia exists
+        if (this.audioContext && navigator.getUserMedia) {
+            //We will call to get user media for the microphone
+            navigator.getUserMedia({ audio: true }, function(stream) {
+                
+                runtime.audioLiveSource = runtime.audioContext.createMediaStreamSource(stream);
+                
+                var levelChecker = runtime.audioContext.createScriptProcessor(4096, 1, 1);
+                runtime.audioLiveSource.connect(levelChecker);
+                
+                levelChecker.connect(runtime.audioContext.destination);
+                
+                levelChecker.onaudioprocess = window.audioProcess = function(e){
+                    var buffer = e.inputBuffer.getChannelData(0);
+                    
+                    var maxVal = 0;
+                    //Iterate through buffer to check if any of the |values| exceeds the set maxVal.
+                    for(var i = 0; i < buffer.length; i++)
+                    {
+                        if (maxVal < buffer[i]) {
+                            maxVal = buffer[i];
+                        }
+                    }
+                    
+                    runtime.audioMicrophoneAmplitude = (maxVal * 100);
+                };
+                
+            }, function(err) {
+                console.error("Error in getUserMedia: " + err);
+            });
+            
+            //We asked the browser...
+            runtime.audioRequestMic = false;
+            //Wait 60 seconds to ask again (assuming we need to)
+            //setTimeout(function(){
+            //    runtime.audioRequestMic = true;
+            //}, 60000);
+        }
+    }
+    
+    return Math.floor(runtime.audioMicrophoneAmplitude);
+};
+Runtime.prototype.isLoud = function() {
+    //Sound considered loud if above 10%
+    return (runtime.soundLevel() > 10);
 };
 
 // Reassigns z-indices for layer functions
