@@ -51,7 +51,7 @@ Stage.prototype.attachPenLayer = function(scene) {
 };
 
 Stage.prototype.isLoaded = function() {
-    return this.penLayerLoaded && this.costumesLoaded == this.costumes.length && this.soundsLoaded == Object.keys(this.sounds).length;
+    return this.penLayerLoaded && Sprite.prototype.isLoaded.call(this);
 };
 
 // Pen functions

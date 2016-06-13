@@ -26,10 +26,23 @@ var Block = function(opAndArgs, optionalSubstack) {
     this.args = opAndArgs.slice(1); // arguments can be either or constants (numbers, boolean strings, etc.) or expressions (Blocks)
     this.isLoop = false; // set to true for loop blocks the first time they run
     this.substack = optionalSubstack;
-    this.subStack2 = null;
+    this.substack2 = null;
     this.nextBlock = null;
     this.tmp = -1;
+    // used in procedure blocks and call blocks
+    // in procedure blocks it's an array of parameter names, index is their position
+    // in call blocks it's an array of evaluated parameter values, index is position
+    this.procParams = [];
+    this.asyncFlag = false; // used in procedure hats
     interp.fixArgs(this);
+};
+
+Block.copyBlock = function (srcBlock) {
+    var dstBlock = new Block([srcBlock.op]);
+    ['primFcn', 'args', 'isLoop', 'substack', 'substack2', 'nextBlock', 'tmp', 'namedParams', 'asyncFlag'].forEach(function (property) {
+        dstBlock[property] = srcBlock[property];
+    });
+    return dstBlock;
 };
 
 var Thread = function(block, target) {
@@ -67,7 +80,7 @@ Interpreter.prototype.fixArgs = function(b) {
     var newArgs = [];
     for (var i = 0; i < b.args.length; i++) {
         var arg = b.args[i];
-        if (arg && arg.constructor == Array) {
+        if (b.op !== 'procDef' && arg && arg.constructor == Array) {
             if ((arg.length > 0) && (arg[0].constructor == Array)) {
                 // if first element arg is itself an array, then arg is a substack
                 if (!b.substack) {
@@ -80,7 +93,7 @@ Interpreter.prototype.fixArgs = function(b) {
                 newArgs.push(new Block(arg));
             }
         } else {
-            newArgs.push(arg); // arg is a constant
+            newArgs.push(arg); // arg is a constant or procDef arguments
         }
     }
     b.args = newArgs;
@@ -153,6 +166,7 @@ Interpreter.prototype.stepActiveThread = function() {
         }
         b.primFcn(b);
         if (this.yield) { this.activeThread.nextBlock = b; return; }
+
         b = this.activeThread.nextBlock; // refresh local variable b in case primitive did some control flow
         while (!b) {
             // end of a substack; pop the owning control flow block from stack
@@ -306,6 +320,11 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['timerReset'] = function(b) { interp.timerBase = Date.now(); };
     this.primitiveTable['timer'] = function(b) { return (Date.now() - interp.timerBase) / 1000; };
 
+    // procedure primatives
+    this.primitiveTable['procDef']             = this.primProcDef;
+    this.primitiveTable["getParam"]            = this.primGetParam;
+    this.primitiveTable['call']                = this.primCall;
+
     new Primitives().addPrimsTo(this.primitiveTable);
 };
 
@@ -328,6 +347,8 @@ Interpreter.prototype.primWait = function(b) {
 
 Interpreter.prototype.primRepeat = function(b) {
     if (b.tmp == -1) {
+        // need to copy the first time it is pushed onto the stack in startSubstack()
+        b = Block.copyBlock(b);
         b.tmp = Math.max(interp.numarg(b, 0), 0); // Initialize repeat count on this block
     }
     if (b.tmp > 0) {
@@ -385,9 +406,83 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
     // Start the substack of a control structure command such as if or forever.
     b.isLoop = !!isLoop;
     this.activeThread.stack.push(b); // remember the block that started the substack
+    //console.log('pushed', b.op, 'onto stack', interp.activeThread.stack.map(function (frame) { return frame.op; }));
+
     if (!secondSubstack) {
         this.activeThread.nextBlock = b.substack;
     } else {
         this.activeThread.nextBlock = b.substack2;
     }
+};
+
+Interpreter.prototype.primProcDef = function (b) {
+    // proc name is arg 0
+    // array with param names is arg 1
+    // array with default values for params is arg 2
+    // and async flag is arg 3
+    b.procParams = b.args[1];
+    b.asyncFlag = b.args[3];
+    // console.log('set param names for', b.args[0], ':', b.procParams);
+};
+
+Interpreter.prototype.primGetParam = function (b) {
+    var paramName = interp.arg(b, 0);
+    // the last call block on the stack is the one with the parameters
+    var callBlock;
+    var procedure;
+    for (var i = interp.activeThread.stack.length - 1; i >= 0; i--) {
+        if (interp.activeThread.stack[i].op === 'call') {
+            callBlock = interp.activeThread.stack[i];
+            break;
+        }
+    }
+    if (!callBlock) {
+        console.log('failed to find a callBlock to get parameters from');
+        return;
+    }
+
+    procedure = interp.activeThread.target.procedures[callBlock.args[0]];
+    if (!procedure) {
+        console.log('missing procedure for getParam block');
+        return;
+    }
+
+    var index;
+    for (index = 0; index < procedure.procParams.length; index++) {
+        if (paramName === procedure.procParams[index]) {
+            // console.log('getParam for', paramName, 'from procedure call to', callBlock.args[0], callBlock.procParams[index]);
+            return callBlock.procParams[index];
+        }
+    }
+
+    // didn't find it
+    console.log('couldn\'t find', paramName, 'in procedure', procedure.args[0]);
+    console.log('procParams:', procedure.procParams);
+    return;
+};
+
+Interpreter.prototype.primCall = function (b) {
+    // first make a copy of the block (so recursive calls can evaluate
+    // parameters as different values)
+    b = Block.copyBlock(b);
+
+    // any parameterss for the procedure will be in the block at the top of
+    // the stack, but if there are any blocks as parameters, we need to
+    // evaluate them now, and save the values in place in the call block
+    var args = b.args.slice(1);
+
+    b.procParams = args.map(function (arg, i) {
+        return interp.arg(b, i + 1);
+    });
+
+    var procedure = interp.activeThread.target.procedures[b.args[0]];
+
+    // push the copy block onto the stack, so when the call returns we can continue
+    interp.activeThread.stack.push(b);
+    //console.log('pushed call onto stack with args:', b.procParams, interp.activeThread.stack.map(function (frame) { return frame.op; }));
+
+    // jump to the procedure
+    // need to set a noop block so that if the procedure starts with an
+    // console.log('running procedure.nextBlock:', procedure.nextBlock);
+    interp.activeThread.nextBlock = procedure.nextBlock;
 };
