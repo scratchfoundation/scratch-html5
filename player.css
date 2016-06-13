@@ -321,6 +321,7 @@ button#trigger-stop:hover {
     padding-left: 3px;
     font: bold 11px sans-serif;
     position: absolute;
+    text-align: left;
 }
 
 .list .list-title {

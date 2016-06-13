@@ -1,3 +1,3 @@
 The inital work on the HTML5 Scratch player was done by Tim Mickel. John Maloney provided feedback and guidance. Shane Clements took over the development and management late summer 2013.
 
-Scimonster fixed some bugs and added some features: the time/date blocks, list reporter block, fixed timer blocks, added timer reporter.
+Scimonster fixed some bugs and added some features: the time/date blocks, list reporter block, fixed timer blocks, added timer reporter, added list watchers.
