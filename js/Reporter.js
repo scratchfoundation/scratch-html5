@@ -13,6 +13,10 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+// Scratch HTML5 Player
+// Reporter.js
+// Tim Mickel, March 2012
+
 'use strict';
 
 var Reporter = function(data) {
