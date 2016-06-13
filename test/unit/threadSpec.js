@@ -5,6 +5,7 @@ describe('Thread', function() {
 
     beforeEach(function() {
         thread = Thread;
+        io = new ioMock();
     });
 
     describe('Initialized variables', function() {
@@ -45,6 +46,68 @@ describe('Thread', function() {
             it('should have a paused variable', function() {
                 expect(initThread.paused).toBe(false);
             });
+        });
+    });
+
+    describe('Test execution of threads', function() {
+        var initInterp, task;
+
+        beforeEach(function() {
+            interp = new Interpreter();
+            interp.initPrims();
+        });
+
+        it('One thread gets executed eventually', function() {
+            var isThreadExecuted = false;
+            interp.primitiveTable['mocktask'] = function() {
+                isThreadExecuted = true;
+            };
+            var runblock = new Block(['mocktask'], null);
+
+            interp.startThread(runblock, new Sprite({}));
+            interp.stepThreads();
+
+            expect(isThreadExecuted).toBe(true);
+        });
+
+        it('Every thread gets executed eventually', function() {
+            var isThread1Executed = false;
+            var isThread2Executed = false;
+            interp.primitiveTable['mocktask1'] = function() {
+                isThread1Executed = true;
+            };
+            interp.primitiveTable['mocktask2'] = function() {
+                isThread2Executed = true;
+            };
+            var runblock1 = new Block(['mocktask1'], null);
+            var runblock2 = new Block(['mocktask2'], null);
+            interp.startThread(runblock1, new Sprite({}));
+            interp.startThread(runblock2, new Sprite({}));
+
+            interp.stepThreads();
+
+            expect(isThread1Executed).toBe(true);
+            expect(isThread2Executed).toBe(true);
+        });
+
+        it('stepActiveThread should execute only the active thread', function() {
+            var isThread1Executed = false;
+            var isThread2Executed = false;
+            interp.primitiveTable['mocktask1'] = function() {
+                isThread1Executed = true;
+            };
+            interp.primitiveTable['mocktask2'] = function() {
+                isThread2Executed = true;
+            };
+            var runblock1 = new Block(['mocktask1'], null);
+            var runblock2 = new Block(['mocktask2'], null);
+            interp.startThread(runblock1, new Sprite({}));
+            interp.startThread(runblock2, new Sprite({}));
+
+            interp.stepActiveThread();
+
+            expect(isThread1Executed).toBe(false);
+            expect(isThread2Executed).toBe(true);
         });
     });
 });
