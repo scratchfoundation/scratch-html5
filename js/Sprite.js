@@ -35,8 +35,12 @@ var Sprite = function(data) {
     this.scale = data.scale || 1.0;
 
     this.direction = data.direction || 90;
-    this.rotation = (data.direction - 90) || 0;
     this.rotationStyle = data.rotationStyle || 'normal';
+    if (this.rotationStyle === 'normal' && data.direction !== undefined) {
+        this.rotation = data.direction - 90;
+    } else {
+        this.rotation = 0;
+    }
     this.isFlipped = data.direction < 0 && data.rotationStyle == 'leftRight';
     this.costumes = data.costumes || [];
     this.currentCostumeIndex = Math.floor(data.currentCostumeIndex) || 0;
