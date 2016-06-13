@@ -296,6 +296,7 @@ Interpreter.prototype.initPrims = function() {
     this.primitiveTable['doUntil']             = function(b) { if (!interp.boolarg(b, 0)) interp.startSubstack(b, true); };
     this.primitiveTable['doReturn']            = function(b) { interp.activeThread = new Thread(null); };
     this.primitiveTable['stopAll']             = function(b) { interp.activeThread = new Thread(null); interp.threads = []; }
+    this.primitiveTable['stopScripts']         = this.stopScripts;
     this.primitiveTable['whenIReceive']        = this.primNoop;
     this.primitiveTable['broadcast:']          = function(b) { interp.broadcast(b, false); };
     this.primitiveTable['doBroadcastAndWait']  = function(b) { interp.broadcast(b, true); };
@@ -391,3 +392,59 @@ Interpreter.prototype.startSubstack = function(b, isLoop, secondSubstack) {
         this.activeThread.nextBlock = b.substack2;
     }
 };
+
+Interpreter.prototype.stopScripts = function(b) {
+    var target = interp.arg(b, 0);
+    switch(target)
+    {
+        case "this script":
+            var threadIndex = interp.threads.indexOf(interp.activeThread);
+            if(threadIndex !== -1)
+            {
+                interp.threads.splice(threadIndex,1);
+                interp.activeThread = new Thread(null);
+            }
+            break;
+        case "other scripts in sprite":
+            var sprite = interp.activeThread.target;
+            var currentThreadIndex = sprite.stacks.indexOf(interp.activeThread.firstBlock);
+            // Create a shallow copy of the sprite's scripts so we can use splice without destroying the original contents
+            var otherThreads = sprite.stacks.slice(0);
+            // Remove the current thread
+            otherThreads.splice(currentThreadIndex, 1);
+
+            // For each thread, find that thread in interp.threads and remove it.
+            for(var otherThreadIndex in otherThreads)
+            {
+                var otherThread = otherThreads[otherThreadIndex];
+
+                var threadIndex = -1;
+
+                // Find thread index in interp.threads
+                for(var interpThreadIndex in interp.threads)
+                {
+                    var thread = interp.threads[interpThreadIndex];
+
+                    if(thread.firstBlock === otherThread)
+                    {
+                        threadIndex = interpThreadIndex;
+                        break;
+                    }
+                }
+
+                // If the thread's been found interp.threads, remove it
+                if(threadIndex !== -1)
+                {
+                    interp.threads.splice(threadIndex,1);
+                }
+            }
+            break;
+        case "all":
+            interp.activeThread = new Thread(null);
+            interp.threads = [];
+            break;
+        default:
+            console.log("stopScripts hasn't implemented: " + target);
+            break;
+    }
+}
